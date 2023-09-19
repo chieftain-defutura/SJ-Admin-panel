@@ -17,6 +17,7 @@ const PendingPost: React.FC = () => {
             <p>Imperdiet in sit rhoncus , eleifend tellus augue lec ... more</p>
             <h5>#Round neck</h5>
           </div>
+          <div></div>
         </div>
       </Post>
     </div>
