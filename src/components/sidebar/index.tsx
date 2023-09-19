@@ -13,7 +13,7 @@ const Sidebar: React.FC = () => {
         <Link to="/">
           <p>Dashboard</p>
         </Link>
-        <Link to="/post">
+        <Link to="/post/pendingpost">
           <p>Post</p>
         </Link>
         <a href="/category">

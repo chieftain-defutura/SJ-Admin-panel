@@ -15,6 +15,9 @@
   }
   p {
     padding: 12px 24px;
+    color: #eee;
+    font-size: 13px;
+    font-weight: 400;
     border-bottom: 2px solid rgba(140, 115, 203, 0.1);
     &:hover {
       background: var(--New, linear-gradient(90deg, #462d85 0%, #db00ff 100%));

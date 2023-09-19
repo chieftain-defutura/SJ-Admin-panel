@@ -3,6 +3,7 @@ import "./header.scss";
 import { ReactComponent as SJlogo } from "../../assets/icons/sjlogo.svg";
 import { ReactComponent as TopChevronDown } from "../../assets/icons/top-chevron-down.svg";
 import { ReactComponent as SNlogo } from "../../assets/icons/sn-logo.svg";
+import { Link } from "react-router-dom";
 const Header: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
   const handleToggle = () => {
@@ -26,9 +27,15 @@ const Header: React.FC = () => {
         </div>
         {isActive && (
           <div className="dropdown-content">
-            <p>March 2023</p>
-            <p>April 2023</p>
-            <p>May 2023</p>
+            <Link to="#">
+              <p>March 2023</p>
+            </Link>
+            <Link to="#">
+              <p>April 2023</p>
+            </Link>
+            <Link to="#">
+              <p>May 2023</p>
+            </Link>
           </div>
         )}
       </div>

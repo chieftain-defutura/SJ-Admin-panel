@@ -1,5 +1,10 @@
 .header-wrap {
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  right: 0%;
   display: flex;
+  background: #fff;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid rgba(170, 170, 170, 0.4);
@@ -11,6 +16,7 @@
   .drop-down {
     .month-filter {
       display: flex;
+      align-items: center;
       gap: 20px;
       justify-content: space-between;
       color: var(--primary-);
@@ -19,29 +25,21 @@
       border: 2px solid #dddddd;
       padding: 13px 24px;
       border-radius: 12px;
-
-      .drop-down-icon {
-        transition: all 0.5s ease-out;
-        // &:hover {
-        //   transform: rotate(-180deg);
-        // }
-      }
     }
     .dropdown-content {
       position: absolute;
-      padding-top: 20px;
+      margin-top: 8px;
+      width: 140px;
       background-color: #fff;
-
-      &:hover {
-        transition: 0.5s;
-      }
+      box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.15);
+      border-radius: 5px;
+      transition: all 0.5s ease-out;
 
       p {
         font-size: 13px;
-        padding: 6px 20px;
+        padding: 8px 20px;
         color: var(--text-primary);
-        transition: 0.5s;
-        transition-delay: 0.5s;
+        border-bottom: 1px solid rgba(170, 170, 170, 0.4);
       }
     }
   }

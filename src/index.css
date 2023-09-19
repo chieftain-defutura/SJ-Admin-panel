@@ -60,6 +60,33 @@ h2 {
   font-size: 20px;
   font-weight: 400;
 }
+h3 {
+  color: var(--primary-);
+  font-weight: 600;
+  letter-spacing: -0.32px;
+  font-size: 16px;
+}
+h5 {
+  color: var(--primary-);
+  font-weight: 600;
+  letter-spacing: -0.32px;
+  font-size: 12px;
+}
+h6 {
+  color: #252525;
+  font-weight: 500;
+  font-size: 14px;
+}
+p {
+  color: var(--secondary-);
+  letter-spacing: -0.24px;
+  font-size: 12px;
+  font-weight: 400;
+}
 button:disabled {
   cursor: no-drop;
+}
+.drop-down-icon.rotate {
+  transform: rotate(-180deg);
+  transition: all 0.5s ease-out;
 }

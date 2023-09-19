@@ -1,0 +1,20 @@
+.btn {
+  border: none;
+  outline: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.btn-primary {
+  padding: 8px 14px;
+  background: var(--New, linear-gradient(90deg, #462d85 0%, #db00ff 100%));
+  color: var(--white);
+  border-radius: 5px;
+}
+.btn-secondary {
+  padding: 8px 14px;
+  background: #ebebeb;
+  color: var(--gray);
+  border-radius: 5px;
+  max-width: 106px;
+  width: 100%;
+}

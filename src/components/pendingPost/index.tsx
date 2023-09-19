@@ -1,23 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import Post from "../../pages/post";
 import "./pendingpost.scss";
-import PostDesign from "../../assets/images/post-logo.png";
+import Button from "../button";
+import { PendingData } from "../../data/pendingPost";
+import ViewDeatailModule from "../viewDetails";
 
 const PendingPost: React.FC = () => {
+  const [isActive, setisActive] = useState(false);
+
+  const handleToggle = () => {
+    setisActive(!isActive);
+  };
   return (
     <div className="mx">
       <Post>
-        <div className="postlist">
-          <div className="post-box">
-            <p>Post Active </p>
-          </div>
-          <img src={PostDesign} alt="post-logo" />
-          <div className="product-details">
-            <h2>Jhon Dravid</h2>
-            <p>Imperdiet in sit rhoncus , eleifend tellus augue lec ... more</p>
-            <h5>#Round neck</h5>
-          </div>
-          <div></div>
+        <div className="product-list">
+          {PendingData.map((f, index) => {
+            return (
+              <div className="postlist" key={index}>
+                <div className="post-box">
+                  <h6>Post Active </h6>
+                </div>
+
+                <img src={f.postimg} alt="post-logo" />
+                <div className="product-details">
+                  <h3>{f.name}</h3>
+                  <p>{f.Description}</p>
+                  <h5>{f.hashtag}</h5>
+                </div>
+
+                <div className="button">
+                  <Button varient="primary" onClick={handleToggle}>
+                    View Details
+                  </Button>
+                  <Button varient="secondary">Deny</Button>
+                </div>
+                <div className="update-time">
+                  <p>Today</p>
+                  <p>2min ago</p>
+                </div>
+              </div>
+            );
+          })}
+          {isActive && <ViewDeatailModule handleToggle={handleToggle} />}
         </div>
       </Post>
     </div>
