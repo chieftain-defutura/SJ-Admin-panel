@@ -1,0 +1,48 @@
+.header-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(170, 170, 170, 0.4);
+  padding: 13px 43px 13px 0;
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+  .drop-down {
+    .month-filter {
+      display: flex;
+      gap: 20px;
+      justify-content: space-between;
+      color: var(--primary-);
+      cursor: pointer;
+      position: relative;
+      border: 2px solid #dddddd;
+      padding: 13px 24px;
+      border-radius: 12px;
+
+      .drop-down-icon {
+        transition: all 0.5s ease-out;
+        // &:hover {
+        //   transform: rotate(-180deg);
+        // }
+      }
+    }
+    .dropdown-content {
+      position: absolute;
+      padding-top: 20px;
+      background-color: #fff;
+
+      &:hover {
+        transition: 0.5s;
+      }
+
+      p {
+        font-size: 13px;
+        padding: 6px 20px;
+        color: var(--text-primary);
+        transition: 0.5s;
+        transition-delay: 0.5s;
+      }
+    }
+  }
+}

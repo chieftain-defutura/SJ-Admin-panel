@@ -1,0 +1,16 @@
+export const USERS_COLLECTION_NAME = "Users";
+export const POST_COLLECTION_NAME = "Post";
+export const CART_COLLECTION_NAME = "Cart";
+export const ADDRESSBOOK_COLLECTION_NAME = "Addressbook";
+export const MYORDERS_COLLECTION_NAME = "Myorders";
+export const TRACKORDER_COLLECTION_NAME = "Trackorder";
+export const MEDIUM_COLLECTION_NAME = "Medium";
+export const ACCESSORIES_COLLECTION_NAME = "Accessories";
+export const PREMIUM_COLLECTION_NAME = "Premium";
+export const POSTORDERS_COLLECTION_NAME = "Postorders";
+export const MEDIUMORDERS_COLLECTION_NAME = "Mediumorders";
+export const ACCESSORIESORDERS_COLLECTION_NAME = "Accessoriesorders";
+export const PREMIUMORDERS_COLLECTION_NAME = "Premiumorders";
+export const NOTIFICATION_COLLECTION_NAME = "Notification";
+export const PAYMENTHISTORY_COLLECTION_NAME = "Paymenthistory";
+export const ADMIN_COLLECTION_NAME = "Admin";

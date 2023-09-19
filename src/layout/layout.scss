@@ -1,0 +1,18 @@
+.layoutWrapper {
+  .layout-children {
+    overflow-y: auto;
+    height: 100%;
+    flex: 1;
+    margin-left: 280px;
+    // margin-top: 68px;
+
+    // @media (max-width: 992px) {
+    //   margin-top: 0;
+    //   margin-left: 0;
+    // }
+
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+  }
+}
