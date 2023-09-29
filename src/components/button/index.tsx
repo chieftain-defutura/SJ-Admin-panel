@@ -2,7 +2,7 @@ import React, { ButtonHTMLAttributes } from "react";
 import "./button.scss";
 
 interface button extends ButtonHTMLAttributes<HTMLButtonElement> {
-  varient: "primary" | "secondary";
+  varient: "primary" | "secondary" | "notifi";
   size?: "small" | "medium" | "large";
   children?: React.ReactNode;
 }

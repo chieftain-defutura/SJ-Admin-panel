@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "./sidebar.scss";
 
 const Sidebar: React.FC = () => {
@@ -10,24 +10,24 @@ const Sidebar: React.FC = () => {
   return (
     <div>
       <div className="sidebar">
-        <Link to="/">
+        <NavLink to="/">
           <p>Dashboard</p>
-        </Link>
-        <Link to="/post/pendingpost">
+        </NavLink>
+        <NavLink to="/post/pendingpost">
           <p>Post</p>
-        </Link>
-        <a href="/category">
-          <p>Category</p>
-        </a>
-        <a href="/orders">
+        </NavLink>
+        <NavLink to="/products">
+          <p>Products</p>
+        </NavLink>
+        <NavLink to="/orders/midlevel-orders/products">
           <p>Orders</p>
-        </a>
-        <a href="/delivery">
+        </NavLink>
+        <NavLink to="/delivery/midlevel-delivery/product">
           <p>Delivery</p>
-        </a>
-        <a href="/notification">
+        </NavLink>
+        <NavLink to="/notification">
           <p>Notification</p>
-        </a>
+        </NavLink>
         <a href="/membership">
           <p>Membership</p>
         </a>

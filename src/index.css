@@ -68,7 +68,7 @@ h3 {
 }
 h5 {
   color: var(--primary-);
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: -0.32px;
   font-size: 12px;
 }
@@ -85,6 +85,14 @@ p {
 }
 button:disabled {
   cursor: no-drop;
+}
+.custom-file-upload input[type="file"] {
+  display: none;
+}
+.custom-file-upload {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 .drop-down-icon.rotate {
   transform: rotate(-180deg);

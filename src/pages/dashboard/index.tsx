@@ -4,7 +4,7 @@ import Layout from "../../layout";
 const Dashboard: React.FC = () => {
   return (
     <div className="mx">
-      <Layout children={undefined}></Layout>;
+      <Layout>dashboard</Layout>;
     </div>
   );
 };

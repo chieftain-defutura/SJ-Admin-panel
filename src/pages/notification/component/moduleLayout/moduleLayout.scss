@@ -1,0 +1,51 @@
+.module-layout {
+  padding: 12px 24px;
+  h1 {
+    font-size: 16px;
+    color: var(--primary-);
+    font-weight: 400;
+  }
+  .input-section {
+    display: grid;
+    // justify-content: space-between;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding-top: 20px;
+  }
+  .icon-upload {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding-top: 20px;
+    .image {
+      h6 {
+        font-size: 12px;
+        color: var(--secondary-);
+        font-weight: 400;
+      }
+      .border-icon {
+        margin-top: 4px;
+        padding: 23px 60px;
+        border-radius: 2px;
+        border: 1px solid rgba(170, 170, 170, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        h2 {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  .discription {
+    input {
+      height: 50px;
+    }
+  }
+  .btn-bottoms {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-end;
+  }
+}

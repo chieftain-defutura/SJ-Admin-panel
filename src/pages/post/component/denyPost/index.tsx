@@ -1,11 +1,12 @@
 import React from "react";
-import Post from "../pages/post";
+import Post from "../..";
+import PostCard from "../../../../components/postCard";
 
 const DenyPost: React.FC = () => {
   return (
     <div className="mx">
       <Post>
-        <h1>Deny post</h1>
+        <PostCard />
       </Post>
     </div>
   );

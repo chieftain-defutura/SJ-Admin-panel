@@ -1,16 +1,13 @@
 export const USERS_COLLECTION_NAME = "Users";
 export const POST_COLLECTION_NAME = "Post";
-export const CART_COLLECTION_NAME = "Cart";
-export const ADDRESSBOOK_COLLECTION_NAME = "Addressbook";
-export const MYORDERS_COLLECTION_NAME = "Myorders";
-export const TRACKORDER_COLLECTION_NAME = "Trackorder";
-export const MEDIUM_COLLECTION_NAME = "Medium";
-export const ACCESSORIES_COLLECTION_NAME = "Accessories";
-export const PREMIUM_COLLECTION_NAME = "Premium";
-export const POSTORDERS_COLLECTION_NAME = "Postorders";
-export const MEDIUMORDERS_COLLECTION_NAME = "Mediumorders";
-export const ACCESSORIESORDERS_COLLECTION_NAME = "Accessoriesorders";
-export const PREMIUMORDERS_COLLECTION_NAME = "Premiumorders";
+export const CART_SUBCOLLECTION_NAME = "Cart";
+export const ADDRESSBOOK_SUBCOLLECTION_NAME = "Addressbook";
+export const MYORDERS_SUBCOLLECTION_NAME = "Myorders";
+export const PRODUCTS_COLLECTION_NAME = "Products";
+export const ORDERS_COLLECTION_NAME = "Orders";
 export const NOTIFICATION_COLLECTION_NAME = "Notification";
-export const PAYMENTHISTORY_COLLECTION_NAME = "Paymenthistory";
-export const ADMIN_COLLECTION_NAME = "Admin";
+export const TRANSECTIONHISTORY_COLLECTION_NAME = "Transections";
+export const ADMIN_COLLECTION_NAME = "Setting";
+
+export const VAIPID_KEY =
+  "BA6FXkqD8tb3CqKNYsqzwWHBt0yDMdAjWc3Sx4dhnaAEXvHjPID-jKxs7IzD664KuxWWm0HvUMEbscrHugj1dhY";

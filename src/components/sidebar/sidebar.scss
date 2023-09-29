@@ -23,4 +23,9 @@
       background: var(--New, linear-gradient(90deg, #462d85 0%, #db00ff 100%));
     }
   }
+  .active {
+    p {
+      background: var(--New, linear-gradient(90deg, #462d85 0%, #db00ff 100%));
+    }
+  }
 }
