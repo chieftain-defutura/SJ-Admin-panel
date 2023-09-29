@@ -1,12 +1,35 @@
 import React, { useState } from "react";
-import { PendingData } from "../../data/pendingPost";
 import "./postCard.scss";
 import Button from "../button";
 import ViewDeatailModule from "../viewDetails";
-
-const PostCard: React.FC = () => {
+import { collection, getDocs } from "firebase/firestore/lite";
+import { db } from "../../utils/firebase";
+import { POST_COLLECTION_NAME } from "../../constants/firebaseCollection";
+import { IpostData } from "../../constants/types";
+import { fetchData } from "../../store/postStoreSlice";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+const PostCard: React.FC<IpostData> = () => {
   const [isActive, setisActive] = useState(false);
-  //   const [approve, setisApprove] = useState([]);
+  const [data, setData] = useState<IpostData[]>([]);
+  const dispatch = useAppDispatch();
+  const fetchedData = useAppSelector((state) => state.post);
+  console.log(fetchedData);
+
+  const handleSubmit = async () => {
+    try {
+      const PostRef = await getDocs(collection(db, POST_COLLECTION_NAME));
+      const fetchPost = PostRef.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as any),
+      }));
+      console.log(fetchPost);
+      setisActive(!isActive);
+      setData(fetchPost);
+      dispatch(fetchData({ fetchPost }));
+    } catch (error) {
+      console.log("Firebase error", error);
+    }
+  };
 
   const handleToggle = () => {
     setisActive(!isActive);
@@ -15,22 +38,22 @@ const PostCard: React.FC = () => {
   return (
     <div>
       <div className="product-list">
-        {PendingData.map((f, index) => {
+        {data.map((f, index) => {
           return (
             <div className="postlist" key={index}>
               <div className="post-box">
                 <h6>Post Active </h6>
               </div>
 
-              <img src={f.postimg} alt="post-logo" />
+              <img src={f.productImage} alt="post-logo" />
               <div className="product-details">
-                <h3>{f.name}</h3>
-                <p>{f.Description}</p>
-                <h5>{f.hashtag}</h5>
+                <h3>{f.username}</h3>
+                <p>{f.description}</p>
+                <h5>{f.hashTag}</h5>
               </div>
 
               <div className="button">
-                <Button varient="primary" onClick={handleToggle}>
+                <Button varient="primary" onClick={handleSubmit}>
                   View Details
                 </Button>
                 <Button varient="secondary">Deny</Button>

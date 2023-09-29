@@ -16,7 +16,7 @@ const Sidebar: React.FC = () => {
         <NavLink to="/post/pendingpost">
           <p>Post</p>
         </NavLink>
-        <NavLink to="/products">
+        <NavLink to="/products/mid-level/product">
           <p>Products</p>
         </NavLink>
         <NavLink to="/orders/midlevel-orders/products">

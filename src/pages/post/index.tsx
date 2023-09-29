@@ -8,6 +8,14 @@ interface IPostLayoutProps {
 }
 
 const Post: React.FC<IPostLayoutProps> = ({ children }) => {
+  // const handleSubmit = async () => {
+  //   try {
+  //     const PostRef = await getDocs(collection(db, "Post"));
+  //     console.log(PostRef);
+  //   } catch (error) {
+  //     console.log("Firebase error", error);
+  //   }
+  // };
   return (
     <Layout>
       <div className="post-header">

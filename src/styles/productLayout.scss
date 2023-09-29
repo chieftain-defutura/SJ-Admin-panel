@@ -1,0 +1,12 @@
+.product-layout {
+  .mid-header {
+    display: flex;
+    padding: 32px;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+  .children-layout {
+    overflow-y: auto;
+    height: 100%;
+  }
+}

@@ -1,22 +1,45 @@
-import React, { useState } from "react";
+import React from "react";
 import Post from "../..";
 import "./pendingpost.scss";
-import Button from "../../../../components/button";
-import ViewDeatailModule from "../../../../components/viewDetails";
 import PostCard from "../../../../components/postCard";
 
 const PendingPost: React.FC = () => {
-  const [isActive, setisActive] = useState(false);
-  const [approve, setisApprove] = useState([]);
+  // const [isActive, setisActive] = useState(false);
+  // const [approve, setisApprove] = useState([]);
 
-  const handleToggle = () => {
-    setisActive(!isActive);
-    setisApprove(approve);
-  };
+  // const handleToggle = () => {
+  //   setisActive(!isActive);
+  //   setisApprove(approve);
+  // };
   return (
     <div className="mx">
       <Post>
-        <PostCard />
+        <PostCard
+          id={""}
+          color={""}
+          description={""}
+          fontStyle={""}
+          productName={""}
+          createdAt={{
+            seconds: 0,
+            nanoseconds: 0,
+          }}
+          productImage={""}
+          material={""}
+          price={""}
+          royalties={""}
+          giftVidio={""}
+          Style={""}
+          fontColor={""}
+          username={""}
+          hashTag={""}
+          updatedAt={{
+            seconds: 0,
+            nanoseconds: 0,
+          }}
+          size={[]}
+          status={""}
+        />
       </Post>
     </div>
   );
