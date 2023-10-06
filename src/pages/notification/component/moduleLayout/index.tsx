@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./moduleLayout.scss";
 import LayoutModule from "../../../../components/layoutModule";
-import { Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import Input from "../../../../components/input";
 import { ReactComponent as Uploadicon } from "../../../../assets/icons/upload-icon.svg";
 import Button from "../../../../components/button";
@@ -19,11 +19,9 @@ const initialValuees = {
 
 const NotifiyModule: React.FC<INote> = ({ handleToggle }) => {
   const [uploadImage, setUploadImage] = useState("");
-  const [fileSize, setFileSize] = useState(false);
 
   const handleChange = (e: any) => {
     const file = e.target.files[0];
-    const maxSize = 5 * 1024 * 1024; // 5MB (example limit)
     // if (file.size > maxSize) {
     //   setFileSize(true);
     //   alert("File size exceeds the limit. Please choose a smaller file.");

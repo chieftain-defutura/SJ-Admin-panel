@@ -16,18 +16,14 @@ import Product from "./pages/orders/component/midlevel-Order/component/product";
 import Accessorey from "./pages/orders/component/midlevel-Order/component/accessorey";
 import PremiumOrders from "./pages/orders/component/premium-Order";
 import PostOrders from "./pages/orders/component/post-Order";
-import ProductsLayout from "./pages/products";
 import MidProducts from "./pages/products/mid-level/product";
 import CreateMidProduct from "./pages/products/mid-level/product/component/createMid-Product";
 import UploadmidProductImage from "./pages/products/mid-level/product/component/uploadDesign-Image";
 import Textimage from "./pages/products/mid-level/product/component/textImage";
 import Premium from "./pages/premium";
+import CreatePremium from "./pages/premium/component/createPremiumproduct";
 
 const App: React.FC = () => {
-  function handleClick(): void {
-    throw new Error("Function not implemented.");
-  }
-
   return (
     <div>
       <Routes>
@@ -110,6 +106,10 @@ const App: React.FC = () => {
           element={<Textimage />}
         />
         <Route path="/products/premium" element={<Premium />} />
+        <Route
+          path="/products/premium/create"
+          element={<CreatePremium index={0} />}
+        />
       </Routes>
     </div>
   );

@@ -105,9 +105,9 @@ const Textimage = () => {
               <div className="layout-wrap">
                 <div className="upload-area">
                   {uploadImage["TextImage"] ? (
-                    <img src={textImage} alt="image" width={200} height={100} />
+                    <img src={textImage} alt="text" width={200} height={100} />
                   ) : (
-                    <img src={BGimage} alt="image" width={200} height={100} />
+                    <img src={BGimage} alt="bg" width={200} height={100} />
                   )}
                 </div>
                 <div className="input-area">

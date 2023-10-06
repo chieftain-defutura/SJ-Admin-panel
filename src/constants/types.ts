@@ -46,3 +46,8 @@ export interface IProductdata {
   productName: string;
   colors: string[];
 }
+export enum IProductCategory {
+  MID = "MIDLEVEL-PRODUCTS",
+  PREMIUM = "PREMIUM-PRODUCTS",
+  ACCESSORY = "ACCESSORY-PRODUCTS",
+}

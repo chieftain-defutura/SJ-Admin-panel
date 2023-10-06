@@ -4,10 +4,6 @@ import "../../styles/toggleSwitch.scss";
 const Toggle: React.FC = () => {
   const [toggle, setToggle] = useState(false);
 
-  const handleToggleChange = () => {
-    setToggle(!toggle);
-  };
-
   return (
     <div className="toggle-container">
       <div className={`toggle-btn ${toggle ? "enable" : "disable"}`}></div>

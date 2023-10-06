@@ -2,23 +2,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import "../../../../../../styles/uploadDesign.scss";
 import MidprodcutLayout from "../../../../../../layout/midproduct-layout";
 import { ReactComponent as Plus } from "../../../../../../assets/icons/plus.svg";
-import { ReactComponent as Delete } from "../../../../../../assets/icons/delete-icon.svg";
 import BGimage from "../../../../../../assets/icons/bg-image.svg";
-
-import Designimg from "../../../../../../assets/images/t-shirt.png";
 import Button from "../../../../../../components/button";
 import LayoutModule from "../../../../../../components/layoutModule";
-import {
-  addDoc,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore/lite";
-import {
-  DESIGN_TEXT_IMAGE,
-  PRODUCTS_COLLECTION_NAME,
-} from "../../../../../../constants/firebaseCollection";
+import { addDoc, collection, getDocs, query } from "firebase/firestore/lite";
+import { DESIGN_TEXT_IMAGE } from "../../../../../../constants/firebaseCollection";
 import { db, storage } from "../../../../../../utils/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
@@ -132,12 +120,12 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
                   {uploadImage["Designs"] ? (
                     <img
                       src={designLogo}
-                      alt="image"
+                      alt="design-logo"
                       width={200}
                       height={100}
                     />
                   ) : (
-                    <img src={BGimage} alt="image" width={200} height={100} />
+                    <img src={BGimage} alt="BGimage" width={200} height={100} />
                   )}
                 </div>
                 <div className="input-area">

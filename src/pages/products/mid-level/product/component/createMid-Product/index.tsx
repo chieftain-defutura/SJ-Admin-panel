@@ -19,6 +19,8 @@ import { db, storage } from "../../../../../../utils/firebase";
 import { PRODUCTS_COLLECTION_NAME } from "../../../../../../constants/firebaseCollection";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import ToggleSwitch from "../../../../../../components/toggleSwitch";
+import ColorModule from "../../../../../../components/color-module";
+import { IProductCategory } from "../../../../../../constants/types";
 
 const initialValue = {
   styles: "",
@@ -26,23 +28,15 @@ const initialValue = {
   normalPrice: "",
   offerPrice: "",
   colors: ["#000000"],
-  colorPickerOpen: true,
-  sizes: [
-    {
-      gender: "",
-      country: "",
-      sizeVarients: [{ size: "", maturements: 0, show: false }],
-    },
-  ],
   detailedFutures: [{ materials: "", cloth: "" }],
 };
 
-interface IFiles {
+export interface IFiles {
   productImage: File;
   productVideo: File;
 }
 
-interface Material {
+export interface Material {
   index: number;
 }
 
@@ -55,6 +49,7 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
   const [material, setMaterial] = useState<Material[]>([]);
   const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
   const [country, setCountry] = useState("");
+
   const [sizes, setSizes] = useState<
     {
       gender: string;
@@ -98,6 +93,8 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
       const dataRef = await addDoc(collection(db, PRODUCTS_COLLECTION_NAME), {
         ...value,
         ...urls,
+        sizes: sizes,
+        type: IProductCategory.MID,
       });
       console.log(dataRef);
     } catch (error) {
@@ -244,7 +241,7 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                     </Button>
 
                     {values.colors.map((color, index) => (
-                      <div className="color-wrap">
+                      <div className="color-wrap" key={index}>
                         <div
                           style={{
                             backgroundColor: color,
@@ -254,59 +251,70 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                         ></div>
                         <Delete
                           onClick={() => {
-                            const updatedColors = [...values.colors];
-                            updatedColors.splice(index, 1);
-                            setValues({ ...values, colors: updatedColors });
+                            const updatedColors = values.colors.filter(
+                              (f) => f !== color
+                            );
+                            setValues((c) => ({ ...c, colors: updatedColors }));
                           }}
                         />
                       </div>
                     ))}
 
                     {active && (
-                      <LayoutModule
+                      // <LayoutModule
+                      //   handleToggle={handleToggle}
+                      //   className="color-layout"
+                      // >
+                      //   <div className="colorname">
+                      //     <h3>Colour</h3>
+
+                      //     <h3>Hex code</h3>
+                      //   </div>
+                      //   <div className="color-details">
+                      //     <div className="choose-color">
+                      //       <Input
+                      //         name="color"
+                      //         type="color"
+                      //         value={values.colors[values.colors.length - 1]}
+                      //         onChange={(e) => {
+                      //           const updatedColors = [
+                      //             ...values.colors,
+                      //             e.target.value,
+                      //           ];
+                      //           setValues({
+                      //             ...values,
+                      //             colors: updatedColors,
+                      //             colorPickerOpen: false,
+                      //           });
+                      //         }}
+                      //       />
+                      //     </div>
+
+                      //     <div className="color-code">
+                      //       {values.colors.map((f, index) => (
+                      //         <h2 key={index}>{f}</h2>
+                      //       ))}
+                      //     </div>
+                      //   </div>
+                      //   <div className="done-btn">
+                      //     <Button
+                      //       varient="primary"
+                      //       onClick={() => setActive(false)}
+                      //     >
+                      //       Done
+                      //     </Button>
+                      //   </div>
+                      // </LayoutModule>
+                      <ColorModule
                         handleToggle={handleToggle}
-                        className="color-layout"
-                      >
-                        <div className="colorname">
-                          <h3>Colour</h3>
-
-                          <h3>Hex code</h3>
-                        </div>
-                        <div className="color-details">
-                          <div className="choose-color">
-                            <Input
-                              name="color"
-                              type="color"
-                              value={values.colors[values.colors.length - 1]}
-                              onChange={(e) => {
-                                const updatedColors = [
-                                  ...values.colors,
-                                  e.target.value,
-                                ];
-                                setValues({
-                                  ...values,
-                                  colors: updatedColors,
-                                  colorPickerOpen: false,
-                                });
-                              }}
-                            />
-                          </div>
-
-                          <div className="color-code">
-                            {values.colors.map((f, index) => (
-                              <h2 key={index}>{f}</h2>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="done-btn">
-                          <Button
-                            varient="primary"
-                            onClick={() => setActive(false)}
-                          >
-                            Done
-                          </Button>
-                        </div>
-                      </LayoutModule>
+                        setActive={setActive}
+                        handleChange={(color) =>
+                          setValues((v) => ({
+                            ...v,
+                            colors: [...v.colors, color],
+                          }))
+                        }
+                      />
                     )}
                   </div>
                 </div>
@@ -331,53 +339,51 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                       <div className="gender">
                         <div
                           className="male"
+                          // style={{ color: gender ? "black" : "" }}
                           onClick={(e) => setGender("MALE")}
                         >
-                          <h3>Male</h3>
+                          <h3 style={{ color: gender ? "black" : "" }}>Male</h3>
                         </div>
                         <div
                           className="female"
                           onClick={(e) => setGender("FEMALE")}
                         >
-                          <h3>Female</h3>
+                          <h3 style={{ color: gender ? "black" : "" }}>
+                            Female
+                          </h3>
                         </div>
                       </div>
                     </div>
                     <div className="sizes">
-                      <div className="types">
+                      <div>
                         {sizes
-                          // .filter(
-                          //   (f) => f.country === country && f.gender === gender
-                          // )
-                          .map((m) => (
-                            <div>
-                              /
-                              <h2>
-                                {m.country} {m.gender}
-                              </h2>
-                              {m.sizeVarients.map((s, i) => (
-                                <div key={i}>
+                          .filter(
+                            (f) => f.country === country && f.gender === gender
+                          )
+                          .map((m, i) => (
+                            <div className="types" key={i}>
+                              {m.sizeVarients.map((s, j) => (
+                                <div className="input-box" key={j}>
                                   <input
                                     type="checkbox"
                                     checked={s.show}
                                     onChange={(e) => {
-                                      const findIndex = sizes.findIndex(
-                                        (f) =>
-                                          f.country === m.country &&
-                                          f.gender === m.gender
-                                      );
-                                      console.log(findIndex);
                                       const newSizes = [...sizes];
-                                      const newSizeVariant = [
-                                        ...sizes[findIndex].sizeVarients,
-                                      ];
-                                      newSizeVariant[i].show = e.target.checked;
-                                      newSizes[findIndex].sizeVarients = [
-                                        ...newSizeVariant,
-                                      ];
-                                      console.log(newSizes);
 
-                                      // setSizes(newSizes);
+                                      setSizes([
+                                        ...newSizes.map((m, ii) => {
+                                          if (ii !== i) return { ...m };
+                                          const sizeVarients =
+                                            m.sizeVarients.map((s, jj) => {
+                                              if (jj !== j) return { ...s };
+                                              return {
+                                                ...s,
+                                                show: e.target.checked,
+                                              };
+                                            });
+                                          return { ...m, sizeVarients };
+                                        }),
+                                      ]);
                                     }}
                                   />
                                   <span>{s.size}</span>
@@ -385,57 +391,30 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                                     type="number"
                                     value={s.measurement}
                                     onChange={(e) => {
-                                      const findIndex = sizes.findIndex(
-                                        (f) =>
-                                          f.country === country &&
-                                          f.gender === gender
-                                      );
                                       const newSizes = [...sizes];
-                                      const newSizeVariant = [
-                                        ...newSizes[findIndex].sizeVarients,
-                                      ];
-                                      newSizeVariant[i].measurement = Number(
-                                        e.target.value
-                                      );
-                                      newSizes[findIndex].sizeVarients =
-                                        newSizeVariant;
-                                      setSizes(newSizes);
+
+                                      setSizes([
+                                        ...newSizes.map((m, ii) => {
+                                          if (ii !== i) return { ...m };
+                                          const sizeVarients =
+                                            m.sizeVarients.map((s, jj) => {
+                                              if (jj !== j) return { ...s };
+                                              return {
+                                                ...s,
+                                                measurement: Number(
+                                                  e.target.value
+                                                ),
+                                              };
+                                            });
+                                          return { ...m, sizeVarients };
+                                        }),
+                                      ]);
                                     }}
                                   />
                                 </div>
                               ))}
                             </div>
                           ))}
-                        <FieldArray name="sizes">
-                          {(arrayHelpers) => (
-                            <div>
-                              {Sizes.map((f, i) =>
-                                f.sizeVarients.map((f, i) => (
-                                  <div className="input-box" key={i}>
-                                    <Input
-                                      type="checkbox"
-                                      checked={f.show}
-                                      name={`sizes[${index}].sizeVarients.show`}
-                                      onChange={handleChange}
-                                    />
-                                    <Input
-                                      type="text"
-                                      value={f.size}
-                                      name={`sizes[${index}].sizeVarients.size`}
-                                      onChange={handleChange}
-                                    />
-                                    <Input
-                                      type="number"
-                                      value={f.maturements}
-                                      name={`sizes[${index}].Varients.maturements`}
-                                      onChange={handleChange}
-                                    />
-                                  </div>
-                                ))
-                              )}
-                            </div>
-                          )}
-                        </FieldArray>
                       </div>
                     </div>
                   </div>

@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import Layout from "../../../../layout";
 import "./createNotification.scss";
 import Button from "../../../../components/button";
 import Icon from "../../../../assets/images/post-logo.png";
 import { ReactComponent as Plus } from "../../../../assets/icons/plus.svg";
-import ViewDeatailModule from "../../../../components/viewDetails";
 import NotifiyModule from "../moduleLayout";
 
 const CreateNotification: React.FC = () => {

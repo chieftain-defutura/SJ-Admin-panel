@@ -22,21 +22,21 @@ const Sidebar: React.FC = () => {
         <NavLink to="/products/premium">
           <p>Premium</p>
         </NavLink>
-        <NavLink to="/orders/midlevel-orders/products">
+        {/* <NavLink to="/orders/midlevel-orders/products">
           <p>Orders</p>
         </NavLink>
         <NavLink to="/delivery/midlevel-delivery/product">
           <p>Delivery</p>
-        </NavLink>
+        </NavLink> */}
         <NavLink to="/notification">
           <p>Notification</p>
         </NavLink>
         <a href="/membership">
           <p>Membership</p>
         </a>
-        <a href="/account">
+        {/* <a href="/account">
           <p>Account</p>
-        </a>
+        </a> */}
       </div>
     </div>
   );
