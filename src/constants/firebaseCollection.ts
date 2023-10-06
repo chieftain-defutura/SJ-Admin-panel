@@ -8,6 +8,8 @@ export const ORDERS_COLLECTION_NAME = "Orders";
 export const NOTIFICATION_COLLECTION_NAME = "Notification";
 export const TRANSECTIONHISTORY_COLLECTION_NAME = "Transections";
 export const ADMIN_COLLECTION_NAME = "Setting";
+export const PRODUCTS_STORAGE = "ProductsImages";
+export const DESIGN_TEXT_IMAGE = "Designimages";
 
 export const VAIPID_KEY =
   "BA6FXkqD8tb3CqKNYsqzwWHBt0yDMdAjWc3Sx4dhnaAEXvHjPID-jKxs7IzD664KuxWWm0HvUMEbscrHugj1dhY";

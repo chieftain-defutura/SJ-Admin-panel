@@ -98,3 +98,7 @@ button:disabled {
   transform: rotate(-180deg);
   transition: all 0.5s ease-out;
 }
+
+input[type="checkbox"] {
+  width: 100% !important;
+}

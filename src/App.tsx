@@ -17,8 +17,17 @@ import Accessorey from "./pages/orders/component/midlevel-Order/component/access
 import PremiumOrders from "./pages/orders/component/premium-Order";
 import PostOrders from "./pages/orders/component/post-Order";
 import ProductsLayout from "./pages/products";
+import MidProducts from "./pages/products/mid-level/product";
+import CreateMidProduct from "./pages/products/mid-level/product/component/createMid-Product";
+import UploadmidProductImage from "./pages/products/mid-level/product/component/uploadDesign-Image";
+import Textimage from "./pages/products/mid-level/product/component/textImage";
+import Premium from "./pages/premium";
 
 const App: React.FC = () => {
+  function handleClick(): void {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <div>
       <Routes>
@@ -85,9 +94,22 @@ const App: React.FC = () => {
         <Route path="/orders/premium-orders" element={<PremiumOrders />} />
         <Route path="/orders/post-orders" element={<PostOrders />} />
         <Route
-          path="/products/mid-level/product"
-          element={<ProductsLayout children={undefined} />}
+          path="/products/mid-level/product/styles"
+          element={<MidProducts />}
         />
+        <Route
+          path="/products/mid-level/product/create"
+          element={<CreateMidProduct index={0} />}
+        />
+        <Route
+          path="/products/mid-level/product/image"
+          element={<UploadmidProductImage />}
+        />
+        <Route
+          path="/products/mid-level/product/text-image"
+          element={<Textimage />}
+        />
+        <Route path="/products/premium" element={<Premium />} />
       </Routes>
     </div>
   );

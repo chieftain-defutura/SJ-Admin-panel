@@ -1,0 +1,104 @@
+.upload-image {
+  margin-left: 120px;
+  padding: 32px 24px;
+
+  .upload-wrap {
+    display: flex;
+    // justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+    .design-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 34px;
+      padding: 54px 24px 24px 24px;
+      width: 248px;
+      height: 372px;
+      max-width: 100%;
+      box-sizing: border-box;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.16);
+      cursor: pointer;
+      .plus-icon {
+        padding: 68px;
+        svg {
+          width: 64px;
+          height: 64px;
+        }
+      }
+    }
+    .layout-module {
+      width: 480px;
+      max-width: 100%;
+      height: 300px;
+      padding: 24px;
+      h2 {
+        padding-bottom: 27px;
+        color: var(--primary-);
+        font-size: 14px;
+      }
+      .btn-upload {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 65px;
+        button {
+          width: 170px;
+        }
+        label {
+          border-radius: 5px;
+          border: 1px solid #d9d9d9;
+          color: var(--primary-);
+          font-size: 12px;
+          padding: 9px 40px;
+          font-weight: 500;
+          cursor: pointer;
+        }
+      }
+      .layout-wrap {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        .upload-area {
+          display: flex;
+          flex-direction: column;
+          gap: 40px;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .input-area {
+          label {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--secondary-);
+          }
+          input {
+            padding: 13px 16px;
+            border-radius: 5px;
+          }
+        }
+      }
+
+      .module-wrapp {
+        padding: 24px;
+        .upload-design {
+          display: flex;
+          justify-content: space-between;
+          // align-items: center;
+          gap: 12px;
+          .image-wrap {
+            display: grid;
+            grid-template-rows: 2fr 2fr;
+          }
+        }
+      }
+    }
+  }
+}

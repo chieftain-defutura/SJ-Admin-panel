@@ -4,17 +4,22 @@ import { ReactComponent as Close } from "../../assets/icons/close.svg";
 
 interface ILayoutModule {
   children: React.ReactNode;
+  className?: string;
   handleToggle: () => void;
 }
-const LayoutModule: React.FC<ILayoutModule> = ({ children, handleToggle }) => {
+const LayoutModule: React.FC<ILayoutModule> = ({
+  children,
+  handleToggle,
+  className,
+}) => {
   return (
     <div className="mx">
       <div className="product-detail">
-        <div className="modal-overlay" />
-        <div className="product-detail-wrap">
-          <div className="close-icon" onClick={handleToggle}>
+        <div className="modal-overlay " onClick={handleToggle} />
+        <div className={`product-detail-wrap ${className} `}>
+          {/* <div className="close-icon" onClick={handleToggle}>
             <Close />
-          </div>
+          </div> */}
           <div className="layout-module-children">{children}</div>
         </div>
       </div>

@@ -24,3 +24,25 @@ export interface IpostData {
   size: string[];
   status: string;
 }
+
+export interface IProductdata {
+  country: string;
+  offerPrice: string;
+  productImage: string;
+  sizes: {
+    sizeVarients: {
+      type: string;
+      value: number;
+    }[];
+    country: string;
+    gender: string;
+  };
+  detailedFutures: {
+    materials: string;
+    cloth: string;
+  }[];
+  normalPrice: string;
+  styles: string;
+  productName: string;
+  colors: string[];
+}

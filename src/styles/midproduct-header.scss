@@ -1,0 +1,35 @@
+.mid-product {
+  display: flex;
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  right: 0%;
+  align-items: center;
+  display: inline-flex;
+  padding: 13px 90px 13px 24px;
+  width: 100%;
+  gap: 43px;
+  border-bottom: 1px solid rgba(170, 170, 170, 0.4);
+  background: #fff;
+  .content-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 13px 90px 13px 24px;
+
+    gap: 33px;
+    a {
+      color: var(--primary-);
+      border-radius: 5px;
+      padding: 10px 35px;
+      border: 1px solid var(--Primary, #462d85);
+    }
+    .active {
+      background: var(--primary-);
+      color: var(--white);
+    }
+    h3 {
+      padding: 10px 35px;
+    }
+  }
+}

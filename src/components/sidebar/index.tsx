@@ -16,8 +16,11 @@ const Sidebar: React.FC = () => {
         <NavLink to="/post/pendingpost">
           <p>Post</p>
         </NavLink>
-        <NavLink to="/products/mid-level/product">
-          <p>Products</p>
+        <NavLink to="/products/mid-level/product/styles">
+          <p>Mid level</p>
+        </NavLink>
+        <NavLink to="/products/premium">
+          <p>Premium</p>
         </NavLink>
         <NavLink to="/orders/midlevel-orders/products">
           <p>Orders</p>
