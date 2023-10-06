@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import MidprodcutLayout from "../../../../layout/midproduct-layout";
 import "../../../../styles/productLayout.scss";
 import { NavLink } from "react-router-dom";
-import { collection, doc, getDocs, query } from "firebase/firestore/lite";
+import { collection, getDocs, query } from "firebase/firestore/lite";
 import { PRODUCTS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import { db } from "../../../../utils/firebase";
 import { IProductdata } from "../../../../constants/types";

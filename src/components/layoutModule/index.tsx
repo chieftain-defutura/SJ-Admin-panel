@@ -1,6 +1,5 @@
 import React from "react";
 import "./layoutModule.scss";
-import { ReactComponent as Close } from "../../assets/icons/close.svg";
 
 interface ILayoutModule {
   children: React.ReactNode;
