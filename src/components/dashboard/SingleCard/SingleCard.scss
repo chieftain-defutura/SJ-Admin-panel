@@ -1,0 +1,93 @@
+.orders-card-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: 21px;
+
+  @media (max-width: 950px) {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 21px;
+  }
+  .orders-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: rgba(140, 115, 203, 0.3);
+    max-width: 500px;
+    width: 100%;
+    max-height: 230px;
+    height: 100%;
+    border-radius: 10px;
+    box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.16);
+    margin: 22px 0;
+
+    .orders-first-part {
+      padding: 16px 31px 16px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      h4 {
+        font-size: 14px;
+        line-height: 20px;
+        font-family: var(--font-bold);
+        text-transform: uppercase;
+        color: var(--primary-);
+        text-align: center;
+      }
+      h1 {
+        font-family: var(--font-arvo-regular);
+        font-size: 72px;
+        color: var(--primary-);
+        margin: 20px 0;
+      }
+      .flex-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        p {
+          font-family: var(--font-bold);
+          color: rgba(70, 45, 133, 0.7);
+          font-size: 12px;
+          text-transform: uppercase;
+        }
+        h3 {
+          color: rgba(70, 45, 133, 0.7);
+          font-family: var(--font-arvo-bold);
+          font-size: 12px;
+          text-transform: uppercase;
+        }
+      }
+    }
+    .orders-second-part {
+      background: linear-gradient(154deg, #ffefff 0%, #fff 100%);
+      border-top-left-radius: 100px;
+      border-bottom-left-radius: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      .flex-item {
+        gap: 8px;
+        h4 {
+          text-transform: uppercase;
+          font-size: 14px;
+          font-family: var(--font-bold);
+          color: var(--secondary-);
+        }
+      }
+      .tShirt-img {
+        margin: 14px 0;
+        filter: drop-shadow(0px 12px 12px rgba(70, 45, 133, 0.28));
+        img {
+          width: 96px;
+          height: 96px;
+        }
+      }
+      p {
+        font-size: 12px;
+        font-family: var(--font-semiBold);
+        color: var(--secondary-);
+        cursor: pointer;
+      }
+    }
+  }
+}
