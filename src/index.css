@@ -14,12 +14,22 @@
   font-family: "Gilroy-Light";
   src: url("../src/assets/fonts/Gilroy-Light.ttf");
 }
+@font-face {
+  font-family: "Arvo-Regular";
+  src: url("../src/assets/fonts/Arvo-Regular.ttf");
+}
+@font-face {
+  font-family: "Arvo-bold";
+  src: url("../src/assets/fonts/Arvo-Bold.ttf");
+}
 
 :root {
   --font-bold: "Gilroy-Bold";
   --font-medium: "Gilroy-Medium";
   --font-semiBold: "Gilroy-SemiBold";
   --font-light: "Gilroy-Light";
+  --font-arvo-regular: "Arvo-Regular";
+  --font-arvo-bold: "Arvo-bold";
   --white: #fff;
   --primary-: #462d85;
   --secondary-: #8c73cb;
@@ -27,6 +37,10 @@
   --text-secondary: #462d8599;
   --gray: #777;
   --border: #777777;
+  --secondary-gray: #aaa;
+  --card-clr: #d9d9d9;
+  --table-text-clr: #454545;
+  --table-border: #f5f5f5;
 }
 
 *,
@@ -40,6 +54,18 @@
 html {
   scroll-behavior: smooth;
 }
+
+td {
+  color: var(--table-text-clr);
+  font-size: 12px;
+  font-family: var(--font-medium);
+}
+
+.flex-item {
+  display: flex;
+  align-items: center;
+}
+
 body {
   color: var(--text-primary);
   transition: all 0.3s linear;
