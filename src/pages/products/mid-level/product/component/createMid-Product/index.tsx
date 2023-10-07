@@ -446,7 +446,7 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                     />
                   </div>
                 </div>
-
+                <div className="position-toggle"></div>
                 <div className="detailes">
                   <FieldArray name="detailedFutures">
                     {(arrayHelpers) => (

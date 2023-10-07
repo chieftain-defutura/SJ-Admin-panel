@@ -1,0 +1,19 @@
+.user-post-list-wrapper {
+  margin: 42px 32px 42px 140px;
+  h2 {
+    font-size: 16px;
+    font-family: var(--font-arvo-bold);
+    color: var(--primary-);
+  }
+  .user-post-container {
+    justify-content: space-between;
+    .total-text {
+      gap: 12px;
+      p {
+        color: var(--secondary-);
+        font-size: 14px;
+        font-family: var(--font-regular);
+      }
+    }
+  }
+}

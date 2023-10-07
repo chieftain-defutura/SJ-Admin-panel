@@ -17,7 +17,7 @@ export const OrdersData = [
     today: "11,500",
     orders: "orders",
     image: TShirtImg,
-    navigation: "/orders/post-orders",
+    navigation: "/orders/midlevel-orders",
   },
   {
     heading: "Today pREMIUM orders",
@@ -26,7 +26,7 @@ export const OrdersData = [
     today: "11,500",
     orders: "orders",
     image: TShirtImg,
-    navigation: "/orders/post-orders",
+    navigation: "/orders/premium-orders",
   },
   {
     heading: "Today Other accessories orders",
@@ -35,6 +35,6 @@ export const OrdersData = [
     today: "11,500",
     orders: "orders",
     image: TShirtImg,
-    navigation: "/orders/post-orders",
+    navigation: "/orders/accessories-orders",
   },
 ];

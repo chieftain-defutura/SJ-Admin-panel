@@ -15,6 +15,10 @@
   src: url("../src/assets/fonts/Gilroy-Light.ttf");
 }
 @font-face {
+  font-family: "Gilroy-Regular";
+  src: url("../src/assets/fonts/Gilroy-Regular.ttf");
+}
+@font-face {
   font-family: "Arvo-Regular";
   src: url("../src/assets/fonts/Arvo-Regular.ttf");
 }
@@ -28,6 +32,7 @@
   --font-medium: "Gilroy-Medium";
   --font-semiBold: "Gilroy-SemiBold";
   --font-light: "Gilroy-Light";
+  --font-regular: "Gilroy-Regular";
   --font-arvo-regular: "Arvo-Regular";
   --font-arvo-bold: "Arvo-bold";
   --white: #fff;
