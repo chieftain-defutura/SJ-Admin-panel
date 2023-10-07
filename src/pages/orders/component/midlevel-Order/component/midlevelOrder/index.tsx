@@ -1,11 +1,11 @@
 import React from "react";
-import Layout from "../../../../layout";
-import "../post-Order/postOrder.scss";
-import TShirtImg from "../../../../assets/images/t-shirt-two.png";
-import ProfileImg from "../../../../assets/images/profile-img.png";
-import Button from "../../../../components/button";
-import TotalRevenue from "../../../../components/dashboard/totalRevenue";
-import SingleCard from "../../../../components/dashboard/SingleCard";
+import TShirtImg from "../../../../../../assets/images/t-shirt-two.png";
+import ProfileImg from "../../../../../../assets/images/profile-img.png";
+import Layout from "../../../../../../layout";
+import Button from "../../../../../../components/button";
+import TotalRevenue from "../../../../../../components/dashboard/totalRevenue";
+import SingleCard from "../../../../../../components/dashboard/SingleCard";
+import "../../../post-Order/postOrder.scss";
 
 const data = {
   heading: "Today post orders",
@@ -17,7 +17,7 @@ const data = {
   navigation: "/orders/post-orders",
 };
 
-const PremiumOrder: React.FC = () => {
+const MidlevelOrder: React.FC = () => {
   return (
     <div className="mx">
       <Layout>
@@ -37,7 +37,7 @@ const PremiumOrder: React.FC = () => {
             </div>
           </div>
           <div className="post-order-text">
-            <p>Premium orders</p>
+            <p>Midlevel Order</p>
           </div>
           <div className="table-wrapper">
             <table>
@@ -92,4 +92,4 @@ const PremiumOrder: React.FC = () => {
   );
 };
 
-export default PremiumOrder;
+export default MidlevelOrder;

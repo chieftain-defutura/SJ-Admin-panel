@@ -1,6 +1,5 @@
 import React from "react";
 import Orders from "../..";
-import "../../../delivery/component/mid-level/midlevel.scss";
 import { NavLink } from "react-router-dom";
 
 interface IOrders {
