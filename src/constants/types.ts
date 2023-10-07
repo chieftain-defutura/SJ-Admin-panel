@@ -50,4 +50,6 @@ export enum IProductCategory {
   MID = "MIDLEVEL-PRODUCTS",
   PREMIUM = "PREMIUM-PRODUCTS",
   ACCESSORY = "ACCESSORY-PRODUCTS",
+  DESIGN_IMAGE = "design-images",
+  TEXT_IMAGE = "text-images",
 }

@@ -142,5 +142,5 @@ input:checked + .slider::before {
   transform: translateX(16px);
 }
 input:checked + .slider {
-  background-color: #ddd;
+  background: var(--New, linear-gradient(90deg, #462d85 0%, #db00ff 100%));
 }

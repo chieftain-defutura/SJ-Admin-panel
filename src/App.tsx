@@ -22,6 +22,7 @@ import Textimage from "./pages/products/mid-level/product/component/textImage";
 import Premium from "./pages/premium";
 import CreatePremium from "./pages/premium/component/createPremiumproduct";
 import AccessoryHome from "./pages/accessory";
+import CreateAccessory from "./pages/accessory/component/createAccessory";
 
 const App: React.FC = () => {
   return (
@@ -105,6 +106,10 @@ const App: React.FC = () => {
         <Route
           path="/products/mid-level/accessory"
           element={<AccessoryHome />}
+        />
+        <Route
+          path="/products/mid-level/accessory/create"
+          element={<CreateAccessory index={0} />}
         />
         <Route path="/products/premium" element={<Premium />} />
         <Route

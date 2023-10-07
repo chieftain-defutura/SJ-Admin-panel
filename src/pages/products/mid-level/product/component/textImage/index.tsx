@@ -1,7 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "../../../../../../styles/uploadDesign.scss";
 import MidprodcutLayout from "../../../../../../layout/midproduct-layout";
-import { addDoc, collection, getDocs, query } from "firebase/firestore/lite";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore/lite";
 import Button from "../../../../../../components/button";
 import LayoutModule from "../../../../../../components/layoutModule";
 import { DESIGN_TEXT_IMAGE } from "../../../../../../constants/firebaseCollection";
@@ -11,6 +17,7 @@ import { ReactComponent as Plus } from "../../../../../../assets/icons/plus-2.sv
 import BGimage from "../../../../../../assets/icons/bg-image.svg";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
+import { IProductCategory } from "../../../../../../constants/types";
 
 const Textimage = () => {
   const [active, setIsActive] = useState(false);
@@ -65,6 +72,7 @@ const Textimage = () => {
       const dataRef = await addDoc(collection(db, DESIGN_TEXT_IMAGE), {
         ...urls,
         hashTag,
+        type: IProductCategory.TEXT_IMAGE,
       });
       console.log(dataRef);
     } catch (error) {}
@@ -72,7 +80,10 @@ const Textimage = () => {
 
   const handleGetData = useCallback(async () => {
     try {
-      const productData = query(collection(db, DESIGN_TEXT_IMAGE));
+      const productData = query(
+        collection(db, DESIGN_TEXT_IMAGE),
+        where("type", "==", "text-images")
+      );
       const data = await getDocs(productData);
       const fetchedData = data.docs.map((d) => ({
         id: d.id,
@@ -142,7 +153,13 @@ const Textimage = () => {
           {data.map((i, index) => (
             <div className="design-wrap" key={index}>
               <div className="logo">
-                <img src={i.TextImage} alt="" />
+                <img
+                  src={i.TextImage}
+                  alt=""
+                  width={200}
+                  height={250}
+                  style={{ objectFit: "contain" }}
+                />
               </div>
               <Button varient="primary">view</Button>
             </div>

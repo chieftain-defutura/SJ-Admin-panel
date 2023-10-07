@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "../../styles/premium.scss";
 import PremiumLayout from "../../layout/premium-layout";
-import { query, collection, getDocs } from "firebase/firestore/lite";
+import { query, collection, getDocs, where } from "firebase/firestore/lite";
 import { NavLink } from "react-router-dom";
 import Button from "../../components/button";
 import LayoutModule from "../../components/layoutModule";
 import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
-import { IProductdata } from "../../constants/types";
+import { IProductCategory, IProductdata } from "../../constants/types";
 import { db } from "../../utils/firebase";
 
 const Premium = () => {
@@ -17,7 +17,10 @@ const Premium = () => {
   };
   const handleGetData = useCallback(async () => {
     try {
-      const productData = query(collection(db, PRODUCTS_COLLECTION_NAME));
+      const productData = query(
+        collection(db, PRODUCTS_COLLECTION_NAME),
+        where("type", "==", IProductCategory.PREMIUM)
+      );
       const data = await getDocs(productData);
       const fetchedData = data.docs.map((d) => ({
         id: d.id,
@@ -45,7 +48,15 @@ const Premium = () => {
         <div className="product-card-layout">
           {data.map((f, i) => (
             <div className="product-card" key={i}>
-              <img src={f.productImage} alt="" width={200} height={250} />
+              <div className="product-img">
+                <img
+                  src={f.productImage}
+                  alt="products"
+                  width={200}
+                  height={250}
+                />
+              </div>
+
               <div className="product-details">
                 <h3>{f.styles}</h3>
                 <Button varient="primary" onClick={handleToggle}>

@@ -25,7 +25,7 @@ const initialValue = {
   detailedFutures: [{ materials: "", cloth: "" }],
 };
 
-const CreatePremium: React.FC<Material> = ({ index }) => {
+const CreateAccessory: React.FC<Material> = ({ index }) => {
   const [image, setImage] = useState("");
   const [video, setVideo] = useState("");
   const [files, setFiles] = useState<IFiles[]>([]);
@@ -77,7 +77,7 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
         ...value,
         ...urls,
         sizes: sizes,
-        type: IProductCategory.PREMIUM,
+        type: IProductCategory.ACCESSORY,
       });
       console.log(dataRef);
     } catch (error) {
@@ -220,171 +220,63 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                   </div>
                 </div>
               </div>
-              <div className="sizes-futures">
-                <div className="color-section">
-                  <div>
-                    <h3>Select Size</h3>
-                    <div className="size">
-                      <div className="drop-down-section">
-                        <div className="drop-down">
-                          <select
-                            name="country"
-                            value={country}
-                            onChange={(e) => setCountry(e.target.value)}
-                          >
-                            <option value="">Select country</option>
-                            {Country.map((f, i) => (
-                              <option id={f} value={f} key={i}>
-                                {f}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div className="gender">
-                          <div
-                            className="male"
-                            // style={{ color: gender ? "black" : "" }}
-                            onClick={(e) => setGender("MALE")}
-                          >
-                            <h3 style={{ color: gender ? "black" : "" }}>
-                              Male
-                            </h3>
-                          </div>
-                          <div
-                            className="female"
-                            onClick={(e) => setGender("FEMALE")}
-                          >
-                            <h3 style={{ color: gender ? "black" : "" }}>
-                              Female
-                            </h3>
-                          </div>
-                        </div>
+              <div className="detailes">
+                <FieldArray name="detailedFutures">
+                  {(arrayHelpers) => (
+                    <>
+                      <div className="add-btn">
+                        <h3>Detailed Features</h3>
                       </div>
-                      <div className="sizes">
-                        <div>
-                          {sizes.map((m, i) => (
-                            <>
-                              {m.country === country && m.gender === gender ? (
-                                <div className="types" key={i}>
-                                  {m.sizeVarients.map((s, j) => (
-                                    <div className="input-box" key={j}>
-                                      <input
-                                        type="checkbox"
-                                        checked={s.show}
-                                        onChange={(e) => {
-                                          const newSizes = [...sizes];
-                                          setSizes([
-                                            ...newSizes.map((m, ii) => {
-                                              console.log(ii !== i);
-                                              if (ii !== i) return { ...m };
-                                              const sizeVarients =
-                                                m.sizeVarients.map((s, jj) => {
-                                                  if (jj !== j) return { ...s };
-                                                  return {
-                                                    ...s,
-                                                    show: e.target.checked,
-                                                  };
-                                                });
-                                              return { ...m, sizeVarients };
-                                            }),
-                                          ]);
-                                        }}
-                                      />
-                                      <span>{s.size}</span>
-                                      <input
-                                        type="number"
-                                        value={s.measurement}
-                                        onChange={(e) => {
-                                          const newSizes = [...sizes];
 
-                                          setSizes([
-                                            ...newSizes.map((m, ii) => {
-                                              if (ii !== i) return { ...m };
-                                              const sizeVarients =
-                                                m.sizeVarients.map((s, jj) => {
-                                                  if (jj !== j) return { ...s };
-                                                  return {
-                                                    ...s,
-                                                    measurement: Number(
-                                                      e.target.value
-                                                    ),
-                                                  };
-                                                });
-                                              return { ...m, sizeVarients };
-                                            }),
-                                          ]);
-                                        }}
-                                      />
-                                    </div>
-                                  ))}
-                                </div>
-                              ) : null}
+                      <div className="materials">
+                        {values.detailedFutures.map((product, i) => (
+                          <div className="input-colums">
+                            <>
+                              <Input
+                                name={`detailedFutures[${i}].materials`}
+                                type="text"
+                                placeholder="Material"
+                                key={i}
+                              />
+                              <Input
+                                name={`detailedFutures[${i}].cloth`}
+                                type="text"
+                                placeholder="Cloth"
+                              />
+                              <div
+                                className="delete"
+                                onClick={() => {
+                                  setMaterial((c) => {
+                                    arrayHelpers.remove(i);
+                                    return c.filter((i) => i.index !== index);
+                                  });
+                                }}
+                              >
+                                <Delete />
+                              </div>
+                              <div
+                                className="plus-icon "
+                                onClick={() => {
+                                  arrayHelpers.push({
+                                    materials: "",
+                                    cloth: "",
+                                  });
+                                }}
+                              >
+                                <Plus />
+                              </div>
                             </>
-                          ))}
-                        </div>
+                          </div>
+                        ))}
                       </div>
-                    </div>
-                  </div>
-                  <div>
-                    <h3>Detailed Features</h3>
-                    <div className="detailes">
-                      <FieldArray name="detailedFutures">
-                        {(arrayHelpers) => (
-                          <>
-                            <div className="materials">
-                              {values.detailedFutures.map((product, i) => (
-                                <div className="input-colums">
-                                  <>
-                                    <Input
-                                      name={`detailedFutures[${i}].materials`}
-                                      type="text"
-                                      placeholder="Material"
-                                      key={i}
-                                    />
-                                    <Input
-                                      name={`detailedFutures[${i}].cloth`}
-                                      type="text"
-                                      placeholder="Cloth"
-                                    />
-                                    <div
-                                      className="delete"
-                                      onClick={() => {
-                                        setMaterial((c) => {
-                                          arrayHelpers.remove(i);
-                                          return c.filter(
-                                            (i) => i.index !== index
-                                          );
-                                        });
-                                      }}
-                                    >
-                                      <Delete />
-                                    </div>
-                                    <div
-                                      className="plus-icon "
-                                      onClick={() => {
-                                        arrayHelpers.push({
-                                          materials: "",
-                                          cloth: "",
-                                        });
-                                      }}
-                                    >
-                                      <Plus />
-                                    </div>
-                                  </>
-                                </div>
-                              ))}
-                            </div>
-                          </>
-                        )}
-                      </FieldArray>
-                    </div>
-                  </div>
-                </div>
-                <div className="btn-submit">
-                  <Button varient="primary" type="submit">
-                    Submit
-                  </Button>
-                </div>
+                    </>
+                  )}
+                </FieldArray>
+              </div>
+              <div className="btn-submit">
+                <Button varient="primary" type="submit">
+                  Submit
+                </Button>
               </div>
             </div>
           </Form>
@@ -394,4 +286,4 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
   );
 };
 
-export default CreatePremium;
+export default CreateAccessory;
