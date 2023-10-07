@@ -22,10 +22,11 @@ const Sidebar: React.FC = () => {
         <NavLink to="/products/premium">
           <p>Premium</p>
         </NavLink>
-        {/* <NavLink to="/orders/midlevel-orders/products">
-          <p>Orders</p>
+
+        <NavLink to="/products/mid-level/accessory">
+          <p>Other accessorey</p>
         </NavLink>
-        <NavLink to="/delivery/midlevel-delivery/product">
+        {/* <NavLink to="/delivery/midlevel-delivery/product">
           <p>Delivery</p>
         </NavLink> */}
         <NavLink to="/notification">

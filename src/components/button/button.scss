@@ -20,8 +20,14 @@
 }
 .btn-notifi {
   border-radius: 5px;
-  border: 1px solid var(--Primary, #462d85);
+  border: 1px solid var(--primary-);
   padding: 8px 14px;
-  color: #462d85;
-  background-color: #fff;
+  color: var(--primary-);
+  background-color: var(--white);
+}
+.btn-premium {
+  padding: 12px 54px 11px 54px;
+  border-radius: 5px;
+  background: var(--primary-);
+  color: var(--white);
 }

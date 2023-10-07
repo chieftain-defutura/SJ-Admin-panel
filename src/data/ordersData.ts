@@ -35,6 +35,6 @@ export const OrdersData = [
     today: "11,500",
     orders: "orders",
     image: TShirtImg,
-    navigation: "/orders/post-orders",
+    navigation: "/orders/accessories-orders",
   },
 ];

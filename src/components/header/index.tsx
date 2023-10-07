@@ -9,6 +9,7 @@ const Header: React.FC = () => {
   const handleToggle = () => {
     setIsActive(!isActive);
   };
+
   return (
     <div className="header-wrap">
       <a href="/">

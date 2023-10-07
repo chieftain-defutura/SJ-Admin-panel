@@ -18,11 +18,12 @@ const data = {
   navigation: "/orders/post-orders",
 };
 
-const MidlevelOrder: React.FC = () => {
+const AccessoriesOrder: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
   const handleToggle = () => {
     setIsActive(!isActive);
   };
+
   return (
     <div className="mx">
       <Layout>
@@ -42,7 +43,7 @@ const MidlevelOrder: React.FC = () => {
             </div>
           </div>
           <div className="post-order-text">
-            <p>Midlevel Order</p>
+            <p>Accessories Order</p>
             <div className="drop-down-wrapper">
               <div className="flex-item" onClick={handleToggle}>
                 <p>Place orders</p>
@@ -68,4 +69,4 @@ const MidlevelOrder: React.FC = () => {
   );
 };
 
-export default MidlevelOrder;
+export default AccessoriesOrder;

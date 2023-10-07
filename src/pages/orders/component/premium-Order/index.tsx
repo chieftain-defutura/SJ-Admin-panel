@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../../../../layout";
-import "../post-Order/postOrder.scss";
+import { ReactComponent as ChevronDown } from "../../../../assets/icons/chevron-down.svg";
 import TShirtImg from "../../../../assets/images/t-shirt-two.png";
-import ProfileImg from "../../../../assets/images/profile-img.png";
-import Button from "../../../../components/button";
 import TotalRevenue from "../../../../components/dashboard/totalRevenue";
 import SingleCard from "../../../../components/dashboard/SingleCard";
+import Table from "../../../../components/dashboard/table";
+import { PostTableData } from "../../../../data/postTableData";
+import "../../../../styles/postOrder.scss";
 
 const data = {
   heading: "Today post orders",
@@ -18,6 +19,10 @@ const data = {
 };
 
 const PremiumOrder: React.FC = () => {
+  const [isActive, setIsActive] = useState(false);
+  const handleToggle = () => {
+    setIsActive(!isActive);
+  };
   return (
     <div className="mx">
       <Layout>
@@ -38,54 +43,25 @@ const PremiumOrder: React.FC = () => {
           </div>
           <div className="post-order-text">
             <p>Premium orders</p>
+            <div className="drop-down-wrapper">
+              <div className="flex-item" onClick={handleToggle}>
+                <p>Place orders</p>
+                <ChevronDown
+                  className={`drop-down-icon ${isActive ? "rotate" : ""}`}
+                  onClick={handleToggle}
+                />
+              </div>
+              {isActive && (
+                <div className="select-drop-down">
+                  <p>Manufacture</p>
+                  <p>Ready to ship</p>
+                  <p>Shipping</p>
+                  <p>Delivered</p>
+                </div>
+              )}
+            </div>
           </div>
-          <div className="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>
-                    <span>User name</span>
-                  </th>
-                  <th>
-                    <span>Product</span>
-                  </th>
-                  <th>
-                    <span>Quantity</span>
-                  </th>
-                  <th>
-                    <span>Price</span>
-                  </th>
-                  <th>
-                    <span>Size</span>
-                  </th>
-                  <th>
-                    <span>Address</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {[...Array(10)].map((_, i) => (
-                  <tr key={i.toString()}>
-                    <td>
-                      <div className="flex-item row-header">
-                        <img src={ProfileImg} alt="" />
-                        <p>John devid</p>
-                      </div>
-                    </td>
-                    <td>White shirt</td>
-                    <td>3 pcs</td>
-                    <td>₹1200</td>
-                    <td>M- 32cm</td>
-                    <td>Chennai</td>
-
-                    <td>
-                      <Button varient="primary">View details</Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <Table data={PostTableData} />
         </div>
       </Layout>
     </div>

@@ -7,8 +7,7 @@ import PendingPost from "./pages/post/component/pendingPost";
 import ApprovedPost from "./pages/post/component/approvePost";
 import DenyPost from "./pages/post/component/denyPost";
 import Notification from "./pages/notification";
-import Product from "./pages/orders/component/midlevel-Order/component/product";
-import Accessorey from "./pages/orders/component/midlevel-Order/component/accessorey";
+import PremiumOrders from "./pages/orders/component/premium-Order";
 import PostOrders from "./pages/orders/component/post-Order";
 import MidProducts from "./pages/products/mid-level/product";
 import CreateMidProduct from "./pages/products/mid-level/product/component/createMid-Product";
@@ -16,8 +15,11 @@ import UploadmidProductImage from "./pages/products/mid-level/product/component/
 import Textimage from "./pages/products/mid-level/product/component/textImage";
 import Premium from "./pages/premium";
 import CreatePremium from "./pages/premium/component/createPremiumproduct";
-import PremiumOrder from "./pages/orders/component/premium-Order";
-import MidlevelOrder from "./pages/orders/component/midlevel-Order/component/midlevelOrder";
+import AccessoryHome from "./pages/accessory";
+import MidlevelOrder from "./pages/orders/component/midlevel-Order";
+import AccessoriesOrder from "./pages/orders/component/accessories-orders";
+import UserPostList from "./pages/dashboard/component/userPostList";
+import UserSubscription from "./pages/dashboard/component/userSubscription";
 
 const App: React.FC = () => {
   return (
@@ -59,16 +61,15 @@ const App: React.FC = () => {
         />
         <Route path="/post/deny" element={<DenyPost />} />
         <Route path="/notification" element={<Notification />} />
-        <Route path="/orders/midlevel-orders/products" element={<Product />} />
-
-        <Route
-          path="/orders/midlevel-orders/accessory"
-          element={<Accessorey />}
-        />
-        <Route path="/orders/premium-orders" element={<PremiumOrder />} />
-        <Route path="/orders/midlevel-orders" element={<MidlevelOrder />} />
-
+        <Route path="/orders/premium-orders" element={<PremiumOrders />} />
         <Route path="/orders/post-orders" element={<PostOrders />} />
+        <Route path="/orders/midlevel-orders" element={<MidlevelOrder />} />
+        <Route
+          path="/orders/accessories-orders"
+          element={<AccessoriesOrder />}
+        />
+        <Route path="/user-post-list" element={<UserPostList />} />
+        <Route path="/user-subscription" element={<UserSubscription />} />
         <Route
           path="/products/mid-level/product/styles"
           element={<MidProducts />}
@@ -84,6 +85,10 @@ const App: React.FC = () => {
         <Route
           path="/products/mid-level/product/text-image"
           element={<Textimage />}
+        />
+        <Route
+          path="/products/mid-level/accessory"
+          element={<AccessoryHome />}
         />
         <Route path="/products/premium" element={<Premium />} />
         <Route
