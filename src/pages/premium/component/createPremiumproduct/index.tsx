@@ -151,7 +151,13 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                             accept="image/jpg,image/png"
                           />
                           <div className="bg-image">
-                            <img src={image} alt="" width={200} height={200} />
+                            <img
+                              src={image}
+                              alt=""
+                              width={200}
+                              height={200}
+                              style={{ objectFit: "contain" }}
+                            />
                           </div>
                         </label>
                       </div>
@@ -177,7 +183,7 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                             accept="video/mp4,video/x-m4v,video/*"
                           />
                           <div className="bg-image">
-                            <video src={video}></video>
+                            <video src={video} width={200} height={200} />
                           </div>
                         </label>
                       </div>

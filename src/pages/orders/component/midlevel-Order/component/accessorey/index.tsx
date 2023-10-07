@@ -1,7 +1,7 @@
 import React from "react";
 import MidlevelOrders from "../..";
 
-const Accessorey: React.FC = () => {
+const AccessoreyOrder: React.FC = () => {
   return (
     <div>
       <MidlevelOrders>
@@ -11,4 +11,4 @@ const Accessorey: React.FC = () => {
   );
 };
 
-export default Accessorey;
+export default AccessoreyOrder;

@@ -10,7 +10,7 @@ const PremiumHeader: React.FC = () => {
         <SNlogo />
       </div>
       <div className="content-section">
-        <NavLink to="/products/mid-level/product/styles">Styles</NavLink>
+        <NavLink to="#">Styles</NavLink>
       </div>
     </div>
   );
