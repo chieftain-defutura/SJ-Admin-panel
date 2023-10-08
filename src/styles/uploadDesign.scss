@@ -21,7 +21,13 @@
       border-radius: 10px;
       background: #fff;
       box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.16);
+      position: relative;
       cursor: pointer;
+      .logo {
+        img {
+          width: 100%;
+        }
+      }
       .plus-icon {
         padding: 68px;
         svg {
