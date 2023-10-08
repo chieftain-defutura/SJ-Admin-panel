@@ -75,6 +75,11 @@
           gap: 40px;
           align-items: center;
           justify-content: space-between;
+          img {
+            width: 200px;
+            height: 100px;
+            object-fit: contain;
+          }
         }
         .input-area {
           label {

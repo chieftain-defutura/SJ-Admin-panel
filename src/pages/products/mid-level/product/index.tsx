@@ -2,10 +2,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import MidprodcutLayout from "../../../../layout/midproduct-layout";
 import "../../../../styles/productLayout.scss";
 import { NavLink } from "react-router-dom";
-import { collection, getDocs, query } from "firebase/firestore/lite";
+import { collection, getDocs, query, where } from "firebase/firestore/lite";
 import { PRODUCTS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import { db } from "../../../../utils/firebase";
-import { IProductdata } from "../../../../constants/types";
+import { IProductCategory, IProductdata } from "../../../../constants/types";
 import Button from "../../../../components/button";
 import LayoutModule from "../../../../components/layoutModule";
 
@@ -30,7 +30,10 @@ const MidProducts: React.FC = () => {
   };
   const handleGetData = useCallback(async () => {
     try {
-      const productData = query(collection(db, PRODUCTS_COLLECTION_NAME));
+      const productData = query(
+        collection(db, PRODUCTS_COLLECTION_NAME),
+        where("type", "==", IProductCategory.MID)
+      );
       const data = await getDocs(productData);
       const fetchedData = data.docs.map((d) => ({
         id: d.id,
@@ -58,7 +61,9 @@ const MidProducts: React.FC = () => {
         <div className="product-card-layout">
           {data.map((f, i) => (
             <div className="product-card" key={i}>
-              <img src={f.productImage} alt="" width={200} height={250} />
+              <div className="product-img">
+                <img src={f.productImage} alt="" width={200} height={250} />
+              </div>
               <div className="product-details">
                 <h3>{f.styles}</h3>
                 <Button varient="primary" onClick={handleToggle}>

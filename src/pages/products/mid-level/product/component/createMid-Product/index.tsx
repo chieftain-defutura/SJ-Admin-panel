@@ -29,6 +29,8 @@ const initialValue = {
   offerPrice: "",
   colors: ["#000000"],
   detailedFutures: [{ materials: "", cloth: "" }],
+  showDesign: false,
+  showTextDesign: false,
 };
 
 export interface IFiles {
@@ -356,65 +358,65 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                     </div>
                     <div className="sizes">
                       <div>
-                        {sizes
-                          .filter(
-                            (f) => f.country === country && f.gender === gender
-                          )
-                          .map((m, i) => (
-                            <div className="types" key={i}>
-                              {m.sizeVarients.map((s, j) => (
-                                <div className="input-box" key={j}>
-                                  <input
-                                    type="checkbox"
-                                    checked={s.show}
-                                    onChange={(e) => {
-                                      const newSizes = [...sizes];
+                        {sizes.map((m, i) => (
+                          <>
+                            {m.country === country && m.gender === gender ? (
+                              <div className="types" key={i}>
+                                {m.sizeVarients.map((s, j) => (
+                                  <div className="input-box" key={j}>
+                                    <input
+                                      type="checkbox"
+                                      checked={s.show}
+                                      onChange={(e) => {
+                                        const newSizes = [...sizes];
+                                        setSizes([
+                                          ...newSizes.map((m, ii) => {
+                                            console.log(ii !== i);
+                                            if (ii !== i) return { ...m };
+                                            const sizeVarients =
+                                              m.sizeVarients.map((s, jj) => {
+                                                if (jj !== j) return { ...s };
+                                                return {
+                                                  ...s,
+                                                  show: e.target.checked,
+                                                };
+                                              });
+                                            return { ...m, sizeVarients };
+                                          }),
+                                        ]);
+                                      }}
+                                    />
+                                    <span>{s.size}</span>
+                                    <input
+                                      type="number"
+                                      value={s.measurement}
+                                      onChange={(e) => {
+                                        const newSizes = [...sizes];
 
-                                      setSizes([
-                                        ...newSizes.map((m, ii) => {
-                                          if (ii !== i) return { ...m };
-                                          const sizeVarients =
-                                            m.sizeVarients.map((s, jj) => {
-                                              if (jj !== j) return { ...s };
-                                              return {
-                                                ...s,
-                                                show: e.target.checked,
-                                              };
-                                            });
-                                          return { ...m, sizeVarients };
-                                        }),
-                                      ]);
-                                    }}
-                                  />
-                                  <span>{s.size}</span>
-                                  <input
-                                    type="number"
-                                    value={s.measurement}
-                                    onChange={(e) => {
-                                      const newSizes = [...sizes];
-
-                                      setSizes([
-                                        ...newSizes.map((m, ii) => {
-                                          if (ii !== i) return { ...m };
-                                          const sizeVarients =
-                                            m.sizeVarients.map((s, jj) => {
-                                              if (jj !== j) return { ...s };
-                                              return {
-                                                ...s,
-                                                measurement: Number(
-                                                  e.target.value
-                                                ),
-                                              };
-                                            });
-                                          return { ...m, sizeVarients };
-                                        }),
-                                      ]);
-                                    }}
-                                  />
-                                </div>
-                              ))}
-                            </div>
-                          ))}
+                                        setSizes([
+                                          ...newSizes.map((m, ii) => {
+                                            if (ii !== i) return { ...m };
+                                            const sizeVarients =
+                                              m.sizeVarients.map((s, jj) => {
+                                                if (jj !== j) return { ...s };
+                                                return {
+                                                  ...s,
+                                                  measurement: Number(
+                                                    e.target.value
+                                                  ),
+                                                };
+                                              });
+                                            return { ...m, sizeVarients };
+                                          }),
+                                        ]);
+                                      }}
+                                    />
+                                  </div>
+                                ))}
+                              </div>
+                            ) : null}
+                          </>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -425,14 +427,26 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                 <div className="toggle-image">
                   <div className="active-img">
                     <h3>Active image</h3>
-                    <ToggleSwitch label={""} />
+                    <ToggleSwitch
+                      value={values.showDesign}
+                      setValue={(value) =>
+                        setValues((v) => ({ ...v, showDesign: value }))
+                      }
+                      label={""}
+                    />
                   </div>
                   <div className="active-img">
                     <h3>Text image</h3>
-                    <ToggleSwitch label={""} />
+                    <ToggleSwitch
+                      value={values.showTextDesign}
+                      setValue={(value) =>
+                        setValues((v) => ({ ...v, showTextDesign: value }))
+                      }
+                      label={""}
+                    />
                   </div>
                 </div>
-
+                <div className="position-toggle"></div>
                 <div className="detailes">
                   <FieldArray name="detailedFutures">
                     {(arrayHelpers) => (

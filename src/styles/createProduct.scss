@@ -360,4 +360,45 @@
       }
     }
   }
+  .detailes {
+    margin-top: 32px;
+    .materials {
+      display: flex;
+      flex-direction: column;
+      padding-top: 39px;
+      .input-colums {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 22px;
+      }
+      input {
+        max-width: 100%;
+        width: 460px;
+        border-radius: 5px;
+        border: 1px solid #eee;
+        background: rgba(140, 115, 203, 0.04);
+        padding: 16px;
+      }
+      .plus-icon {
+        padding: 4px;
+        border-radius: 5px;
+        background: #d9d9d9;
+        cursor: pointer;
+      }
+      .delete {
+        padding: 4px;
+
+        border-radius: 5px;
+        background: #d9d9d9;
+        cursor: pointer;
+      }
+    }
+  }
+  .btn-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 32px;
+  }
 }

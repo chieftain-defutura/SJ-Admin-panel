@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import "../../styles/toggleSwitch.scss";
 interface IToogle {
-  label: "";
+  label?: string;
+  value: boolean;
+  setValue: (val: boolean) => void;
 }
 
-const ToggleSwitch: React.FC<IToogle> = ({ label }) => {
-  const [checked, setCheked] = useState(false);
-
+const ToggleSwitch: React.FC<IToogle> = ({ label, value, setValue }) => {
   return (
     <div>
       <label className="switch">
         <input
           type="checkbox"
-          checked={checked}
-          onChange={() => setCheked(!checked)}
+          checked={value}
+          onChange={() => setValue(!value)}
         />
         <span className="slider" />
       </label>

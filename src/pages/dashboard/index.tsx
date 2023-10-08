@@ -5,6 +5,7 @@ import TotalRevenue from "../../components/dashboard/totalRevenue";
 import OrdersCard from "../../components/dashboard/ordersCard";
 import "./dashboard.scss";
 import { OrdersData } from "../../data/ordersData";
+import { Link } from "react-router-dom";
 
 const Dashboard: React.FC = () => {
   return (
@@ -37,14 +38,18 @@ const Dashboard: React.FC = () => {
               </div>
               <h1>120k</h1>
               <h2>premium</h2>
-              <h6>View more</h6>
+              <Link to="/user-subscription">
+                <h6>View more</h6>
+              </Link>
             </div>
             <div className="subscription-content flex-item">
               <div className="total-subscription-text flex-item">
                 <h5>User total post</h5>
               </div>
               <h1>120</h1>
-              <h6>View more</h6>
+              <Link to="/user-post-list">
+                <h6>View more</h6>
+              </Link>
             </div>
           </div>
         </div>
