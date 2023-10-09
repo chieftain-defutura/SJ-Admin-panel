@@ -20,6 +20,7 @@ import MidlevelOrder from "./pages/orders/component/midlevel-Order";
 import AccessoriesOrder from "./pages/orders/component/accessories-orders";
 import UserPostList from "./pages/dashboard/component/userPostList";
 import UserSubscription from "./pages/dashboard/component/userSubscription";
+import CreateAccessory from "./pages/accessory/component/createAccessory";
 
 const App: React.FC = () => {
   return (
@@ -89,6 +90,10 @@ const App: React.FC = () => {
         <Route
           path="/products/mid-level/accessory"
           element={<AccessoryHome />}
+        />
+        <Route
+          path="/products/mid-level/accessory/create"
+          element={<CreateAccessory index={0} />}
         />
         <Route path="/products/premium" element={<Premium />} />
         <Route

@@ -5,11 +5,18 @@ import { ReactComponent as Plus } from "../../../../../../assets/icons/plus.svg"
 import BGimage from "../../../../../../assets/icons/bg-image.svg";
 import Button from "../../../../../../components/button";
 import LayoutModule from "../../../../../../components/layoutModule";
-import { addDoc, collection, getDocs, query } from "firebase/firestore/lite";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore/lite";
 import { DESIGN_TEXT_IMAGE } from "../../../../../../constants/firebaseCollection";
 import { db, storage } from "../../../../../../utils/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
+import { IProductCategory } from "../../../../../../constants/types";
 
 export interface IDesigns {
   Designs?: File;
@@ -73,6 +80,7 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
       const dataRef = await addDoc(collection(db, DESIGN_TEXT_IMAGE), {
         ...urls,
         hashTag,
+        type: IProductCategory.DESIGN_IMAGE,
       });
       console.log(dataRef);
     } catch (error) {}
@@ -84,7 +92,10 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
       //   collection(db, DESIGN_TEXT_IMAGE),
       //   where("Designs", "==", uploadImage.Designs)
       // );
-      const productData = query(collection(db, DESIGN_TEXT_IMAGE));
+      const productData = query(
+        collection(db, DESIGN_TEXT_IMAGE),
+        where("type", "==", IProductCategory.DESIGN_IMAGE)
+      );
       const data = await getDocs(productData);
       const fetchedData = data.docs.map((d) => ({
         id: d.id,
@@ -121,11 +132,11 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
                     <img
                       src={designLogo}
                       alt="design-logo"
-                      width={200}
-                      height={100}
+                      // width={164}
+                      // height={160}
                     />
                   ) : (
-                    <img src={BGimage} alt="BGimage" width={200} height={100} />
+                    <img src={BGimage} alt="image" width={200} height={100} />
                   )}
                 </div>
                 <div className="input-area">
@@ -160,8 +171,19 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
           {data.map((i, index) => (
             <div className="design-wrap" key={index}>
               <div className="logo">
-                <img src={i.Designs} alt="" />
+                {data ? (
+                  <img
+                    src={i.Designs}
+                    alt=""
+                    width={200}
+                    height={250}
+                    style={{ objectFit: "contain" }}
+                  />
+                ) : (
+                  <img src={i.TextImage} alt="image" width={200} height={100} />
+                )}
               </div>
+
               <Button varient="primary">view</Button>
             </div>
           ))}

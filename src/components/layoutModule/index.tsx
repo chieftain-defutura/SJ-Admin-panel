@@ -16,9 +16,6 @@ const LayoutModule: React.FC<ILayoutModule> = ({
       <div className="product-detail">
         <div className="modal-overlay " onClick={handleToggle} />
         <div className={`product-detail-wrap ${className} `}>
-          {/* <div className="close-icon" onClick={handleToggle}>
-            <Close />
-          </div> */}
           <div className="layout-module-children">{children}</div>
         </div>
       </div>
