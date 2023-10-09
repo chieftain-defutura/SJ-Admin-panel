@@ -121,8 +121,8 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                   <div className="imageupload">
                     <Field as="select" name="styles">
                       <option value="">select styles</option>
-                      <option value="Round Neck">Round Neck</option>
-                      <option value="V Neck">V Neck</option>
+                      <option value="Saree">Saree</option>
+                      <option value="Blazers">Blazers</option>
                     </Field>
                     <div className="video-image">
                       <div className="bg-video">

@@ -20,11 +20,6 @@ const ProductModule: React.FC<IProductLayoutModule> = ({
             <Close />
           </div>
           {children}
-          {/* <div className="product-preview-img"></div>
-
-          <div className="product-preview">
-           
-          </div> */}
         </div>
       </div>
     </div>

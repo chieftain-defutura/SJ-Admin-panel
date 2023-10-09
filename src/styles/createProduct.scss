@@ -359,6 +359,26 @@
         }
       }
     }
+    .position-toggle {
+      h2 {
+        color: var(--text-primary);
+        font-weight: 500;
+        padding: 24px 0;
+      }
+      .toggle-positions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        .toggles {
+          display: flex;
+          flex-direction: row-reverse;
+          align-items: center;
+          gap: 4px;
+          padding: 8px;
+        }
+      }
+    }
   }
   .detailes {
     margin-top: 32px;

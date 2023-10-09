@@ -67,9 +67,52 @@ const AccessoryHome = () => {
               </div>
               {active && (
                 <ProductModule handleToggle={handleToggle}>
-                  <div className="product-preview-img">
-                    <h1>hello</h1>
-                  </div>
+                  {f.detailedFutures.map((item, index) => (
+                    <>
+                      <div className="product-preview-img" key={index}>
+                        <h2>Product image</h2>
+                        <div className="product-img">
+                          <img
+                            src={f.productImage}
+                            alt="products"
+                            width={176}
+                            height={234}
+                          />
+                        </div>
+                        {/* <h3>{f.productName}</h3> */}
+                      </div>
+                      <div className="product-preview-img">
+                        <h2>Preview</h2>
+                        <div className="content">
+                          <div>
+                            <h4>style</h4>
+                            <h3>{f.styles}</h3>
+                          </div>{" "}
+                          <div>
+                            <h4>Normal Price</h4>
+                            <h3>{f.normalPrice}</h3>
+                          </div>
+                          <div>
+                            <h4>Normal Price</h4>
+                            <h3>{f.offerPrice}</h3>
+                          </div>
+                        </div>
+                        <div className="detailed-future">
+                          <h4>Detailed Features</h4>
+                        </div>
+                        <div className="content-material">
+                          <div>
+                            <h4>Material</h4>
+                            <h3>{item.materials}</h3>
+                          </div>
+                          <div>
+                            <h4>Cloth</h4>
+                            <h3>{item.cloth}</h3>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  ))}
                 </ProductModule>
               )}
             </div>

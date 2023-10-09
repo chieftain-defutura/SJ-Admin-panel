@@ -2,10 +2,16 @@ import React, { useCallback, useEffect, useState } from "react";
 import "../../../../../../styles/uploadDesign.scss";
 import MidprodcutLayout from "../../../../../../layout/midproduct-layout";
 import {
+  Timestamp,
   addDoc,
   collection,
+  deleteDoc,
+  doc,
   getDocs,
+  orderBy,
   query,
+  setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore/lite";
 import Button from "../../../../../../components/button";
@@ -18,6 +24,8 @@ import BGimage from "../../../../../../assets/icons/bg-image.svg";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import { IProductCategory } from "../../../../../../constants/types";
+import ToggleSwitch from "../../../../../../components/toggleSwitch";
+import { ReactComponent as Deleteicon } from "../../../../../../assets/icons/delete.svg";
 
 const Textimage = () => {
   const [active, setIsActive] = useState(false);
@@ -26,12 +34,14 @@ const Textimage = () => {
   //   const [fileSize, setFileSize] = useState(false);
   const [data, setData] = useState<IUploadFiles[]>([]);
   const [hashTag, setHashtag] = useState("");
+  const [isActiveImage, setActiveImage] = useState(true);
+  console.log(isActiveImage);
 
   const handleFilechange = (e: any) => {
     const file = e.target.files[0];
     setUploadImage((e) => ({
       ...e,
-      TextImage: file,
+      Images: file,
     }));
     const fileReader = new FileReader();
     fileReader.onload = (r) => {
@@ -46,6 +56,34 @@ const Textimage = () => {
     setIsActive(true);
   };
 
+  const handleDelete = async (id: string) => {
+    try {
+      const productData = query(collection(db, DESIGN_TEXT_IMAGE));
+      const data = await getDocs(productData);
+      const fetchedData = data.docs.map((d) => ({
+        id: d.id,
+        ...(d.data() as any),
+      }));
+      const taskDocRef = doc(db, DESIGN_TEXT_IMAGE, id);
+      await deleteDoc(taskDocRef);
+    } catch (err) {
+      alert(err);
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const docRef = doc(db, DESIGN_TEXT_IMAGE);
+
+      await updateDoc(docRef, {
+        isActiveImage,
+      });
+      console.log("Document successfully updated!");
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
+
   const handleSubmit = async () => {
     setIsActive(!active);
     try {
@@ -53,7 +91,7 @@ const Textimage = () => {
 
       let UploadFiles = 0;
       const imageFileUrl = Object.entries(uploadImage).map((f) => f);
-
+      console.log(imageFileUrl);
       await Promise.all(
         imageFileUrl.map(async (f) => {
           const imageRef = ref(storage, `DesignImages/${v4()}`);
@@ -72,16 +110,21 @@ const Textimage = () => {
       const dataRef = await addDoc(collection(db, DESIGN_TEXT_IMAGE), {
         ...urls,
         hashTag,
+        // active: isActiveImage,
         type: IProductCategory.TEXT_IMAGE,
+        created: Timestamp.now(),
       });
       console.log(dataRef);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleGetData = useCallback(async () => {
     try {
       const productData = query(
         collection(db, DESIGN_TEXT_IMAGE),
+        orderBy("created"),
         where("type", "==", "text-images")
       );
       const data = await getDocs(productData);
@@ -108,14 +151,16 @@ const Textimage = () => {
             <div className="plus-icon">
               <Plus />
             </div>
-            <Button varient="primary">Add image</Button>
+            <div className="add-btn">
+              <Button varient="primary">Add image</Button>
+            </div>
           </div>
           {active && (
             <LayoutModule handleToggle={handleToggle} className="layout-module">
               <h2>Add text image</h2>
               <div className="layout-wrap">
                 <div className="upload-area">
-                  {uploadImage["TextImage"] ? (
+                  {uploadImage["Images"] ? (
                     <img src={textImage} alt="text" width={200} height={100} />
                   ) : (
                     <img src={BGimage} alt="bg" width={200} height={100} />
@@ -152,16 +197,29 @@ const Textimage = () => {
           )}
           {data.map((i, index) => (
             <div className="design-wrap" key={index}>
+              <div className="toggle-switch">
+                <h3>Active</h3>
+                <ToggleSwitch
+                  value={isActiveImage}
+                  setValue={() => handleUpdate}
+                />
+              </div>
               <div className="logo">
                 <img
-                  src={i.TextImage}
+                  src={i.Images}
                   alt=""
                   width={200}
                   height={250}
                   style={{ objectFit: "contain" }}
                 />
               </div>
-              <Button varient="primary">view</Button>
+              <div className="update">
+                <div onClick={() => handleDelete}>
+                  <Deleteicon />
+                </div>
+
+                <Button varient="primary">view</Button>
+              </div>
             </div>
           ))}
         </div>

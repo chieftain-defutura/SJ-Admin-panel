@@ -8,7 +8,6 @@ import Button from "../../../../components/button";
 import Input from "../../../../components/input";
 import { PRODUCTS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import { IProductCategory } from "../../../../constants/types";
-import { defaultSizes, Country } from "../../../../data/midproductSize";
 import { storage, db } from "../../../../utils/firebase";
 import {
   IFiles,
@@ -31,20 +30,6 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
   const [files, setFiles] = useState<IFiles[]>([]);
   const [toggle, setToggle] = useState(false);
   const [material, setMaterial] = useState<Material[]>([]);
-  const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
-  const [country, setCountry] = useState("");
-
-  const [sizes, setSizes] = useState<
-    {
-      gender: string;
-      country: string;
-      sizeVarients: {
-        size: string;
-        measurement: number;
-        show: boolean;
-      }[];
-    }[]
-  >([]);
 
   const handleToggle = () => {
     setToggle(true);
@@ -76,7 +61,6 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
       const dataRef = await addDoc(collection(db, PRODUCTS_COLLECTION_NAME), {
         ...value,
         ...urls,
-        sizes: sizes,
         type: IProductCategory.ACCESSORY,
       });
       console.log(dataRef);
@@ -86,28 +70,6 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
     console.log("value", value);
   };
 
-  const getSizesLists = useMemo(() => {
-    if (!gender || !country) return undefined;
-
-    const data = sizes.find(
-      (f) => f.country === country && f.gender === gender
-    );
-    console.log(data);
-    if (!data) {
-      setSizes((e) => [
-        ...e,
-        {
-          gender: gender,
-          country: country,
-          sizeVarients: [...defaultSizes],
-        },
-      ]);
-      return;
-    } else {
-      return data;
-    }
-  }, [gender, country]);
-  console.log(sizes);
   return (
     <PremiumLayout>
       <Formik initialValues={initialValue} onSubmit={handleSubmit}>
@@ -121,8 +83,10 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
                   <div className="imageupload">
                     <Field as="select" name="styles">
                       <option value="">select styles</option>
-                      <option value="Round Neck">Round Neck</option>
-                      <option value="V Neck">V Neck</option>
+                      <option value="pillow">pillow</option>
+                      <option value="Bed">Bed</option>
+                      <option value="Bed-shit">Bed shit</option>
+                      <option value="Bed-cover">Bed cover</option>
                     </Field>
                     <div className="video-image">
                       <div className="bg-video">

@@ -8,6 +8,8 @@ import { db } from "../../../../utils/firebase";
 import { IProductCategory, IProductdata } from "../../../../constants/types";
 import Button from "../../../../components/button";
 import LayoutModule from "../../../../components/layoutModule";
+import ProductModule from "../../../../components/productLayoutModule";
+import CardModule from "../card";
 
 // const sizes=[
 //   {
@@ -58,44 +60,7 @@ const MidProducts: React.FC = () => {
             <h4>Add style</h4>
           </NavLink>
         </div>
-        <div className="product-card-layout">
-          {data.map((f, i) => (
-            <div className="product-card" key={i}>
-              <div className="product-img">
-                <img src={f.productImage} alt="" width={200} height={250} />
-              </div>
-              <div className="product-details">
-                <h3>{f.styles}</h3>
-                <Button varient="primary" onClick={handleToggle}>
-                  View
-                </Button>
-              </div>
-              {active && (
-                <LayoutModule
-                  handleToggle={handleToggle}
-                  className="product-module"
-                >
-                  <h2>preview</h2>
-
-                  <div className="product-preview">
-                    <div>
-                      <h2>Style</h2>
-                      <h3>{f.styles}</h3>
-                    </div>
-                    <div>
-                      <h2>Normal price</h2>
-                      <h3>{f.normalPrice}</h3>
-                    </div>
-                    <div>
-                      <h2>Offer price</h2>
-                      <h3>{f.offerPrice}</h3>
-                    </div>
-                  </div>
-                </LayoutModule>
-              )}
-            </div>
-          ))}
-        </div>
+        <CardModule data={data} handleToggle={handleToggle} active={active} />
       </div>
     </MidprodcutLayout>
   );

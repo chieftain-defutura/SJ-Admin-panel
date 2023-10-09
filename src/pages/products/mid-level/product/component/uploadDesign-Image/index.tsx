@@ -17,19 +17,22 @@ import { db, storage } from "../../../../../../utils/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import { IProductCategory } from "../../../../../../constants/types";
+import { ReactComponent as Deleteicon } from "../../../../../../assets/icons/delete.svg";
+import ToggleSwitch from "../../../../../../components/toggleSwitch";
 
 export interface IDesigns {
-  Designs?: File;
-  TextImage?: File;
+  Images?: File;
+  // TextImage?: File;
 }
 export interface IUploadFiles {
-  Designs: "";
+  Images: "";
   hashTag: "";
-  TextImage: "";
+  // TextImage: "";
 }
 
 const UploadmidProductImage: React.FC<IDesigns> = () => {
   const [active, setIsActive] = useState(false);
+  const [isActiveImage, setActiveImage] = useState(true);
   const [uploadImage, setUploadImage] = useState<IDesigns>({});
   const [designLogo, setDesignLogo] = useState("");
   const [data, setData] = useState<IUploadFiles[]>([]);
@@ -37,7 +40,7 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
     const file = e.target.files[0];
     setUploadImage((e) => ({
       ...e,
-      Designs: file,
+      Images: file,
     }));
     const fileReader = new FileReader();
     fileReader.onload = (r) => {
@@ -80,6 +83,7 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
       const dataRef = await addDoc(collection(db, DESIGN_TEXT_IMAGE), {
         ...urls,
         hashTag,
+        active: isActiveImage,
         type: IProductCategory.DESIGN_IMAGE,
       });
       console.log(dataRef);
@@ -121,14 +125,16 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
             <div className="plus-icon">
               <Plus />
             </div>
-            <Button varient="primary">Add image</Button>
+            <div className="add-btn">
+              <Button varient="primary">Add image</Button>
+            </div>
           </div>
           {active && (
             <LayoutModule handleToggle={handleToggle} className="layout-module">
               <h2>Add image</h2>
               <div className="layout-wrap">
                 <div className="upload-area">
-                  {uploadImage["Designs"] ? (
+                  {uploadImage["Images"] ? (
                     <img
                       src={designLogo}
                       alt="design-logo"
@@ -170,21 +176,31 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
           )}
           {data.map((i, index) => (
             <div className="design-wrap" key={index}>
+              <div className="toggle-switch">
+                <h3>Active</h3>
+                <ToggleSwitch
+                  value={isActiveImage}
+                  setValue={(value) => setActiveImage(value)}
+                />
+              </div>
               <div className="logo">
                 {data ? (
                   <img
-                    src={i.Designs}
+                    src={i.Images}
                     alt=""
                     width={200}
                     height={250}
                     style={{ objectFit: "contain" }}
                   />
                 ) : (
-                  <img src={i.TextImage} alt="image" width={200} height={100} />
+                  <img src={i.Images} alt="image" width={200} height={100} />
                 )}
               </div>
+              <div className="update">
+                <Deleteicon />
 
-              <Button varient="primary">view</Button>
+                <Button varient="primary">view</Button>
+              </div>
             </div>
           ))}
         </div>

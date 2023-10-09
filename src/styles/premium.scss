@@ -1,3 +1,9 @@
 .premium-layout {
   margin-left: 160px;
+  .product-card-layout {
+    .product-preview-img {
+      display: flex;
+      background-color: red;
+    }
+  }
 }
