@@ -1,0 +1,25 @@
+.customer-details-wrapper {
+  .customer-details-container {
+    display: flex;
+    align-items: center;
+    gap: 61px;
+    h5 {
+      letter-spacing: -0.24px;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+    .flex-item {
+      gap: 8px;
+    }
+    .icons {
+      margin-top: 8px;
+    }
+  }
+  .dont-btn {
+    position: absolute;
+    bottom: 24px;
+    left: 48%;
+    right: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
