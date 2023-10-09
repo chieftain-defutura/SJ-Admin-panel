@@ -1,0 +1,92 @@
+.delivery-details-modal-wrapper {
+  .order-conformed-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 14px 16px;
+    gap: 32px;
+    .first-column {
+      .flex-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .checkbox-input {
+          .unstyled {
+            list-style-type: none;
+            .styled-checkbox {
+              position: absolute;
+              opacity: 0;
+
+              & + label {
+                position: relative;
+                cursor: pointer;
+                padding: 0;
+                font-size: 12px;
+                color: var(--secondary-);
+              }
+              & + label:before {
+                content: "";
+                margin-right: 10px;
+                display: inline-block;
+                vertical-align: text-top;
+                width: 20px;
+                height: 20px;
+                border-radius: 5px;
+                border: 1px solid #aaa;
+              }
+              &:checked + label:before {
+                border-radius: 5px;
+                background: linear-gradient(90deg, #462d85 0%, #db00ff 100%);
+                border: none;
+              }
+
+              &:disabled + label {
+                color: #b8b8b8;
+                cursor: auto;
+              }
+              &:disabled + label:before {
+                box-shadow: none;
+                background: #ddd;
+              }
+              &:checked + label:after {
+                content: "";
+                position: absolute;
+                left: 5px;
+                top: 9px;
+                background: white;
+                width: 2px;
+                height: 2px;
+                box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white,
+                  4px -4px 0 white, 4px -6px 0 white, 4px -8px 0 white;
+                transform: rotate(45deg);
+              }
+            }
+          }
+        }
+
+        .calender-content {
+          input[type="date"] {
+            padding: 5px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            font-size: 12px;
+            color: var(--primary-);
+          }
+        }
+      }
+      .text-area-input {
+        margin-top: 8px;
+        textarea {
+          padding: 12px;
+          border-radius: 5px;
+          border: 1px solid #ddd;
+        }
+      }
+    }
+  }
+  .done-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 18px;
+  }
+}
