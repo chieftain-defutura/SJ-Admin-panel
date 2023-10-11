@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import TShirtImg from "../../../../assets/images/t-shirt-two.png";
 import Layout from "../../../../layout";
 import { ReactComponent as ChevronDown } from "../../../../assets/icons/chevron-down.svg";
@@ -9,20 +9,41 @@ import "../../../../styles/postOrder.scss";
 import Button from "../../../../components/button";
 import LayoutModule from "../../../../components/layoutModule";
 import MidlevelModal from "../../ordersModals/midlevelModal";
+import { get } from "http";
+import { collection, getDocs } from "firebase/firestore/lite";
+import { db } from "../../../../utils/firebase";
 
-const data = {
-  heading: "Today mid level orders",
-  orderNumber: 71,
-  todayRevenue: "Today Revenue",
-  today: "11,500",
-  orders: "orders",
-  image: TShirtImg,
-  navigation: "/orders/post-orders",
-};
+// const datas = {
+//   heading: "Today mid level orders",
+//   orderNumber: 71,
+//   todayRevenue: "Today Revenue",
+//   today: "11,500",
+//   orders: "orders",
+//   image: TShirtImg,
+//   navigation: "/orders/post-orders",
+// };
 
 const MidlevelOrder: React.FC = () => {
   const [active, setActive] = useState(false);
   const [isActive, setIsActive] = useState(false);
+
+  const [data, setData] = useState<any[]>();
+  const getData = useCallback(async () => {
+    const productData = await getDocs(collection(db, "Orders"));
+    const fetchProduct = productData.docs.map((doc) => ({
+      id: doc.id,
+      ...(doc.data() as any),
+    }));
+    setData(fetchProduct);
+  }, []);
+
+  useEffect(() => {
+    getData();
+  }, [getData]);
+
+  const FilteredData = data?.filter((f) => f.type === "Mid-Level");
+  console.log(FilteredData);
+
   const handleToggle = () => {
     setIsActive(!isActive);
   };
@@ -34,6 +55,8 @@ const MidlevelOrder: React.FC = () => {
   const handleModalCloseToggle = () => {
     setActive(false);
   };
+
+  if (!data) return <p>no data</p>;
 
   return (
     <div className="mx">
@@ -48,7 +71,7 @@ const MidlevelOrder: React.FC = () => {
               gridTemplateColumns: "1fr 1fr",
             }}
           >
-            <SingleCard data={data} />
+            {/* <SingleCard data={data} /> */}
             <div style={{ marginTop: "18px" }}>
               <TotalRevenue />
             </div>
@@ -98,11 +121,11 @@ const MidlevelOrder: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {PostTableData.map((item, index) => (
+                {data.map((item, index) => (
                   <tr key={index}>
                     <td>
                       <div className="flex-item row-header">
-                        <img src={item.profileImg} alt="" />
+                        {/* <img src={item.profileImg} alt="" /> */}
                         <p>{item.name}</p>
                       </div>
                     </td>
