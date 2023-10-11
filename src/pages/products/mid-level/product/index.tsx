@@ -6,30 +6,11 @@ import { collection, getDocs, query, where } from "firebase/firestore/lite";
 import { PRODUCTS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import { db } from "../../../../utils/firebase";
 import { IProductCategory, IProductdata } from "../../../../constants/types";
-import Button from "../../../../components/button";
-import LayoutModule from "../../../../components/layoutModule";
-import ProductModule from "../../../../components/productLayoutModule";
-import CardModule from "../card";
-
-// const sizes=[
-//   {
-//     map:"S",
-//     value:32,
-//     show:false
-//   }
-// ]
-
-// {
-//   country:"india",
-//   gen:"male",sizes:sizes
-// }
+import CardModule from "../../../../components/card";
 
 const MidProducts: React.FC = () => {
   const [data, setData] = useState<IProductdata[]>([]);
-  const [active, setActive] = useState(false);
-  const handleToggle = () => {
-    setActive(!active);
-  };
+
   const handleGetData = useCallback(async () => {
     try {
       const productData = query(
@@ -60,7 +41,11 @@ const MidProducts: React.FC = () => {
             <h4>Add style</h4>
           </NavLink>
         </div>
-        <CardModule data={data} handleToggle={handleToggle} active={active} />
+        <div className="product-card-layout">
+          {data.map((f, i) => (
+            <CardModule {...f} key={i} />
+          ))}
+        </div>
       </div>
     </MidprodcutLayout>
   );

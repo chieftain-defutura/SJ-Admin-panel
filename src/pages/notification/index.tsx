@@ -25,7 +25,7 @@ const Notification: React.FC = () => {
     if (notification?.title) {
       notify();
     }
-  }, []);
+  }, [notify]);
 
   requestForToken();
 

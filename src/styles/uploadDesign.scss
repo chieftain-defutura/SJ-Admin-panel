@@ -33,6 +33,10 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        h3 {
+          font-family: "Gilroy-Medium";
+          font-weight: 500;
+        }
       }
       .update {
         display: flex;
@@ -43,6 +47,41 @@
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+      .delete-module {
+        position: relative;
+        overflow-y: auto;
+        margin: 0 auto;
+        box-sizing: border-box;
+        border-radius: 10px;
+        background-color: #fff;
+        width: 580px;
+        height: 181px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        .content-delete {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        h3 {
+          padding-bottom: 12px;
+        }
+        p {
+          color: var(--gray);
+          font-weight: 500;
+          font-size: 12px;
+          line-height: 20px;
+        }
+        .delete-section-btn {
+          padding-top: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: space-evenly;
+        }
       }
     }
     .layout-module {
@@ -59,7 +98,7 @@
         display: flex;
         width: 100%;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
         padding-top: 65px;
         button {
           width: 170px;

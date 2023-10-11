@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import PremiumLayout from "../../../../layout/premium-layout";
 import { addDoc, collection } from "firebase/firestore/lite";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -28,12 +28,9 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
   const [image, setImage] = useState("");
   const [video, setVideo] = useState("");
   const [files, setFiles] = useState<IFiles[]>([]);
-  const [toggle, setToggle] = useState(false);
   const [material, setMaterial] = useState<Material[]>([]);
+  console.log(material);
 
-  const handleToggle = () => {
-    setToggle(true);
-  };
   const handleSubmit = async (value: typeof initialValue) => {
     try {
       let urls = {};

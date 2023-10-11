@@ -10,22 +10,20 @@ import {
   getDocs,
   orderBy,
   query,
-  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore/lite";
-import Button from "../../../../../../components/button";
-import LayoutModule from "../../../../../../components/layoutModule";
 import { DESIGN_TEXT_IMAGE } from "../../../../../../constants/firebaseCollection";
 import { db, storage } from "../../../../../../utils/firebase";
 import { IDesigns, IUploadFiles } from "../uploadDesign-Image";
-import { ReactComponent as Plus } from "../../../../../../assets/icons/plus-2.svg";
-import BGimage from "../../../../../../assets/icons/bg-image.svg";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import { IProductCategory } from "../../../../../../constants/types";
-import ToggleSwitch from "../../../../../../components/toggleSwitch";
-import { ReactComponent as Deleteicon } from "../../../../../../assets/icons/delete.svg";
+import ImageCardModule from "../../../imageCardModule";
+import Button from "../../../../../../components/button";
+import { ReactComponent as Plus } from "../../../../../../assets/icons/plus-2.svg";
+import LayoutModule from "../../../../../../components/layoutModule";
+import BGimage from "../../../../../../assets/icons/bg-image.svg";
 
 const Textimage = () => {
   const [active, setIsActive] = useState(false);
@@ -35,7 +33,7 @@ const Textimage = () => {
   const [data, setData] = useState<IUploadFiles[]>([]);
   const [hashTag, setHashtag] = useState("");
   const [isActiveImage, setActiveImage] = useState(true);
-  console.log(isActiveImage);
+  // console.log(isActiveImage);
 
   const handleFilechange = (e: any) => {
     const file = e.target.files[0];
@@ -64,6 +62,8 @@ const Textimage = () => {
         id: d.id,
         ...(d.data() as any),
       }));
+      console.log(fetchedData);
+
       const taskDocRef = doc(db, DESIGN_TEXT_IMAGE, id);
       await deleteDoc(taskDocRef);
     } catch (err) {
@@ -85,7 +85,8 @@ const Textimage = () => {
   };
 
   const handleSubmit = async () => {
-    setIsActive(!active);
+    setIsActive(false);
+
     try {
       let urls = {};
 
@@ -156,7 +157,10 @@ const Textimage = () => {
             </div>
           </div>
           {active && (
-            <LayoutModule handleToggle={handleToggle} className="layout-module">
+            <LayoutModule
+              handleToggle={() => setIsActive(!active)}
+              className="layout-module"
+            >
               <h2>Add text image</h2>
               <div className="layout-wrap">
                 <div className="upload-area">
@@ -195,32 +199,17 @@ const Textimage = () => {
               </div>
             </LayoutModule>
           )}
-          {data.map((i, index) => (
-            <div className="design-wrap" key={index}>
-              <div className="toggle-switch">
-                <h3>Active</h3>
-                <ToggleSwitch
-                  value={isActiveImage}
-                  setValue={() => handleUpdate}
-                />
-              </div>
-              <div className="logo">
-                <img
-                  src={i.Images}
-                  alt=""
-                  width={200}
-                  height={250}
-                  style={{ objectFit: "contain" }}
-                />
-              </div>
-              <div className="update">
-                <div onClick={() => handleDelete}>
-                  <Deleteicon />
-                </div>
 
-                <Button varient="primary">view</Button>
-              </div>
-            </div>
+          {data.map((i, index) => (
+            <ImageCardModule
+              handleFilechange={handleFilechange}
+              uploadImage={uploadImage}
+              isActiveImage={isActiveImage}
+              handleDelete={handleDelete}
+              handleUpdate={handleUpdate}
+              {...i}
+              key={index}
+            />
           ))}
         </div>
       </div>

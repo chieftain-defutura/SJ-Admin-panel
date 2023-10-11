@@ -1,18 +1,12 @@
-import React, { ChangeEvent, useMemo, useState } from "react";
-import { Field, FieldArray, Form, Formik, FormikValues } from "formik";
+import React, { useMemo, useState } from "react";
+import { Field, FieldArray, Form, Formik } from "formik";
 import "../../../../../../styles/createProduct.scss";
 import Input from "../../../../../../components/input";
 import Button from "../../../../../../components/button";
 import { v4 } from "uuid";
-import LayoutModule from "../../../../../../components/layoutModule";
 import { ReactComponent as Plus } from "../../../../../../assets/icons/plus-2.svg";
 import { ReactComponent as Delete } from "../../../../../../assets/icons/delete.svg";
-import { NavLink } from "react-router-dom";
-import {
-  Country,
-  Sizes,
-  defaultSizes,
-} from "../../../../../../data/midproductSize";
+import { Country, defaultSizes } from "../../../../../../data/midproductSize";
 import CreateProductLayout from "../../../../../../layout/createProduct-layout";
 import { addDoc, collection } from "firebase/firestore/lite";
 import { db, storage } from "../../../../../../utils/firebase";
@@ -48,11 +42,15 @@ export interface Material {
 
 const CreateMidProduct: React.FC<Material> = ({ index }) => {
   const [image, setImage] = useState("");
-  const [video, setVideo] = useState("");
+  // const [video, setVideo] = useState("");
   const [files, setFiles] = useState<IFiles[]>([]);
   const [active, setActive] = useState(false);
   const [toggle, setToggle] = useState(false);
+  console.log(toggle);
+
   const [material, setMaterial] = useState<Material[]>([]);
+  console.log(material);
+
   const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
   const [country, setCountry] = useState("");
 
@@ -129,7 +127,9 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
     } else {
       return data;
     }
-  }, [gender, country]);
+  }, [gender, country, sizes]);
+  console.log("getSizesLists", getSizesLists);
+
   console.log(sizes);
   return (
     <CreateProductLayout>
@@ -178,7 +178,7 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                           </div>
                         </label>
                       </div>
-                      <div className="bg-video">
+                      {/* <div className="bg-video">
                         <h4>3D Video</h4>
                         <label htmlFor="3dvideo" className="custom-file-upload">
                           <input
@@ -203,7 +203,7 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                             <video src={video}></video>
                           </div>
                         </label>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <div className="product-info">

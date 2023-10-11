@@ -29,8 +29,10 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
   const [image, setImage] = useState("");
   const [video, setVideo] = useState("");
   const [files, setFiles] = useState<IFiles[]>([]);
-  const [toggle, setToggle] = useState(false);
+
   const [material, setMaterial] = useState<Material[]>([]);
+  console.log(material);
+
   const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
   const [country, setCountry] = useState("");
 
@@ -46,9 +48,6 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
     }[]
   >([]);
 
-  const handleToggle = () => {
-    setToggle(true);
-  };
   const handleSubmit = async (value: typeof initialValue) => {
     try {
       let urls = {};
@@ -106,8 +105,8 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
     } else {
       return data;
     }
-  }, [gender, country]);
-  console.log(sizes);
+  }, [gender, country, sizes]);
+  console.log("getSizesLists", getSizesLists);
   return (
     <PremiumLayout>
       <Formik initialValues={initialValue} onSubmit={handleSubmit}>

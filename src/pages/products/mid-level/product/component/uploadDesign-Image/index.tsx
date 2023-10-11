@@ -8,8 +8,11 @@ import LayoutModule from "../../../../../../components/layoutModule";
 import {
   addDoc,
   collection,
+  deleteDoc,
+  doc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore/lite";
 import { DESIGN_TEXT_IMAGE } from "../../../../../../constants/firebaseCollection";
@@ -17,8 +20,8 @@ import { db, storage } from "../../../../../../utils/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import { IProductCategory } from "../../../../../../constants/types";
-import { ReactComponent as Deleteicon } from "../../../../../../assets/icons/delete.svg";
-import ToggleSwitch from "../../../../../../components/toggleSwitch";
+
+import ImageCardModule from "../../../imageCardModule";
 
 export interface IDesigns {
   Images?: File;
@@ -55,7 +58,35 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
   const handleToggle = () => {
     setIsActive(true);
   };
+  const handleDelete = async (id: string) => {
+    try {
+      const productData = query(collection(db, DESIGN_TEXT_IMAGE));
+      const data = await getDocs(productData);
+      const fetchedData = data.docs.map((d) => ({
+        id: d.id,
+        ...(d.data() as any),
+      }));
+      console.log("fetchedData", fetchedData);
 
+      const taskDocRef = doc(db, DESIGN_TEXT_IMAGE, id);
+      await deleteDoc(taskDocRef);
+    } catch (err) {
+      alert(err);
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const docRef = doc(db, DESIGN_TEXT_IMAGE);
+
+      await updateDoc(docRef, {
+        isActiveImage,
+      });
+      console.log("Document successfully updated!");
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
   const handleSubmit = async () => {
     setIsActive(!active);
     try {
@@ -130,7 +161,10 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
             </div>
           </div>
           {active && (
-            <LayoutModule handleToggle={handleToggle} className="layout-module">
+            <LayoutModule
+              handleToggle={() => setIsActive(!active)}
+              className="layout-module"
+            >
               <h2>Add image</h2>
               <div className="layout-wrap">
                 <div className="upload-area">
@@ -142,7 +176,7 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
                       // height={160}
                     />
                   ) : (
-                    <img src={BGimage} alt="image" width={200} height={100} />
+                    <img src={BGimage} alt="Bg" width={200} height={100} />
                   )}
                 </div>
                 <div className="input-area">
@@ -175,33 +209,15 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
             </LayoutModule>
           )}
           {data.map((i, index) => (
-            <div className="design-wrap" key={index}>
-              <div className="toggle-switch">
-                <h3>Active</h3>
-                <ToggleSwitch
-                  value={isActiveImage}
-                  setValue={(value) => setActiveImage(value)}
-                />
-              </div>
-              <div className="logo">
-                {data ? (
-                  <img
-                    src={i.Images}
-                    alt=""
-                    width={200}
-                    height={250}
-                    style={{ objectFit: "contain" }}
-                  />
-                ) : (
-                  <img src={i.Images} alt="image" width={200} height={100} />
-                )}
-              </div>
-              <div className="update">
-                <Deleteicon />
-
-                <Button varient="primary">view</Button>
-              </div>
-            </div>
+            <ImageCardModule
+              handleFilechange={handleFilechange}
+              uploadImage={uploadImage}
+              isActiveImage={isActiveImage}
+              handleDelete={handleDelete}
+              handleUpdate={handleUpdate}
+              {...i}
+              key={index}
+            />
           ))}
         </div>
       </div>
