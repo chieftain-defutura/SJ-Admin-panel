@@ -204,7 +204,6 @@ const Textimage = () => {
             <ImageCardModule
               handleFilechange={handleFilechange}
               uploadImage={uploadImage}
-              isActiveImage={isActiveImage}
               handleDelete={handleDelete}
               handleUpdate={handleUpdate}
               {...i}

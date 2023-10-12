@@ -35,7 +35,7 @@ export interface IUploadFiles {
 
 const UploadmidProductImage: React.FC<IDesigns> = () => {
   const [active, setIsActive] = useState(false);
-  const [isActiveImage, setActiveImage] = useState(true);
+  // const [isActiveImage, setActiveImage] = useState(true);
   const [uploadImage, setUploadImage] = useState<IDesigns>({});
   const [designLogo, setDesignLogo] = useState("");
   const [data, setData] = useState<IUploadFiles[]>([]);
@@ -80,7 +80,7 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
       const docRef = doc(db, DESIGN_TEXT_IMAGE);
 
       await updateDoc(docRef, {
-        isActiveImage,
+        // isActiveImage,
       });
       console.log("Document successfully updated!");
     } catch (error) {
@@ -114,7 +114,7 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
       const dataRef = await addDoc(collection(db, DESIGN_TEXT_IMAGE), {
         ...urls,
         hashTag,
-        active: isActiveImage,
+        // active: isActiveImage,
         type: IProductCategory.DESIGN_IMAGE,
       });
       console.log(dataRef);
@@ -212,7 +212,7 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
             <ImageCardModule
               handleFilechange={handleFilechange}
               uploadImage={uploadImage}
-              isActiveImage={isActiveImage}
+              // isActiveImage={isActiveImage}
               handleDelete={handleDelete}
               handleUpdate={handleUpdate}
               {...i}
