@@ -32,7 +32,7 @@ const Textimage = () => {
   //   const [fileSize, setFileSize] = useState(false);
   const [data, setData] = useState<IUploadFiles[]>([]);
   const [hashTag, setHashtag] = useState("");
-  const [isActiveImage, setActiveImage] = useState(true);
+  // const [isActiveImage, setActiveImage] = useState(true);
   // console.log(isActiveImage);
 
   const handleFilechange = (e: any) => {
@@ -76,7 +76,7 @@ const Textimage = () => {
       const docRef = doc(db, DESIGN_TEXT_IMAGE);
 
       await updateDoc(docRef, {
-        isActiveImage,
+        // isActiveImage,
       });
       console.log("Document successfully updated!");
     } catch (error) {
@@ -111,7 +111,7 @@ const Textimage = () => {
       const dataRef = await addDoc(collection(db, DESIGN_TEXT_IMAGE), {
         ...urls,
         hashTag,
-        active: isActiveImage,
+        // active: isActiveImage,
         type: IProductCategory.TEXT_IMAGE,
         created: Timestamp.now(),
       });
@@ -157,7 +157,10 @@ const Textimage = () => {
             </div>
           </div>
           {active && (
-            <LayoutModule handleToggle={() => setIsActive(!active)} className="layout-module">
+            <LayoutModule
+              handleToggle={() => setIsActive(!active)}
+              className="layout-module"
+            >
               <h2>Add text image</h2>
               <div className="layout-wrap">
                 <div className="upload-area">
@@ -182,7 +185,12 @@ const Textimage = () => {
               </div>
               <div className="btn-upload">
                 <label htmlFor="icon-image" className="custom-file-upload">
-                  <input type="file" id="icon-image" name="icon" onChange={handleFilechange} />
+                  <input
+                    type="file"
+                    id="icon-image"
+                    name="icon"
+                    onChange={handleFilechange}
+                  />
                   Change Image
                 </label>
                 <Button varient="primary" onClick={handleSubmit}>

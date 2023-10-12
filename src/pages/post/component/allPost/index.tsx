@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import PostCard from "../../../../components/postCard";
 import PostLayout from "../../../../layout/post-layout";
 import { IpostData } from "../../../../constants/types";
-import { useAppDispatch, useAppSelector } from "../../../../store/store";
 import {
   collection,
   doc,
@@ -13,11 +12,9 @@ import {
 } from "firebase/firestore/lite";
 import { db } from "../../../../utils/firebase";
 import { POST_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
-import { fetchData } from "../../../../store/postStoreSlice";
 import Loading from "../../../../components/loading";
 
-const Allpost: React.FC<IpostData> = ({ userId }) => {
-  const [isActive, setisActive] = useState(false);
+const Allpost: React.FC = () => {
   const [data, setData] = useState<IpostData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -28,7 +25,7 @@ const Allpost: React.FC<IpostData> = ({ userId }) => {
   const handleUpdate = async (e: any) => {
     e.preventDefault();
     try {
-      const updateRef = doc(db, POST_COLLECTION_NAME, userId);
+      const updateRef = doc(db, POST_COLLECTION_NAME);
 
       await updateDoc(updateRef, {
         status: "pending",
@@ -71,12 +68,7 @@ const Allpost: React.FC<IpostData> = ({ userId }) => {
         <PostLayout>
           {data.map((f, i) => (
             <>
-              <PostCard
-                handleUpdate={handleUpdate}
-                isActive={isActive}
-                {...f}
-                key={i}
-              />
+              <PostCard handleUpdate={handleUpdate} {...f} key={i} />
             </>
           ))}
         </PostLayout>

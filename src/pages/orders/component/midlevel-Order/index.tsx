@@ -1,27 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
-import TShirtImg from "../../../../assets/images/t-shirt-two.png";
 import Layout from "../../../../layout";
 import { ReactComponent as ChevronDown } from "../../../../assets/icons/chevron-down.svg";
-import SingleCard from "../../../../components/dashboard/SingleCard";
 import TotalRevenue from "../../../../components/dashboard/totalRevenue";
-import { PostTableData } from "../../../../data/postTableData";
 import "../../../../styles/postOrder.scss";
 import Button from "../../../../components/button";
 import LayoutModule from "../../../../components/layoutModule";
 import MidlevelModal from "../../ordersModals/midlevelModal";
-import { get } from "http";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../../utils/firebase";
-
-// const datas = {
-//   heading: "Today mid level orders",
-//   orderNumber: 71,
-//   todayRevenue: "Today Revenue",
-//   today: "11,500",
-//   orders: "orders",
-//   image: TShirtImg,
-//   navigation: "/orders/post-orders",
-// };
 
 const MidlevelOrder: React.FC = () => {
   const [active, setActive] = useState(false);
@@ -150,7 +136,10 @@ const MidlevelOrder: React.FC = () => {
             </table>
           </div>
           {active && (
-            <LayoutModule handleToggle={handleModalToggle} className="layout-module">
+            <LayoutModule
+              handleToggle={handleModalToggle}
+              className="layout-module"
+            >
               <MidlevelModal onClose={handleModalCloseToggle} />
             </LayoutModule>
           )}

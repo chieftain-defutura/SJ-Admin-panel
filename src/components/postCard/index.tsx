@@ -1,14 +1,18 @@
 import React from "react";
 import "./postCard.scss";
 import Button from "../button";
-import ViewDeatailModule from "../viewDetails";
 import { IpostData } from "../../constants/types";
 interface IcardData extends IpostData {
-  isActive: boolean;
+  // isActive: boolean;
   handleUpdate: (e: any) => Promise<void>;
 }
 
-const PostCard: React.FC<IcardData> = ({ textAndImage, productName, style, handleUpdate }) => {
+const PostCard: React.FC<IcardData> = ({
+  textAndImage,
+  productName,
+  style,
+  handleUpdate,
+}) => {
   //   const handleApproved = () => {};
   return (
     <div>
@@ -18,7 +22,12 @@ const PostCard: React.FC<IcardData> = ({ textAndImage, productName, style, handl
             <h6>Post Active </h6>
           </div>
           <div className="post-img">
-            <img src={textAndImage.image} width={200} height={200} />
+            <img
+              src={textAndImage.image}
+              alt="textAndImage"
+              width={200}
+              height={200}
+            />
           </div>
           <h3>user name</h3>
 

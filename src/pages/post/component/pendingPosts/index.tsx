@@ -8,7 +8,7 @@ import { db } from "../../../../utils/firebase";
 import { POST_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import { fetchData } from "../../../../store/postStoreSlice";
 
-const PendingPost: React.FC<IpostData> = ({ userId }) => {
+const PendingPost: React.FC = () => {
   const [isActive, setisActive] = useState(false);
   const [data, setData] = useState<IpostData[]>([]);
   const dispatch = useAppDispatch();
@@ -18,7 +18,7 @@ const PendingPost: React.FC<IpostData> = ({ userId }) => {
   const handleUpdate = async (e: any) => {
     e.preventDefault();
     try {
-      const updateRef = doc(db, POST_COLLECTION_NAME, userId);
+      const updateRef = doc(db, POST_COLLECTION_NAME);
 
       await updateDoc(updateRef, {
         status: "pending",
@@ -48,12 +48,7 @@ const PendingPost: React.FC<IpostData> = ({ userId }) => {
     <div className="mx">
       <PostLayout>
         {data.map((f, i) => (
-          <PostCard
-            isActive={isActive}
-            handleUpdate={handleUpdate}
-            {...f}
-            key={i}
-          />
+          <PostCard handleUpdate={handleUpdate} {...f} key={i} />
         ))}
       </PostLayout>
     </div>

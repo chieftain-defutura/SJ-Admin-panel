@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import MidprodcutLayout from "../../../../layout/midproduct-layout";
 import "../../../../styles/productLayout.scss";
 import { NavLink } from "react-router-dom";
-import { collection, getDocs, query, where, deleteDoc, doc } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { PRODUCTS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import { db } from "../../../../utils/firebase";
 import { IProductCategory, IProductdata } from "../../../../constants/types";
@@ -34,16 +34,6 @@ const MidProducts: React.FC<IProductdata> = ({ id }) => {
     }
   }, [setData]);
 
-  const handleDelete = async () => {
-    const DeleteRef = doc(db, PRODUCTS_COLLECTION_NAME, id);
-
-    try {
-      const removeDoc = await deleteDoc(DeleteRef);
-      console.log(removeDoc);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   useEffect(() => {
     handleGetData();
   }, [handleGetData]);
@@ -61,7 +51,7 @@ const MidProducts: React.FC<IProductdata> = ({ id }) => {
         ) : (
           <div className="product-card-layout">
             {data.map((f, i) => (
-              <CardModule handleDelete={handleDelete} {...f} key={i} />
+              <CardModule {...f} key={i} />
             ))}
           </div>
         )}

@@ -59,23 +59,3 @@ export enum IProductCategory {
   DESIGN_IMAGE = "design-images",
   TEXT_IMAGE = "text-images",
 }
-const a = {
-  textAndImage: {
-    image:
-      "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Freact-native-expo-project-45030dfd-a1a4-4930-b428-fcc1d700ed9c/ImagePicker/f2e74e55-4f13-4f89-a4a3-6a9f48a0b751.jpeg",
-    position: "Front",
-    title: "image",
-  },
-  sizes: {
-    country: "India",
-    sizeVarient: {
-      unit: "cm",
-      size: "S",
-      measurement: 28,
-    },
-  },
-  giftVideo: null,
-  price: "400",
-  style: "Round Neck",
-  status: "pending",
-};
