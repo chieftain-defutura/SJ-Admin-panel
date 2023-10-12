@@ -8,7 +8,7 @@ import { ReactComponent as Plus } from "../../../../../../assets/icons/plus-2.sv
 import { ReactComponent as Delete } from "../../../../../../assets/icons/delete.svg";
 import { Country, defaultSizes } from "../../../../../../data/midproductSize";
 import CreateProductLayout from "../../../../../../layout/createProduct-layout";
-import { addDoc, collection } from "firebase/firestore/lite";
+import { addDoc, collection } from "firebase/firestore";
 import { db, storage } from "../../../../../../utils/firebase";
 import { PRODUCTS_COLLECTION_NAME } from "../../../../../../constants/firebaseCollection";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
@@ -110,9 +110,7 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
   const getSizesLists = useMemo(() => {
     if (!gender || !country) return undefined;
 
-    const data = sizes.find(
-      (f) => f.country === country && f.gender === gender
-    );
+    const data = sizes.find((f) => f.country === country && f.gender === gender);
     console.log(data);
     if (!data) {
       setSizes((e) => [
@@ -150,10 +148,7 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                     <div className="video-image">
                       <div className="bg-video">
                         <h4>Image</h4>
-                        <label
-                          htmlFor="product-image"
-                          className="custom-file-upload"
-                        >
+                        <label htmlFor="product-image" className="custom-file-upload">
                           <input
                             type="file"
                             id="product-image"
@@ -257,9 +252,7 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                         ></div>
                         <Delete
                           onClick={() => {
-                            const updatedColors = values.colors.filter(
-                              (f) => f !== color
-                            );
+                            const updatedColors = values.colors.filter((f) => f !== color);
                             setValues((c) => ({ ...c, colors: updatedColors }));
                           }}
                         />
@@ -303,22 +296,17 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                           <h3
                             style={{
                               color: gender === "MALE" ? "" : "#777",
-                              borderBottom:
-                                gender === "MALE" ? "2px solid #8C73CB" : "",
+                              borderBottom: gender === "MALE" ? "2px solid #8C73CB" : "",
                             }}
                           >
                             Male
                           </h3>
                         </div>
-                        <div
-                          className="female"
-                          onClick={() => setGender("FEMALE")}
-                        >
+                        <div className="female" onClick={() => setGender("FEMALE")}>
                           <h3
                             style={{
                               color: gender === "FEMALE" ? "" : "#777",
-                              borderBottom:
-                                gender === "FEMALE" ? "2px solid #8C73CB" : "",
+                              borderBottom: gender === "FEMALE" ? "2px solid #8C73CB" : "",
                             }}
                           >
                             Female
@@ -343,14 +331,13 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                                           ...newSizes.map((m, ii) => {
                                             console.log(ii !== i);
                                             if (ii !== i) return { ...m };
-                                            const sizeVarients =
-                                              m.sizeVarients.map((s, jj) => {
-                                                if (jj !== j) return { ...s };
-                                                return {
-                                                  ...s,
-                                                  show: e.target.checked,
-                                                };
-                                              });
+                                            const sizeVarients = m.sizeVarients.map((s, jj) => {
+                                              if (jj !== j) return { ...s };
+                                              return {
+                                                ...s,
+                                                show: e.target.checked,
+                                              };
+                                            });
                                             return { ...m, sizeVarients };
                                           }),
                                         ]);
@@ -366,16 +353,13 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                                         setSizes([
                                           ...newSizes.map((m, ii) => {
                                             if (ii !== i) return { ...m };
-                                            const sizeVarients =
-                                              m.sizeVarients.map((s, jj) => {
-                                                if (jj !== j) return { ...s };
-                                                return {
-                                                  ...s,
-                                                  measurement: Number(
-                                                    e.target.value
-                                                  ),
-                                                };
-                                              });
+                                            const sizeVarients = m.sizeVarients.map((s, jj) => {
+                                              if (jj !== j) return { ...s };
+                                              return {
+                                                ...s,
+                                                measurement: Number(e.target.value),
+                                              };
+                                            });
                                             return { ...m, sizeVarients };
                                           }),
                                         ]);
@@ -399,18 +383,14 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                     <h3>Active image</h3>
                     <ToggleSwitch
                       value={values.showDesign}
-                      setValue={(value) =>
-                        setValues((v) => ({ ...v, showDesign: value }))
-                      }
+                      setValue={(value) => setValues((v) => ({ ...v, showDesign: value }))}
                     />
                   </div>
                   <div className="active-img">
                     <h3>Text image</h3>
                     <ToggleSwitch
                       value={values.showTextDesign}
-                      setValue={(value) =>
-                        setValues((v) => ({ ...v, showTextDesign: value }))
-                      }
+                      setValue={(value) => setValues((v) => ({ ...v, showTextDesign: value }))}
                     />
                   </div>
                 </div>
@@ -422,36 +402,28 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                       <div className="toggles">
                         <ToggleSwitch
                           value={values.frontSide}
-                          setValue={(value) =>
-                            setValues((v) => ({ ...v, frontSide: value }))
-                          }
+                          setValue={(value) => setValues((v) => ({ ...v, frontSide: value }))}
                         />
                         <h3>Front side:</h3>
                       </div>
                       <div className="toggles">
                         <ToggleSwitch
                           value={values.backSide}
-                          setValue={(value) =>
-                            setValues((v) => ({ ...v, backSide: value }))
-                          }
+                          setValue={(value) => setValues((v) => ({ ...v, backSide: value }))}
                         />
                         <h3>Back side:</h3>
                       </div>
                       <div className="toggles">
                         <ToggleSwitch
                           value={values.leftSide}
-                          setValue={(value) =>
-                            setValues((v) => ({ ...v, leftSide: value }))
-                          }
+                          setValue={(value) => setValues((v) => ({ ...v, leftSide: value }))}
                         />
                         <h3>Left side:</h3>
                       </div>
                       <div className="toggles">
                         <ToggleSwitch
                           value={values.rightSide}
-                          setValue={(value) =>
-                            setValues((v) => ({ ...v, rightSide: value }))
-                          }
+                          setValue={(value) => setValues((v) => ({ ...v, rightSide: value }))}
                         />
                         <h3>Right side:</h3>
                       </div>

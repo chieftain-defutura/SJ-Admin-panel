@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./postCard.scss";
 import Button from "../button";
 import ViewDeatailModule from "../viewDetails";
-import { collection, getDocs } from "firebase/firestore/lite";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { POST_COLLECTION_NAME } from "../../constants/firebaseCollection";
 import { IpostData } from "../../constants/types";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PremiumLayout from "../../../../layout/premium-layout";
-import { addDoc, collection } from "firebase/firestore/lite";
+import { addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { Formik, Field, FieldArray, Form } from "formik";
 import { v4 } from "uuid";
@@ -9,10 +9,7 @@ import Input from "../../../../components/input";
 import { PRODUCTS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import { IProductCategory } from "../../../../constants/types";
 import { storage, db } from "../../../../utils/firebase";
-import {
-  IFiles,
-  Material,
-} from "../../../products/mid-level/product/component/createMid-Product";
+import { IFiles, Material } from "../../../products/mid-level/product/component/createMid-Product";
 import { ReactComponent as Delete } from "../../../../assets/icons/delete-icon.svg";
 import { ReactComponent as Plus } from "../../../../assets/icons/plus.svg";
 
@@ -88,10 +85,7 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
                     <div className="video-image">
                       <div className="bg-video">
                         <h4>Image</h4>
-                        <label
-                          htmlFor="product-image"
-                          className="custom-file-upload"
-                        >
+                        <label htmlFor="product-image" className="custom-file-upload">
                           <input
                             type="file"
                             id="product-image"

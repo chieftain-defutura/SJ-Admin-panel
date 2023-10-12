@@ -12,7 +12,7 @@ import {
   query,
   updateDoc,
   where,
-} from "firebase/firestore/lite";
+} from "firebase/firestore";
 import { DESIGN_TEXT_IMAGE } from "../../../../../../constants/firebaseCollection";
 import { db, storage } from "../../../../../../utils/firebase";
 import { IDesigns, IUploadFiles } from "../uploadDesign-Image";
@@ -157,10 +157,7 @@ const Textimage = () => {
             </div>
           </div>
           {active && (
-            <LayoutModule
-              handleToggle={() => setIsActive(!active)}
-              className="layout-module"
-            >
+            <LayoutModule handleToggle={() => setIsActive(!active)} className="layout-module">
               <h2>Add text image</h2>
               <div className="layout-wrap">
                 <div className="upload-area">
@@ -185,12 +182,7 @@ const Textimage = () => {
               </div>
               <div className="btn-upload">
                 <label htmlFor="icon-image" className="custom-file-upload">
-                  <input
-                    type="file"
-                    id="icon-image"
-                    name="icon"
-                    onChange={handleFilechange}
-                  />
+                  <input type="file" id="icon-image" name="icon" onChange={handleFilechange} />
                   Change Image
                 </label>
                 <Button varient="primary" onClick={handleSubmit}>

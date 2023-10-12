@@ -10,7 +10,7 @@ import Button from "../../../../components/button";
 import LayoutModule from "../../../../components/layoutModule";
 import MidlevelModal from "../../ordersModals/midlevelModal";
 import { get } from "http";
-import { collection, getDocs } from "firebase/firestore/lite";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../../utils/firebase";
 
 // const datas = {
@@ -150,10 +150,7 @@ const MidlevelOrder: React.FC = () => {
             </table>
           </div>
           {active && (
-            <LayoutModule
-              handleToggle={handleModalToggle}
-              className="layout-module"
-            >
+            <LayoutModule handleToggle={handleModalToggle} className="layout-module">
               <MidlevelModal onClose={handleModalCloseToggle} />
             </LayoutModule>
           )}
