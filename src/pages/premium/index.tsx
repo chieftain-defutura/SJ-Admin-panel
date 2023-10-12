@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "../../styles/premium.scss";
 import PremiumLayout from "../../layout/premium-layout";
-import { query, collection, getDocs, where, deleteDoc, doc } from "firebase/firestore";
+import { query, collection, getDocs, where } from "firebase/firestore";
 import { NavLink } from "react-router-dom";
 import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
 import { IProductCategory, IProductdata } from "../../constants/types";
