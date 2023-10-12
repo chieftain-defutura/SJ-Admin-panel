@@ -15,6 +15,7 @@ import {
 } from "../../../products/mid-level/product/component/createMid-Product";
 import { ReactComponent as Delete } from "../../../../assets/icons/delete-icon.svg";
 import { ReactComponent as Plus } from "../../../../assets/icons/plus.svg";
+import { useNavigate } from "react-router-dom";
 
 const initialValue = {
   styles: "",
@@ -30,6 +31,7 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
   const [files, setFiles] = useState<IFiles[]>([]);
   const [material, setMaterial] = useState<Material[]>([]);
   console.log(material);
+  const navigate = useNavigate();
 
   const handleSubmit = async (value: typeof initialValue) => {
     try {
@@ -61,6 +63,7 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
         type: IProductCategory.ACCESSORY,
       });
       console.log(dataRef);
+      navigate("/products/mid-level/accessory");
     } catch (error) {
       console.log("error", error);
     }

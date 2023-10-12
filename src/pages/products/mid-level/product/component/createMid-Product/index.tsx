@@ -15,6 +15,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import ToggleSwitch from "../../../../../../components/toggleSwitch";
 import ColorModule from "../../../../../../components/color-module";
 import { IProductCategory } from "../../../../../../constants/types";
+import { useNavigate } from "react-router-dom";
 
 const initialValue = {
   styles: "",
@@ -65,6 +66,7 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
       }[];
     }[]
   >([]);
+  const navigate = useNavigate();
 
   const handleToggle = () => {
     setActive(true);
@@ -101,6 +103,7 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
         type: IProductCategory.MID,
       });
       console.log(dataRef);
+      navigate("/products/mid-level/product/styles");
     } catch (error) {
       console.log("error", error);
     }

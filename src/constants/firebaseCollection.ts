@@ -1,5 +1,5 @@
 export const USERS_COLLECTION_NAME = "Users";
-export const POST_COLLECTION_NAME = "post";
+export const POST_COLLECTION_NAME = "Posts";
 export const CART_SUBCOLLECTION_NAME = "Cart";
 export const ADDRESSBOOK_SUBCOLLECTION_NAME = "Addressbook";
 export const MYORDERS_SUBCOLLECTION_NAME = "Myorders";

@@ -1,71 +1,58 @@
-import React, { useState } from "react";
+import React from "react";
 import "./postCard.scss";
 import Button from "../button";
 import ViewDeatailModule from "../viewDetails";
-import { collection, getDocs } from "firebase/firestore/lite";
-import { db } from "../../utils/firebase";
-import { POST_COLLECTION_NAME } from "../../constants/firebaseCollection";
+
 import { IpostData } from "../../constants/types";
-import { fetchData } from "../../store/postStoreSlice";
-import { useAppDispatch, useAppSelector } from "../../store/store";
-const PostCard: React.FC<IpostData> = () => {
-  const [isActive, setisActive] = useState(false);
-  const [data, setData] = useState<IpostData[]>([]);
-  const dispatch = useAppDispatch();
-  const fetchedData = useAppSelector((state) => state.post);
-  console.log(fetchedData);
+interface IcardData extends IpostData {
+  isActive: boolean;
+  handleUpdate: (e: any) => Promise<void>;
+}
 
-  const handleSubmit = async () => {
-    try {
-      const PostRef = await getDocs(collection(db, POST_COLLECTION_NAME));
-      const fetchPost = PostRef.docs.map((doc) => ({
-        id: doc.id,
-        ...(doc.data() as any),
-      }));
-      console.log(fetchPost);
-      setisActive(!isActive);
-      setData(fetchPost);
-      dispatch(fetchData({ fetchPost }));
-    } catch (error) {
-      console.log("Firebase error", error);
-    }
-  };
-
-  const handleToggle = () => {
-    setisActive(!isActive);
-  };
+const PostCard: React.FC<IcardData> = ({
+  textAndImage,
+  productName,
+  style,
+  handleUpdate,
+}) => {
   //   const handleApproved = () => {};
   return (
     <div>
       <div className="product-list">
-        {data.map((f, index) => {
-          return (
-            <div className="postlist" key={index}>
-              <div className="post-box">
-                <h6>Post Active </h6>
-              </div>
+        <div className="postlist">
+          <div className="post-box">
+            <h6>Post Active </h6>
+          </div>
+          <div className="post-img">
+            <img src={textAndImage.image} width={200} height={200} />
+          </div>
+          <h3>user name</h3>
 
-              <img src={f.productImage} alt="post-logo" />
-              <div className="product-details">
-                <h3>{f.username}</h3>
-                <p>{f.description}</p>
-                <h5>{f.hashTag}</h5>
-              </div>
-
-              <div className="button">
-                <Button varient="primary" onClick={handleSubmit}>
-                  View Details
-                </Button>
-                <Button varient="secondary">Deny</Button>
-              </div>
-              <div className="update-time">
-                <p>Today</p>
-                <p>2min ago</p>
-              </div>
+          <div className="product-details">
+            <div>
+              <p>Product</p>
+              <h3>{productName}</h3>
             </div>
-          );
-        })}
-        {isActive && <ViewDeatailModule handleToggle={handleToggle} />}
+            <div>
+              <p>styles</p>
+              <h3>{style}</h3>
+            </div>
+            <p>{}</p>
+          </div>
+
+          <div className="button">
+            <Button varient="primary">View Details</Button>
+            <Button varient="secondary" onClick={handleUpdate}>
+              Deny
+            </Button>
+          </div>
+          <div className="update-time">
+            <p>Today</p>
+            <p>2min ago</p>
+          </div>
+        </div>
+
+        {/* {isActive && <ViewDeatailModule handleToggle={handleToggle} />} */}
       </div>
     </div>
   );

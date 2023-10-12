@@ -111,7 +111,7 @@ const Textimage = () => {
       const dataRef = await addDoc(collection(db, DESIGN_TEXT_IMAGE), {
         ...urls,
         hashTag,
-        // active: isActiveImage,
+        active: isActiveImage,
         type: IProductCategory.TEXT_IMAGE,
         created: Timestamp.now(),
       });

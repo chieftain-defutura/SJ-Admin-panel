@@ -4,7 +4,9 @@ import ProductModule from "../productLayoutModule";
 import { IProductdata } from "../../constants/types";
 import LayoutModule from "../layoutModule";
 
-interface ICardModuleData extends IProductdata {}
+interface ICardModuleData extends IProductdata {
+  handleDelete: () => Promise<void>;
+}
 
 const CardModule: React.FC<ICardModuleData> = ({
   productImage,
@@ -13,12 +15,15 @@ const CardModule: React.FC<ICardModuleData> = ({
   normalPrice,
   offerPrice,
   detailedFutures,
+  handleDelete,
+  id,
 }) => {
   const [active, setActive] = useState(false);
   const [isactive, setIsActive] = useState(false);
   const handleToggle = () => {
     setActive(!active);
   };
+
   return (
     <div>
       <div className="product-card-layout">
@@ -141,7 +146,9 @@ const CardModule: React.FC<ICardModuleData> = ({
                         >
                           Cancel
                         </Button>
-                        <Button varient="primary">Done</Button>
+                        <Button varient="primary" onClick={handleDelete}>
+                          Done
+                        </Button>
                       </div>
                     </LayoutModule>
                   )}

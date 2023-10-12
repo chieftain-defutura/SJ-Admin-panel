@@ -16,6 +16,7 @@ import {
 } from "../../../products/mid-level/product/component/createMid-Product";
 import { ReactComponent as Delete } from "../../../../assets/icons/delete-icon.svg";
 import { ReactComponent as Plus } from "../../../../assets/icons/plus.svg";
+import { useNavigate } from "react-router-dom";
 
 const initialValue = {
   styles: "",
@@ -29,7 +30,7 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
   const [image, setImage] = useState("");
   const [video, setVideo] = useState("");
   const [files, setFiles] = useState<IFiles[]>([]);
-
+  const navigate = useNavigate();
   const [material, setMaterial] = useState<Material[]>([]);
   console.log(material);
 
@@ -79,6 +80,7 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
         type: IProductCategory.PREMIUM,
       });
       console.log(dataRef);
+      navigate("/products/premium");
     } catch (error) {
       console.log("error", error);
     }
