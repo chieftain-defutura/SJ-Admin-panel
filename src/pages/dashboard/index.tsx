@@ -6,6 +6,7 @@ import OrdersCard from "../../components/dashboard/ordersCard";
 import "./dashboard.scss";
 import { OrdersData } from "../../data/ordersData";
 import { Link } from "react-router-dom";
+import Chart from "../../components/Chart";
 
 const Dashboard: React.FC = () => {
   return (
@@ -18,7 +19,15 @@ const Dashboard: React.FC = () => {
           </div>
           <div className="grid-item">
             <TotalRevenue />
-            <TotalRevenue />
+            <div
+              style={{
+                borderRadius: "10px",
+                boxShadow: "0px 0px 12px 0px rgba(0, 0, 0, 0.16)",
+                padding: "16px",
+              }}
+            >
+              <Chart />
+            </div>
           </div>
           <div style={{ margin: "32px 0" }}>
             <OrdersCard data={OrdersData} />
