@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PostCard from "../../../../components/postCard";
 import PostLayout from "../../../../layout/post-layout";
 import { IpostData } from "../../../../constants/types";
@@ -8,14 +8,24 @@ import { db } from "../../../../utils/firebase";
 import { POST_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import { fetchData } from "../../../../store/postStoreSlice";
 
-const ApprovedPost: React.FC<IpostData> = ({ userId }) => {
+const PendingPost: React.FC<IpostData> = ({ userId }) => {
   const [isActive, setisActive] = useState(false);
   const [data, setData] = useState<IpostData[]>([]);
   const dispatch = useAppDispatch();
   const fetchedData = useAppSelector((state) => state.post);
   console.log(fetchedData);
 
-  const handleSubmit = async () => {
+  const handleUpdate = async (e: any) => {
+    e.preventDefault();
+    try {
+      const updateRef = doc(db, POST_COLLECTION_NAME, userId);
+
+      await updateDoc(updateRef, {
+        status: "pending",
+      });
+    } catch (error) {}
+  };
+  const handleGetData = useCallback(async () => {
     try {
       const PostRef = await getDocs(collection(db, POST_COLLECTION_NAME));
       const fetchPost = PostRef.docs.map((doc) => ({
@@ -29,25 +39,14 @@ const ApprovedPost: React.FC<IpostData> = ({ userId }) => {
     } catch (error) {
       console.log("Firebase error", error);
     }
-  };
+  }, [setData, dispatch, isActive]);
+  useEffect(() => {
+    handleGetData();
+  }, [handleGetData]);
 
-  const handleToggle = () => {
-    setisActive(!isActive);
-  };
-  const handleUpdate = async (e: any) => {
-    e.preventDefault();
-    try {
-      const updateRef = doc(db, POST_COLLECTION_NAME, userId);
-
-      await updateDoc(updateRef, {
-        status: "pending",
-      });
-    } catch (error) {}
-  };
   return (
     <div className="mx">
       <PostLayout>
-        <h1>hello</h1>
         {data.map((f, i) => (
           <PostCard
             isActive={isActive}
@@ -61,4 +60,4 @@ const ApprovedPost: React.FC<IpostData> = ({ userId }) => {
   );
 };
 
-export default ApprovedPost;
+export default PendingPost;

@@ -1,18 +1,20 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "../../styles/premium.scss";
 import PremiumLayout from "../../layout/premium-layout";
-import { query, collection, getDocs, where } from "firebase/firestore";
+import { query, collection, getDocs, where, deleteDoc, doc } from "firebase/firestore";
 import { NavLink } from "react-router-dom";
 import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
 import { IProductCategory, IProductdata } from "../../constants/types";
 import { db } from "../../utils/firebase";
 import CardModule from "../../components/card";
-
-const Premium = () => {
+import Loading from "../../components/loading";
+const Premium: React.FC<IProductdata> = ({ id }) => {
   const [data, setData] = useState<IProductdata[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleGetData = useCallback(async () => {
     try {
+      setIsLoading(true);
       const productData = query(
         collection(db, PRODUCTS_COLLECTION_NAME),
         where("type", "==", IProductCategory.PREMIUM)
@@ -26,6 +28,8 @@ const Premium = () => {
       setData(fetchedData);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   }, [setData]);
 
@@ -41,11 +45,15 @@ const Premium = () => {
             <h4>Add style</h4>
           </NavLink>
         </div>
-        <div className="product-card-layout">
-          {data.map((f, i) => (
-            <CardModule {...f} key={i} />
-          ))}
-        </div>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div className="product-card-layout">
+            {data.map((f, i) => (
+              <CardModule {...f} key={i} />
+            ))}
+          </div>
+        )}
       </div>
     </PremiumLayout>
   );

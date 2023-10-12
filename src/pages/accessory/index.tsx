@@ -7,12 +7,15 @@ import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
 import { IProductCategory, IProductdata } from "../../constants/types";
 import { db } from "../../utils/firebase";
 import AccessoryCardModule from "../../components/accessoryCard";
+import Loading from "../../components/loading";
 
 const AccessoryHome = () => {
   const [data, setData] = useState<IProductdata[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleGetData = useCallback(async () => {
     try {
+      setIsLoading(true);
       const productData = query(
         collection(db, PRODUCTS_COLLECTION_NAME),
         where("type", "==", IProductCategory.ACCESSORY)
@@ -26,6 +29,8 @@ const AccessoryHome = () => {
       setData(fetchedData);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   }, [setData]);
 
@@ -41,11 +46,15 @@ const AccessoryHome = () => {
             <h4>Add style</h4>
           </NavLink>
         </div>
-        <div className="product-card-layout">
-          {data.map((f, i) => (
-            <AccessoryCardModule {...f} key={i} />
-          ))}
-        </div>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div className="product-card-layout">
+            {data.map((f, i) => (
+              <AccessoryCardModule {...f} key={i} />
+            ))}
+          </div>
+        )}
       </div>
     </PremiumLayout>
   );

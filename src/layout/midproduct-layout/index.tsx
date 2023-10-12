@@ -3,7 +3,7 @@ import "../layout.scss";
 import Sidebar from "../../components/sidebar";
 import MidProductHeader from "../../components/midProduct-header";
 
-interface ILayoutProps {
+export interface ILayoutProps {
   children: React.ReactNode;
 }
 

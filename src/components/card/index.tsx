@@ -3,8 +3,13 @@ import Button from "../button";
 import ProductModule from "../productLayoutModule";
 import { IProductdata } from "../../constants/types";
 import LayoutModule from "../layoutModule";
+import { deleteDoc, doc } from "firebase/firestore";
+import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
+import { db } from "../../utils/firebase";
 
-interface ICardModuleData extends IProductdata {}
+interface ICardModuleData extends IProductdata {
+  handleDelete?: any;
+}
 
 const CardModule: React.FC<ICardModuleData> = ({
   productImage,
@@ -13,12 +18,24 @@ const CardModule: React.FC<ICardModuleData> = ({
   normalPrice,
   offerPrice,
   detailedFutures,
+  id,
 }) => {
   const [active, setActive] = useState(false);
   const [isactive, setIsActive] = useState(false);
   const handleToggle = () => {
     setActive(!active);
   };
+
+  const handleDelete = async () => {
+    const DeleteRef = doc(db, PRODUCTS_COLLECTION_NAME, id);
+
+    try {
+      await deleteDoc(DeleteRef);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <div className="product-card-layout">
@@ -39,12 +56,7 @@ const CardModule: React.FC<ICardModuleData> = ({
                 <div className="product-preview-img">
                   <h2>Product image</h2>
                   <div className="product-img">
-                    <img
-                      src={productImage}
-                      alt="products"
-                      width={176}
-                      height={234}
-                    />
+                    <img src={productImage} alt="products" width={176} height={234} />
                   </div>
                 </div>
                 <div className="product-preview-img">
@@ -111,37 +123,30 @@ const CardModule: React.FC<ICardModuleData> = ({
                   </div> */}
 
                   <div className="edit-btn">
-                    <Button
-                      varient="secondary"
-                      onClick={(e) => setIsActive(true)}
-                    >
+                    <Button varient="secondary" onClick={(e) => setIsActive(true)}>
                       Delete
                     </Button>
                     <Button varient="primary">Edit</Button>
                   </div>
                   {isactive && (
-                    <LayoutModule
-                      handleToggle={() => setIsActive(false)}
-                      className="delete-module"
-                    >
+                    <LayoutModule handleToggle={() => setIsActive(false)} className="delete-module">
                       <div className="content-delete">
                         <h3>Delete</h3>
                       </div>
                       <div className="content-delete">
                         <p>
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit, sed do eiusmod tempor incididunt ut labore et
-                          dolore magna aliqua. Ut enim ad minim veniam,""
+                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                          veniam,""
                         </p>
                       </div>
                       <div className="delete-section-btn">
-                        <Button
-                          varient="notifi"
-                          onClick={() => setIsActive(false)}
-                        >
+                        <Button varient="notifi" onClick={() => setIsActive(false)}>
                           Cancel
                         </Button>
-                        <Button varient="primary">Done</Button>
+                        <Button varient="primary" onClick={handleDelete}>
+                          Done
+                        </Button>
                       </div>
                     </LayoutModule>
                   )}

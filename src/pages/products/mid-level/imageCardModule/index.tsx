@@ -10,7 +10,6 @@ import { ReactComponent as Deleteicon } from "../../../../assets/icons/delete.sv
 import ProductModule from "../../../../components/productLayoutModule";
 
 interface IData extends IUploadFiles {
-  isActiveImage: boolean;
   handleDelete: (id: string) => Promise<void>;
   handleUpdate: () => Promise<void>;
   uploadImage: IDesigns;
@@ -19,8 +18,7 @@ interface IData extends IUploadFiles {
 }
 const ImageCardModule: React.FC<IData> = ({
   Images,
-  isActiveImage,
-  handleDelete,
+
   handleUpdate,
   uploadImage,
   handleFilechange,
@@ -36,7 +34,7 @@ const ImageCardModule: React.FC<IData> = ({
       <div className="design-wrap">
         <div className="toggle-switch">
           <h3>Active</h3>
-          <ToggleSwitch value={isActiveImage} setValue={() => handleUpdate} />
+          <ToggleSwitch setValue={() => handleUpdate} value={false} />
         </div>
         <div className="logo">
           <img

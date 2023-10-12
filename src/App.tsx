@@ -3,9 +3,7 @@ import "./App.css";
 import Dashboard from "./pages/dashboard";
 import { Route, Routes } from "react-router-dom";
 import Post from "./pages/post";
-import PendingPost from "./pages/post/component/pendingPost";
 import ApprovedPost from "./pages/post/component/approvePost";
-import DenyPost from "./pages/post/component/denyPost";
 import Notification from "./pages/notification";
 import PremiumOrders from "./pages/orders/component/premium-Order";
 import PostOrders from "./pages/orders/component/post-Order";
@@ -21,6 +19,8 @@ import AccessoriesOrder from "./pages/orders/component/accessories-orders";
 import UserPostList from "./pages/dashboard/component/userPostList";
 import UserSubscription from "./pages/dashboard/component/userSubscription";
 import CreateAccessory from "./pages/accessory/component/createAccessory";
+import Allpost from "./pages/post/component/allPost";
+import PendingPost from "./pages/post/component/pendingPosts";
 
 const App: React.FC = () => {
   return (
@@ -28,39 +28,105 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/post" element={<Post children={undefined} />} />
-        <Route path="/post/pendingpost" element={<PendingPost />} />
+        <Route
+          path="/post/all-post"
+          element={
+            <Allpost
+              id={""}
+              productCaption={""}
+              offerPrice={""}
+              quantity={""}
+              color={""}
+              gender={""}
+              detailedFeatures={[]}
+              userId={""}
+              productName={""}
+              textAndImage={{
+                image: "",
+                position: "",
+                title: "",
+              }}
+              sizes={{
+                country: "",
+                sizeVarient: {
+                  unit: "",
+                  size: "",
+                  measurement: 0,
+                },
+              }}
+              giftVideo={null}
+              price={""}
+              style={""}
+              status={""}
+            />
+          }
+        />
         <Route
           path="/post/approved"
           element={
             <ApprovedPost
               id={""}
+              productCaption={""}
+              offerPrice={""}
+              quantity={""}
               color={""}
-              description={""}
-              fontStyle={""}
+              gender={""}
+              detailedFeatures={[]}
+              userId={""}
               productName={""}
-              createdAt={{
-                seconds: 0,
-                nanoseconds: 0,
+              textAndImage={{
+                image: "",
+                position: "",
+                title: "",
               }}
-              productImage={""}
-              material={""}
+              sizes={{
+                country: "",
+                sizeVarient: {
+                  unit: "",
+                  size: "",
+                  measurement: 0,
+                },
+              }}
+              giftVideo={null}
               price={""}
-              royalties={""}
-              giftVidio={""}
-              Style={""}
-              fontColor={""}
-              username={""}
-              hashTag={""}
-              updatedAt={{
-                seconds: 0,
-                nanoseconds: 0,
-              }}
-              size={[]}
+              style={""}
               status={""}
             />
           }
         />
-        <Route path="/post/deny" element={<DenyPost />} />
+        <Route
+          path="/post/pending"
+          element={
+            <PendingPost
+              id={""}
+              productCaption={""}
+              offerPrice={""}
+              quantity={""}
+              color={""}
+              gender={""}
+              detailedFeatures={[]}
+              userId={""}
+              productName={""}
+              textAndImage={{
+                image: "",
+                position: "",
+                title: "",
+              }}
+              sizes={{
+                country: "",
+                sizeVarient: {
+                  unit: "",
+                  size: "",
+                  measurement: 0,
+                },
+              }}
+              giftVideo={null}
+              price={""}
+              style={""}
+              status={""}
+            />
+          }
+        />
         <Route path="/notification" element={<Notification />} />
         <Route path="/orders/premium-orders" element={<PremiumOrders />} />
         <Route path="/orders/post-orders" element={<PostOrders />} />
@@ -73,7 +139,24 @@ const App: React.FC = () => {
         <Route path="/user-subscription" element={<UserSubscription />} />
         <Route
           path="/products/mid-level/product/styles"
-          element={<MidProducts />}
+          element={
+            <MidProducts
+              id={""}
+              country={""}
+              offerPrice={""}
+              productImage={""}
+              sizes={{
+                sizeVarients: [],
+                country: "",
+                gender: "",
+              }}
+              detailedFutures={[]}
+              normalPrice={""}
+              styles={""}
+              productName={""}
+              colors={[]}
+            />
+          }
         />
         <Route
           path="/products/mid-level/product/create"
@@ -95,7 +178,27 @@ const App: React.FC = () => {
           path="/products/mid-level/accessory/create"
           element={<CreateAccessory index={0} />}
         />
-        <Route path="/products/premium" element={<Premium />} />
+        <Route
+          path="/products/premium"
+          element={
+            <Premium
+              id={""}
+              country={""}
+              offerPrice={""}
+              productImage={""}
+              sizes={{
+                sizeVarients: [],
+                country: "",
+                gender: "",
+              }}
+              detailedFutures={[]}
+              normalPrice={""}
+              styles={""}
+              productName={""}
+              colors={[]}
+            />
+          }
+        />
         <Route
           path="/products/premium/create"
           element={<CreatePremium index={0} />}
