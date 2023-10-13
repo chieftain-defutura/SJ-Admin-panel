@@ -71,9 +71,6 @@
       justify-content: center;
     }
     .color-section {
-      display: flex;
-      justify-content: space-between;
-
       .size {
         box-sizing: border-box;
         border: 1px solid #e1e1e1;
@@ -141,45 +138,11 @@
           }
         }
       }
-      .detailes {
-        .materials {
-          display: flex;
-          flex-direction: column;
-          padding-top: 39px;
-          .input-colums {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 22px;
-          }
-          input {
-            max-width: 100%;
-            width: 200px;
-            border-radius: 5px;
-            border: 1px solid #eee;
-            background: rgba(140, 115, 203, 0.04);
-            padding: 16px;
-          }
-          .plus-icon {
-            padding: 4px;
-            border-radius: 5px;
-            background: #d9d9d9;
-            cursor: pointer;
-          }
-          .delete {
-            padding: 4px;
-
-            border-radius: 5px;
-            background: #d9d9d9;
-            cursor: pointer;
-          }
-        }
-      }
     }
   }
   .color-section {
     display: flex;
-    justify-content: space-between;
+    gap: 30px;
     margin-top: 32px;
     padding: 32px;
     border-radius: 10px;
@@ -332,38 +295,15 @@
         cursor: pointer;
       }
     }
-    .detailes {
-      padding-top: 36px;
-      .materials {
-        display: flex;
-        flex-direction: column;
-        padding-top: 39px;
-        .input-colums {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          gap: 22px;
-        }
-        input {
-          max-width: 100%;
-          width: 480px;
-          border-radius: 5px;
-          border: 1px solid #eee;
-          background: rgba(140, 115, 203, 0.04);
-          padding: 16px;
-        }
-        .plus-icon {
-          padding: 4px;
-          background: #fff;
-          cursor: pointer;
-        }
-      }
-    }
+
     .position-toggle {
       h2 {
         color: var(--text-primary);
         font-weight: 500;
         padding: 24px 0;
+      }
+      h3 {
+        font-weight: 500;
       }
       .toggle-positions {
         display: flex;
@@ -380,40 +320,51 @@
       }
     }
   }
+  .description {
+    h3 {
+      padding: 16px 0;
+    }
+    input {
+      padding: 24px;
+
+      border-radius: 5px;
+      width: 500px;
+    }
+  }
   .detailes {
     margin-top: 32px;
-    .materials {
-      display: flex;
-      flex-direction: column;
-      padding-top: 39px;
-      .input-colums {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 22px;
-      }
-      input {
-        max-width: 100%;
-        width: 460px;
-        border-radius: 5px;
-        border: 1px solid #eee;
-        background: rgba(140, 115, 203, 0.04);
-        padding: 16px;
-      }
-      .plus-icon {
-        padding: 4px;
-        border-radius: 5px;
-        background: #d9d9d9;
-        cursor: pointer;
-      }
-      .delete {
-        padding: 4px;
+    // .materials {
+    //   display: flex;
+    //   flex-direction: column;
+    //   padding-top: 39px;
+    //   .input-colums {
+    //     display: flex;
+    //     justify-content: space-between;
+    //     align-items: center;
+    //     gap: 22px;
+    //   }
+    //   input {
+    //     max-width: 100%;
+    //     width: 460px;
+    //     border-radius: 5px;
+    //     border: 1px solid #eee;
+    //     background: rgba(140, 115, 203, 0.04);
+    //     padding: 16px;
+    //   }
+    //   .plus-icon {
+    //     padding: 4px;
+    //     border-radius: 5px;
+    //     background: #d9d9d9;
+    //     cursor: pointer;
+    //   }
+    //   .delete {
+    //     padding: 4px;
 
-        border-radius: 5px;
-        background: #d9d9d9;
-        cursor: pointer;
-      }
-    }
+    //     border-radius: 5px;
+    //     background: #d9d9d9;
+    //     cursor: pointer;
+    //   }
+    // }
   }
   .btn-submit {
     display: flex;

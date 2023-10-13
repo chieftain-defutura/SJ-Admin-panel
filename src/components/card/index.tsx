@@ -15,7 +15,7 @@ const CardModule: React.FC<ICardModuleData> = ({
   productName,
   normalPrice,
   offerPrice,
-  detailedFutures,
+  description,
   id,
 }) => {
   const [active, setActive] = useState(false);
@@ -99,18 +99,14 @@ const CardModule: React.FC<ICardModuleData> = ({
                   <div className="detailed-future">
                     <h4>Detailed Features</h4>
                   </div>
-                  {detailedFutures.map((f, i) => (
-                    <div className="content-material" key={i}>
-                      <div>
-                        <h4>Material</h4>
-                        <h3>{f.materials}</h3>
-                      </div>
-                      <div>
-                        <h4>Cloth</h4>
-                        <h3>{f.cloth}</h3>
-                      </div>
+
+                  <div className="content-material">
+                    <div>
+                      <h4>Description</h4>
+                      <h3>{description}</h3>
                     </div>
-                  ))}
+                  </div>
+
                   {/* <div className="colors">
                     <h4>Colors :</h4>
                     {colors.map((color, i) => (

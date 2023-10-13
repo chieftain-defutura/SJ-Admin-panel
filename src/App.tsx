@@ -54,7 +54,7 @@ const App: React.FC = () => {
                 country: "",
                 gender: "",
               }}
-              detailedFutures={[]}
+              description={""}
               normalPrice={""}
               styles={""}
               productName={""}
@@ -95,7 +95,7 @@ const App: React.FC = () => {
                 country: "",
                 gender: "",
               }}
-              detailedFutures={[]}
+              description={""}
               normalPrice={""}
               styles={""}
               productName={""}

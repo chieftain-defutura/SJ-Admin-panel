@@ -16,7 +16,7 @@ const AccessoryCardModule: React.FC<ICardModuleData> = ({
   normalPrice,
   offerPrice,
   id,
-  detailedFutures,
+  description,
 }) => {
   const [active, setActive] = useState(false);
   const [isactive, setIsActive] = useState(false);
@@ -86,18 +86,12 @@ const AccessoryCardModule: React.FC<ICardModuleData> = ({
                   <div className="detailed-future">
                     <h4>Detailed Features</h4>
                   </div>
-                  {detailedFutures.map((f, i) => (
-                    <div className="content-material" key={i}>
-                      <div>
-                        <h4>Material</h4>
-                        <h3>{f.materials}</h3>
-                      </div>
-                      <div>
-                        <h4>Cloth</h4>
-                        <h3>{f.cloth}</h3>
-                      </div>
+                  <div className="content-material">
+                    <div>
+                      <h4>Description</h4>
+                      <h3>{description}</h3>
                     </div>
-                  ))}
+                  </div>
 
                   <div className="edit-btn">
                     <Button

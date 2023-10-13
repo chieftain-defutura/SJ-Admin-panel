@@ -2,37 +2,25 @@ import React, { useCallback, useEffect, useState } from "react";
 import PostCard from "../../../../components/postCard";
 import PostLayout from "../../../../layout/post-layout";
 import { IpostData } from "../../../../constants/types";
-import { useAppDispatch, useAppSelector } from "../../../../store/store";
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore/lite";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../../../../utils/firebase";
 import { POST_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
-import { fetchData } from "../../../../store/postStoreSlice";
+import Loading from "../../../../components/loading";
 
 const ApprovedPost: React.FC = () => {
-  const [isActive, setisActive] = useState(false);
   const [data, setData] = useState<IpostData[]>([]);
-  const dispatch = useAppDispatch();
-  const fetchedData = useAppSelector((state) => state.post);
-  console.log(fetchedData);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleGetData = useCallback(async () => {
-    try {
-      const PostRef = await getDocs(collection(db, POST_COLLECTION_NAME));
-      const fetchPost = PostRef.docs.map((doc) => ({
-        id: doc.id,
-        ...(doc.data() as any),
-      }));
-      console.log(fetchPost);
-      setisActive(!isActive);
-      setData(fetchPost);
-      dispatch(fetchData({ fetchPost }));
-    } catch (error) {
-      console.log("Firebase error", error);
-    }
-  }, [setData, dispatch, isActive]);
-  useEffect(() => {
-    handleGetData();
-  }, [handleGetData]);
+  // const dispatch = useAppDispatch();
+  // const fetchedData = useAppSelector((state) => state.post);
+  console.log(data);
 
   const handleUpdate = async (e: any) => {
     e.preventDefault();
@@ -40,18 +28,51 @@ const ApprovedPost: React.FC = () => {
       const updateRef = doc(db, POST_COLLECTION_NAME);
 
       await updateDoc(updateRef, {
-        status: "approved",
+        status: "pending",
       });
-    } catch (error) {}
+      console.log(updateRef);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  const handleGetData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const productData = query(
+        collection(db, POST_COLLECTION_NAME),
+        where("status", "==", "approved")
+      );
+      const data = await getDocs(productData);
+      const fetchedData = data.docs.map((d) => ({
+        id: d.id,
+        ...(d.data() as any),
+      }));
+      console.log(fetchedData);
+      setData(fetchedData);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [setData]);
+
+  useEffect(() => {
+    handleGetData();
+  }, [handleGetData]);
   return (
     <div className="mx">
-      <PostLayout>
-        <h1>hello</h1>
-        {data.map((f, i) => (
-          <PostCard handleUpdate={handleUpdate} {...f} key={i} />
-        ))}
-      </PostLayout>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <PostLayout>
+          {data.map((f, i) => (
+            <>
+              <PostCard handleUpdate={handleUpdate} {...f} key={i} />
+            </>
+          ))}
+        </PostLayout>
+      )}
     </div>
   );
 };

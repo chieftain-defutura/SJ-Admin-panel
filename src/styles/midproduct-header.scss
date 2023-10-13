@@ -6,10 +6,14 @@
   right: 0%;
   align-items: center;
   display: inline-flex;
-  padding: 13px 90px 13px 24px;
+  padding: 13px 90px 13px 12px;
   width: 100%;
   gap: 43px;
   border-bottom: 1px solid rgba(170, 170, 170, 0.4);
+  .mid-logo {
+    display: flex;
+    align-items: center;
+  }
   background: #fff;
   .content-section {
     display: flex;

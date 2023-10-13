@@ -1,10 +1,9 @@
 import React, { useMemo, useState } from "react";
-import { Field, FieldArray, Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import "../../../../../../styles/createProduct.scss";
 import Input from "../../../../../../components/input";
 import Button from "../../../../../../components/button";
 import { v4 } from "uuid";
-import { ReactComponent as Plus } from "../../../../../../assets/icons/plus-2.svg";
 import { ReactComponent as Delete } from "../../../../../../assets/icons/delete.svg";
 import { Country, defaultSizes } from "../../../../../../data/midproductSize";
 import CreateProductLayout from "../../../../../../layout/createProduct-layout";
@@ -24,13 +23,14 @@ const initialValue = {
   normalPrice: "",
   offerPrice: "",
   colors: ["#000000"],
-  detailedFutures: [{ materials: "", cloth: "" }],
+  // detailedFutures: [{ materials: "", cloth: "" }],
   showDesign: false,
   showTextDesign: false,
   frontSide: false,
   backSide: false,
   leftSide: false,
   rightSide: false,
+  description: "",
 };
 
 export interface IFiles {
@@ -49,9 +49,6 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
   const [active, setActive] = useState(false);
   const [toggle, setToggle] = useState(false);
   console.log(toggle);
-
-  const [material, setMaterial] = useState<Material[]>([]);
-  console.log(material);
 
   const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
   const [country, setCountry] = useState("");
@@ -462,7 +459,15 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                     </div>
                   </div>
                 </div>
-                <div className="detailes">
+                <div className="description">
+                  <Input
+                    name="description"
+                    type="text"
+                    value={values.description}
+                    label="Description"
+                  />
+                </div>
+                {/* <div className="detailes">
                   <FieldArray name="detailedFutures">
                     {(arrayHelpers) => (
                       <>
@@ -511,10 +516,11 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                             </div>
                           ))}
                         </div>
+                       
                       </>
                     )}
                   </FieldArray>
-                </div>
+                </div> */}
               </div>
               <div className="btn-submit">
                 <Button varient="primary" type="submit" disabled={isSubmitting}>

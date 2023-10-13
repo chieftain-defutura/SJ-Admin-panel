@@ -1,6 +1,7 @@
 export interface IpostData {
   id: string;
   productCaption: string;
+  normalPrice: string;
   offerPrice: string;
   quantity: string;
   color: string;
@@ -44,10 +45,7 @@ export interface IProductdata {
     country: string;
     gender: string;
   };
-  detailedFutures: {
-    materials: string;
-    cloth: string;
-  }[];
+  description: string;
   normalPrice: string;
   styles: string;
   productName: string;

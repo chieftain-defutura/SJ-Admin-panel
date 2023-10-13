@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PremiumLayout from "../../../../layout/premium-layout";
 import { addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Formik, Field, FieldArray, Form } from "formik";
+import { Formik, Field, Form } from "formik";
 import { v4 } from "uuid";
 import Button from "../../../../components/button";
 import Input from "../../../../components/input";
@@ -13,8 +13,7 @@ import {
   IFiles,
   Material,
 } from "../../../products/mid-level/product/component/createMid-Product";
-import { ReactComponent as Delete } from "../../../../assets/icons/delete-icon.svg";
-import { ReactComponent as Plus } from "../../../../assets/icons/plus.svg";
+
 import { useNavigate } from "react-router-dom";
 import MOdalPopUp from "../../../../components/ModalPopupBox";
 
@@ -23,15 +22,14 @@ const initialValue = {
   productName: "",
   normalPrice: "",
   offerPrice: "",
-  detailedFutures: [{ materials: "", cloth: "" }],
+  description: "",
 };
 
 const CreateAccessory: React.FC<Material> = ({ index }) => {
   const [image, setImage] = useState("");
   const [video, setVideo] = useState("");
   const [files, setFiles] = useState<IFiles[]>([]);
-  const [material, setMaterial] = useState<Material[]>([]);
-  console.log(material);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (value: typeof initialValue) => {
@@ -185,58 +183,13 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
                   </div>
                 </div>
               </div>
-              <div className="detailes">
-                <FieldArray name="detailedFutures">
-                  {(arrayHelpers) => (
-                    <>
-                      <div className="add-btn">
-                        <h3>Detailed Features</h3>
-                      </div>
-
-                      <div className="materials">
-                        {values.detailedFutures.map((product, i) => (
-                          <div className="input-colums">
-                            <>
-                              <Input
-                                name={`detailedFutures[${i}].materials`}
-                                type="text"
-                                placeholder="Material"
-                                key={i}
-                              />
-                              <Input
-                                name={`detailedFutures[${i}].cloth`}
-                                type="text"
-                                placeholder="Cloth"
-                              />
-                              <div
-                                className="delete"
-                                onClick={() => {
-                                  setMaterial((c) => {
-                                    arrayHelpers.remove(i);
-                                    return c.filter((i) => i.index !== index);
-                                  });
-                                }}
-                              >
-                                <Delete />
-                              </div>
-                              <div
-                                className="plus-icon "
-                                onClick={() => {
-                                  arrayHelpers.push({
-                                    materials: "",
-                                    cloth: "",
-                                  });
-                                }}
-                              >
-                                <Plus />
-                              </div>
-                            </>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </FieldArray>
+              <div className="description">
+                <h3>Description</h3>
+                <Input
+                  name="description"
+                  type="text"
+                  value={values.description}
+                />
               </div>
               <div className="btn-submit">
                 <Button varient="primary" type="submit" disabled={isSubmitting}>
