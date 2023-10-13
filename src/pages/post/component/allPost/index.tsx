@@ -9,7 +9,7 @@ import {
   query,
   updateDoc,
   where,
-} from "firebase/firestore/lite";
+} from "firebase/firestore";
 import { db } from "../../../../utils/firebase";
 import { POST_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import Loading from "../../../../components/loading";

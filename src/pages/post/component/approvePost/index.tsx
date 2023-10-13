@@ -40,7 +40,7 @@ const ApprovedPost: React.FC = () => {
       const updateRef = doc(db, POST_COLLECTION_NAME);
 
       await updateDoc(updateRef, {
-        status: "pending",
+        status: "approved",
       });
     } catch (error) {}
   };

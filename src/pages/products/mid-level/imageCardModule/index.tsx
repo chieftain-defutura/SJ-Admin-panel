@@ -8,9 +8,11 @@ import {
 } from "../product/component/uploadDesign-Image";
 import { ReactComponent as Deleteicon } from "../../../../assets/icons/delete.svg";
 import ProductModule from "../../../../components/productLayoutModule";
+import { deleteDoc, doc } from "firebase/firestore";
+import { DESIGN_TEXT_IMAGE } from "../../../../constants/firebaseCollection";
+import { db } from "../../../../utils/firebase";
 
 interface IData extends IUploadFiles {
-  handleDelete: (id: string) => Promise<void>;
   handleUpdate: () => Promise<void>;
   uploadImage: IDesigns;
 
@@ -18,7 +20,7 @@ interface IData extends IUploadFiles {
 }
 const ImageCardModule: React.FC<IData> = ({
   Images,
-
+  id,
   handleUpdate,
   uploadImage,
   handleFilechange,
@@ -28,6 +30,16 @@ const ImageCardModule: React.FC<IData> = ({
 
   const handleActive = () => {
     setActive(true);
+  };
+  const handleDelete = async () => {
+    const DeleteRef = doc(db, DESIGN_TEXT_IMAGE, id);
+
+    try {
+      await deleteDoc(DeleteRef);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div>
@@ -73,7 +85,9 @@ const ImageCardModule: React.FC<IData> = ({
               <Button varient="notifi" onClick={() => setIsActive(false)}>
                 Cancel
               </Button>
-              <Button varient="primary">Done</Button>
+              <Button varient="primary" onClick={handleDelete}>
+                Done
+              </Button>
             </div>
           </LayoutModule>
         )}

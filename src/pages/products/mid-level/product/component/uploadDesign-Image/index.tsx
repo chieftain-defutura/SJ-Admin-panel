@@ -8,7 +8,6 @@ import LayoutModule from "../../../../../../components/layoutModule";
 import {
   addDoc,
   collection,
-  deleteDoc,
   doc,
   getDocs,
   query,
@@ -28,8 +27,9 @@ export interface IDesigns {
   // TextImage?: File;
 }
 export interface IUploadFiles {
-  Images: "";
-  hashTag: "";
+  Images: string;
+  hashTag: string;
+  id: string;
   // TextImage: "";
 }
 
@@ -57,22 +57,6 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
 
   const handleToggle = () => {
     setIsActive(true);
-  };
-  const handleDelete = async (id: string) => {
-    try {
-      const productData = query(collection(db, DESIGN_TEXT_IMAGE));
-      const data = await getDocs(productData);
-      const fetchedData = data.docs.map((d) => ({
-        id: d.id,
-        ...(d.data() as any),
-      }));
-      console.log("fetchedData", fetchedData);
-
-      const taskDocRef = doc(db, DESIGN_TEXT_IMAGE, id);
-      await deleteDoc(taskDocRef);
-    } catch (err) {
-      alert(err);
-    }
   };
 
   const handleUpdate = async () => {
@@ -117,6 +101,7 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
         // active: isActiveImage,
         type: IProductCategory.DESIGN_IMAGE,
       });
+      window.location.reload();
       console.log(dataRef);
     } catch (error) {}
   };
@@ -212,8 +197,6 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
             <ImageCardModule
               handleFilechange={handleFilechange}
               uploadImage={uploadImage}
-              // isActiveImage={isActiveImage}
-              handleDelete={handleDelete}
               handleUpdate={handleUpdate}
               {...i}
               key={index}

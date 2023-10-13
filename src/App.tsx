@@ -72,7 +72,7 @@ const App: React.FC = () => {
         />
         <Route
           path="/products/mid-level/product/text-image"
-          element={<Textimage />}
+          element={<Textimage Images={""} hashTag={""} id={""} />}
         />
         <Route
           path="/products/mid-level/accessory"

@@ -28,6 +28,7 @@ export interface IpostData {
   price: string;
   style: string;
   status: string;
+  type: string;
 }
 
 export interface IProductdata {

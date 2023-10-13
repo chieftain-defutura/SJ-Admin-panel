@@ -3,6 +3,9 @@ import Button from "../button";
 import ProductModule from "../productLayoutModule";
 import { IProductdata } from "../../constants/types";
 import LayoutModule from "../layoutModule";
+import { db } from "../../utils/firebase";
+import { deleteDoc, doc } from "firebase/firestore";
+import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
 
 interface ICardModuleData extends IProductdata {}
 
@@ -12,8 +15,7 @@ const AccessoryCardModule: React.FC<ICardModuleData> = ({
   productName,
   normalPrice,
   offerPrice,
-  sizes,
-  colors,
+  id,
   detailedFutures,
 }) => {
   const [active, setActive] = useState(false);
@@ -21,6 +23,16 @@ const AccessoryCardModule: React.FC<ICardModuleData> = ({
 
   const handleToggle = () => {
     setActive(!active);
+  };
+  const handleDelete = async () => {
+    const DeleteRef = doc(db, PRODUCTS_COLLECTION_NAME, id);
+
+    try {
+      await deleteDoc(DeleteRef);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div>
@@ -118,7 +130,9 @@ const AccessoryCardModule: React.FC<ICardModuleData> = ({
                         >
                           Cancel
                         </Button>
-                        <Button varient="primary">Done</Button>
+                        <Button varient="primary" onClick={handleDelete}>
+                          Done
+                        </Button>
                       </div>
                     </LayoutModule>
                   )}

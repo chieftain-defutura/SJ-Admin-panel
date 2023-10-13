@@ -29,6 +29,7 @@ const CardModule: React.FC<ICardModuleData> = ({
 
     try {
       await deleteDoc(DeleteRef);
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }

@@ -11,6 +11,7 @@ const PostCard: React.FC<IcardData> = ({
   textAndImage,
   productName,
   style,
+  type,
   handleUpdate,
 }) => {
   //   const handleApproved = () => {};
@@ -19,7 +20,7 @@ const PostCard: React.FC<IcardData> = ({
       <div className="product-list">
         <div className="postlist">
           <div className="post-box">
-            <h6>Post Active </h6>
+            2<h6>Post Active </h6>
           </div>
           <div className="post-img">
             <img

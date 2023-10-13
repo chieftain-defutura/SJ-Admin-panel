@@ -9,10 +9,14 @@ import Input from "../../../../components/input";
 import { PRODUCTS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import { IProductCategory } from "../../../../constants/types";
 import { storage, db } from "../../../../utils/firebase";
-import { IFiles, Material } from "../../../products/mid-level/product/component/createMid-Product";
+import {
+  IFiles,
+  Material,
+} from "../../../products/mid-level/product/component/createMid-Product";
 import { ReactComponent as Delete } from "../../../../assets/icons/delete-icon.svg";
 import { ReactComponent as Plus } from "../../../../assets/icons/plus.svg";
 import { useNavigate } from "react-router-dom";
+import MOdalPopUp from "../../../../components/ModalPopupBox";
 
 const initialValue = {
   styles: "",
@@ -70,7 +74,7 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
   return (
     <PremiumLayout>
       <Formik initialValues={initialValue} onSubmit={handleSubmit}>
-        {({ values, setValues, handleChange }) => (
+        {({ values, setValues, isSubmitting }) => (
           <Form>
             <div className="create-product">
               <div className="style-section">
@@ -88,7 +92,10 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
                     <div className="video-image">
                       <div className="bg-video">
                         <h4>Image</h4>
-                        <label htmlFor="product-image" className="custom-file-upload">
+                        <label
+                          htmlFor="product-image"
+                          className="custom-file-upload"
+                        >
                           <input
                             type="file"
                             id="product-image"
@@ -232,10 +239,11 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
                 </FieldArray>
               </div>
               <div className="btn-submit">
-                <Button varient="primary" type="submit">
-                  Submit
+                <Button varient="primary" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Uploading" : "submit"}
                 </Button>
               </div>
+              {isSubmitting && <MOdalPopUp />}
             </div>
           </Form>
         )}

@@ -10,10 +10,14 @@ import { PRODUCTS_COLLECTION_NAME } from "../../../../constants/firebaseCollecti
 import { IProductCategory } from "../../../../constants/types";
 import { defaultSizes, Country } from "../../../../data/midproductSize";
 import { storage, db } from "../../../../utils/firebase";
-import { IFiles, Material } from "../../../products/mid-level/product/component/createMid-Product";
+import {
+  IFiles,
+  Material,
+} from "../../../products/mid-level/product/component/createMid-Product";
 import { ReactComponent as Delete } from "../../../../assets/icons/delete-icon.svg";
 import { ReactComponent as Plus } from "../../../../assets/icons/plus.svg";
 import { useNavigate } from "react-router-dom";
+import MOdalPopUp from "../../../../components/ModalPopupBox";
 
 const initialValue = {
   styles: "",
@@ -87,7 +91,9 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
   const getSizesLists = useMemo(() => {
     if (!gender || !country) return undefined;
 
-    const data = sizes.find((f) => f.country === country && f.gender === gender);
+    const data = sizes.find(
+      (f) => f.country === country && f.gender === gender
+    );
     console.log(data);
     if (!data) {
       setSizes((e) => [
@@ -107,7 +113,7 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
   return (
     <PremiumLayout>
       <Formik initialValues={initialValue} onSubmit={handleSubmit}>
-        {({ values, setValues, handleChange }) => (
+        {({ values, setValues, isSubmitting }) => (
           <Form>
             <div className="create-product">
               <div className="style-section">
@@ -123,7 +129,10 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                     <div className="video-image">
                       <div className="bg-video">
                         <h4>Image</h4>
-                        <label htmlFor="product-image" className="custom-file-upload">
+                        <label
+                          htmlFor="product-image"
+                          className="custom-file-upload"
+                        >
                           <input
                             type="file"
                             id="product-image"
@@ -236,13 +245,33 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                         <div className="gender">
                           <div
                             className="male"
-                            // style={{ color: gender ? "black" : "" }}
-                            onClick={(e) => setGender("MALE")}
+                            onClick={() => setGender("MALE")}
                           >
-                            <h3 style={{ color: gender ? "black" : "" }}>Male</h3>
+                            <h3
+                              style={{
+                                color: gender === "MALE" ? "" : "#777",
+                                borderBottom:
+                                  gender === "MALE" ? "2px solid #8C73CB" : "",
+                              }}
+                            >
+                              Male
+                            </h3>
                           </div>
-                          <div className="female" onClick={(e) => setGender("FEMALE")}>
-                            <h3 style={{ color: gender ? "black" : "" }}>Female</h3>
+                          <div
+                            className="female"
+                            onClick={() => setGender("FEMALE")}
+                          >
+                            <h3
+                              style={{
+                                color: gender === "FEMALE" ? "" : "#777",
+                                borderBottom:
+                                  gender === "FEMALE"
+                                    ? "2px solid #8C73CB"
+                                    : "",
+                              }}
+                            >
+                              Female
+                            </h3>
                           </div>
                         </div>
                       </div>
@@ -263,13 +292,14 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                                             ...newSizes.map((m, ii) => {
                                               console.log(ii !== i);
                                               if (ii !== i) return { ...m };
-                                              const sizeVarients = m.sizeVarients.map((s, jj) => {
-                                                if (jj !== j) return { ...s };
-                                                return {
-                                                  ...s,
-                                                  show: e.target.checked,
-                                                };
-                                              });
+                                              const sizeVarients =
+                                                m.sizeVarients.map((s, jj) => {
+                                                  if (jj !== j) return { ...s };
+                                                  return {
+                                                    ...s,
+                                                    show: e.target.checked,
+                                                  };
+                                                });
                                               return { ...m, sizeVarients };
                                             }),
                                           ]);
@@ -285,13 +315,16 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                                           setSizes([
                                             ...newSizes.map((m, ii) => {
                                               if (ii !== i) return { ...m };
-                                              const sizeVarients = m.sizeVarients.map((s, jj) => {
-                                                if (jj !== j) return { ...s };
-                                                return {
-                                                  ...s,
-                                                  measurement: Number(e.target.value),
-                                                };
-                                              });
+                                              const sizeVarients =
+                                                m.sizeVarients.map((s, jj) => {
+                                                  if (jj !== j) return { ...s };
+                                                  return {
+                                                    ...s,
+                                                    measurement: Number(
+                                                      e.target.value
+                                                    ),
+                                                  };
+                                                });
                                               return { ...m, sizeVarients };
                                             }),
                                           ]);
@@ -333,7 +366,9 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                                       onClick={() => {
                                         setMaterial((c) => {
                                           arrayHelpers.remove(i);
-                                          return c.filter((i) => i.index !== index);
+                                          return c.filter(
+                                            (i) => i.index !== index
+                                          );
                                         });
                                       }}
                                     >
@@ -361,10 +396,15 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                   </div>
                 </div>
                 <div className="btn-submit">
-                  <Button varient="primary" type="submit">
-                    Submit
+                  <Button
+                    varient="primary"
+                    type="submit"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Uploading" : "submit"}
                   </Button>
                 </div>
+                {isSubmitting && <MOdalPopUp />}
               </div>
             </div>
           </Form>

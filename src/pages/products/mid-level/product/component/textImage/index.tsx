@@ -5,7 +5,6 @@ import {
   Timestamp,
   addDoc,
   collection,
-  deleteDoc,
   doc,
   getDocs,
   orderBy,
@@ -25,7 +24,7 @@ import { ReactComponent as Plus } from "../../../../../../assets/icons/plus-2.sv
 import LayoutModule from "../../../../../../components/layoutModule";
 import BGimage from "../../../../../../assets/icons/bg-image.svg";
 
-const Textimage = () => {
+const Textimage: React.FC<IUploadFiles> = ({ id }) => {
   const [active, setIsActive] = useState(false);
   const [uploadImage, setUploadImage] = useState<IDesigns>({});
   const [textImage, settextImage] = useState("");
@@ -52,23 +51,6 @@ const Textimage = () => {
 
   const handleToggle = () => {
     setIsActive(true);
-  };
-
-  const handleDelete = async (id: string) => {
-    try {
-      const productData = query(collection(db, DESIGN_TEXT_IMAGE));
-      const data = await getDocs(productData);
-      const fetchedData = data.docs.map((d) => ({
-        id: d.id,
-        ...(d.data() as any),
-      }));
-      console.log(fetchedData);
-
-      const taskDocRef = doc(db, DESIGN_TEXT_IMAGE, id);
-      await deleteDoc(taskDocRef);
-    } catch (err) {
-      alert(err);
-    }
   };
 
   const handleUpdate = async () => {
@@ -115,6 +97,7 @@ const Textimage = () => {
         type: IProductCategory.TEXT_IMAGE,
         created: Timestamp.now(),
       });
+      window.location.reload();
       console.log(dataRef);
     } catch (error) {
       console.log(error);
@@ -143,6 +126,7 @@ const Textimage = () => {
   useEffect(() => {
     handleGetData();
   }, [handleGetData]);
+
   return (
     <MidprodcutLayout>
       <div className="upload-image">
@@ -204,7 +188,6 @@ const Textimage = () => {
             <ImageCardModule
               handleFilechange={handleFilechange}
               uploadImage={uploadImage}
-              handleDelete={handleDelete}
               handleUpdate={handleUpdate}
               {...i}
               key={index}
