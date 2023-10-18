@@ -6,10 +6,12 @@ import LayoutModule from "../layoutModule";
 import { deleteDoc, doc } from "firebase/firestore";
 import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
 import { db } from "../../utils/firebase";
+import { Link } from "react-router-dom";
 
 interface ICardModuleData extends IProductdata {}
 
 const CardModule: React.FC<ICardModuleData> = ({
+  gender,
   productImage,
   styles,
   productName,
@@ -17,12 +19,15 @@ const CardModule: React.FC<ICardModuleData> = ({
   offerPrice,
   description,
   id,
+  sizes,
+  colors,
 }) => {
   const [active, setActive] = useState(false);
   const [isactive, setIsActive] = useState(false);
   const handleToggle = () => {
     setActive(!active);
   };
+  console.log(sizes);
 
   const handleDelete = async () => {
     const DeleteRef = doc(db, PRODUCTS_COLLECTION_NAME, id);
@@ -82,6 +87,10 @@ const CardModule: React.FC<ICardModuleData> = ({
                       <h4>Product name</h4>
                       <h3>{productName}</h3>
                     </div>
+                    <div>
+                      <h4>Gender</h4>
+                      <h3>{gender}</h3>
+                    </div>
                   </div>
 
                   {/* {sizes.sizeVarients.map((s, i) => (
@@ -96,9 +105,9 @@ const CardModule: React.FC<ICardModuleData> = ({
                       </div>
                     </div>
                   ))} */}
-                  <div className="detailed-future">
+                  {/* <div className="detailed-future">
                     <h4>Detailed Features</h4>
-                  </div>
+                  </div> */}
 
                   <div className="content-material">
                     <div>
@@ -107,20 +116,59 @@ const CardModule: React.FC<ICardModuleData> = ({
                     </div>
                   </div>
 
-                  {/* <div className="colors">
-                    <h4>Colors :</h4>
-                    {colors.map((color, i) => (
-                      <div className="color-section">
-                        <div
-                          style={{
-                            backgroundColor: color,
-                          }}
-                          className="color-circle"
-                          key={i}
-                        ></div>
-                      </div>
-                    ))}
+                  {/* <div>
+                    <select name="sizes">
+                      {sizes.map((v, index) => (
+                        <option id={v.country} value={v.country} key={index}>
+                          {v.country}
+                        </option>
+                      ))}
+                    </select>
+                    <table>
+                      <tr>
+                        <th>Size</th>
+                        <th>measurement</th>
+                        <th>Quntity</th>
+                      </tr>
+
+                      {sizes.map((v, index) => (
+                        <>
+                          {v.country === v.country ? (
+                            <div key={index}>
+                              {v.sizeVarients.map((f, i) => (
+                                <>
+                                  <tr key={i}>
+                                    <td>{f.size}</td>
+                                    <td>{f.measurement}</td>
+                                    <td>{f.quantity}</td>
+                                  </tr>
+                                </>
+                              ))}
+                            </div>
+                          ) : null}
+                        </>
+                      ))}
+                    </table>
                   </div> */}
+
+                  {/* <pre>{JSON.stringify(sizes, null, 2)}</pre> */}
+
+                  {colors && (
+                    <div className="colors">
+                      <h4>Colors :</h4>
+                      {colors.map((color, i) => (
+                        <div className="color-section">
+                          <div
+                            style={{
+                              backgroundColor: color,
+                            }}
+                            className="color-circle"
+                            key={i}
+                          ></div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
 
                   <div className="edit-btn">
                     <Button
@@ -129,7 +177,9 @@ const CardModule: React.FC<ICardModuleData> = ({
                     >
                       Delete
                     </Button>
-                    <Button varient="primary">Edit</Button>
+                    <Link to="/products/mid-level/product/styles/edit">
+                      <Button varient="primary">Edit</Button>
+                    </Link>
                   </div>
                   {isactive && (
                     <LayoutModule

@@ -5,11 +5,9 @@ import {
   Timestamp,
   addDoc,
   collection,
-  doc,
   getDocs,
   orderBy,
   query,
-  updateDoc,
   where,
 } from "firebase/firestore";
 import { DESIGN_TEXT_IMAGE } from "../../../../../../constants/firebaseCollection";
@@ -23,16 +21,16 @@ import Button from "../../../../../../components/button";
 import { ReactComponent as Plus } from "../../../../../../assets/icons/plus-2.svg";
 import LayoutModule from "../../../../../../components/layoutModule";
 import BGimage from "../../../../../../assets/icons/bg-image.svg";
-
-const Textimage: React.FC<IUploadFiles> = ({ id }) => {
+interface IToggleDate {
+  isActiveImage: boolean;
+}
+const Textimage: React.FC<IToggleDate> = ({ isActiveImage }) => {
   const [active, setIsActive] = useState(false);
   const [uploadImage, setUploadImage] = useState<IDesigns>({});
   const [textImage, settextImage] = useState("");
   //   const [fileSize, setFileSize] = useState(false);
   const [data, setData] = useState<IUploadFiles[]>([]);
   const [hashTag, setHashtag] = useState("");
-  // const [isActiveImage, setActiveImage] = useState(true);
-  // console.log(isActiveImage);
 
   const handleFilechange = (e: any) => {
     const file = e.target.files[0];
@@ -53,18 +51,18 @@ const Textimage: React.FC<IUploadFiles> = ({ id }) => {
     setIsActive(true);
   };
 
-  const handleUpdate = async () => {
-    try {
-      const docRef = doc(db, DESIGN_TEXT_IMAGE);
+  // const handleUpdate = async () => {
+  //   try {
+  //     const docRef = doc(db, DESIGN_TEXT_IMAGE);
 
-      await updateDoc(docRef, {
-        // isActiveImage,
-      });
-      console.log("Document successfully updated!");
-    } catch (error) {
-      console.error("Error updating document: ", error);
-    }
-  };
+  //     await updateDoc(docRef, {
+  //       isActiveImage,
+  //     });
+  //     console.log("Document successfully updated!");
+  //   } catch (error) {
+  //     console.error("Error updating document: ", error);
+  //   }
+  // };
 
   const handleSubmit = async () => {
     setIsActive(false);
@@ -93,9 +91,9 @@ const Textimage: React.FC<IUploadFiles> = ({ id }) => {
       const dataRef = await addDoc(collection(db, DESIGN_TEXT_IMAGE), {
         ...urls,
         hashTag,
-        // active: isActiveImage,
         type: IProductCategory.TEXT_IMAGE,
         created: Timestamp.now(),
+        activePost: isActiveImage,
       });
       window.location.reload();
       console.log(dataRef);
@@ -188,7 +186,7 @@ const Textimage: React.FC<IUploadFiles> = ({ id }) => {
             <ImageCardModule
               handleFilechange={handleFilechange}
               uploadImage={uploadImage}
-              handleUpdate={handleUpdate}
+              // handleUpdate={handleUpdate}
               {...i}
               key={index}
             />

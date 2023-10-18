@@ -8,6 +8,16 @@
     font-weight: 500;
   }
   .style-section {
+    .gender-update {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .gender {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+    }
     .styles-wrap {
       display: flex;
       justify-content: space-between;
