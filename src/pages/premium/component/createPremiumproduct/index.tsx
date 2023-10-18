@@ -24,6 +24,7 @@ const initialValue = {
   normalPrice: "",
   offerPrice: "",
   description: "",
+  gender: "MALE",
 };
 
 const CreatePremium: React.FC<Material> = ({ index }) => {
@@ -41,6 +42,7 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
       country: string;
       sizeVarients: {
         size: string;
+        quantity: number;
         measurement: number;
         show: boolean;
       }[];
@@ -75,6 +77,7 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
         ...value,
         ...urls,
         sizes: sizes,
+        // gender: gender,
         type: IProductCategory.PREMIUM,
       });
       console.log(dataRef);
@@ -110,11 +113,46 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
   return (
     <PremiumLayout>
       <Formik initialValues={initialValue} onSubmit={handleSubmit}>
-        {({ values, setValues, isSubmitting }) => (
+        {({ values, setValues, isSubmitting, setFieldValue }) => (
           <Form>
             <div className="create-product">
               <div className="style-section">
-                <h3>Select styles</h3>
+                <div className="gender-update">
+                  <h3>Select styles</h3>
+
+                  <div className="gender">
+                    <div
+                      className="male"
+                      onClick={() => setFieldValue("gender", "MALE")}
+                    >
+                      <h3
+                        style={{
+                          color: values.gender === "MALE" ? "" : "#777",
+                          borderBottom:
+                            values.gender === "MALE" ? "2px solid #8C73CB" : "",
+                        }}
+                      >
+                        Male
+                      </h3>
+                    </div>
+                    <div
+                      className="female"
+                      onClick={() => setFieldValue("gender", "FEMALE")}
+                    >
+                      <h3
+                        style={{
+                          color: values.gender === "FEMALE" ? "" : "#777",
+                          borderBottom:
+                            values.gender === "FEMALE"
+                              ? "2px solid #8C73CB"
+                              : "",
+                        }}
+                      >
+                        Female
+                      </h3>
+                    </div>
+                  </div>
+                </div>
 
                 <div className="styles-wrap">
                   <div className="imageupload">
@@ -147,7 +185,7 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                               fileReader.readAsDataURL(file);
                             }}
                             // files={files}
-                            accept="image/jpg,image/png"
+                            // accept="image/jpg,image/png"
                           />
                           <div className="bg-image">
                             <img
@@ -318,6 +356,30 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                                                   return {
                                                     ...s,
                                                     measurement: Number(
+                                                      e.target.value
+                                                    ),
+                                                  };
+                                                });
+                                              return { ...m, sizeVarients };
+                                            }),
+                                          ]);
+                                        }}
+                                      />
+                                      <input
+                                        type="number"
+                                        value={s.quantity}
+                                        onChange={(e) => {
+                                          const newSizes = [...sizes];
+
+                                          setSizes([
+                                            ...newSizes.map((m, ii) => {
+                                              if (ii !== i) return { ...m };
+                                              const sizeVarients =
+                                                m.sizeVarients.map((s, jj) => {
+                                                  if (jj !== j) return { ...s };
+                                                  return {
+                                                    ...s,
+                                                    quantity: Number(
                                                       e.target.value
                                                     ),
                                                   };

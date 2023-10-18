@@ -21,6 +21,8 @@ import UserSubscription from "./pages/dashboard/component/userSubscription";
 import CreateAccessory from "./pages/accessory/component/createAccessory";
 import Allpost from "./pages/post/component/allPost";
 import PendingPost from "./pages/post/component/pendingPosts";
+import Subscription from "./pages/subscription";
+import EditMidform from "./pages/products/mid-level/product/component/createMid-Product/EditMidform";
 
 const App: React.FC = () => {
   return (
@@ -49,16 +51,13 @@ const App: React.FC = () => {
               country={""}
               offerPrice={""}
               productImage={""}
-              sizes={{
-                sizeVarients: [],
-                country: "",
-                gender: "",
-              }}
               description={""}
               normalPrice={""}
               styles={""}
               productName={""}
               colors={[]}
+              gender={""}
+              sizes={[]}
             />
           }
         />
@@ -67,12 +66,17 @@ const App: React.FC = () => {
           element={<CreateMidProduct index={0} />}
         />
         <Route
+          path="/products/mid-level/product/styles/edit/:id"
+          element={<EditMidform />}
+        />
+
+        <Route
           path="/products/mid-level/product/image"
-          element={<UploadmidProductImage />}
+          element={<UploadmidProductImage isActiveImage={true} />}
         />
         <Route
           path="/products/mid-level/product/text-image"
-          element={<Textimage Images={""} hashTag={""} id={""} />}
+          element={<Textimage isActiveImage={true} />}
         />
         <Route
           path="/products/mid-level/accessory"
@@ -82,31 +86,12 @@ const App: React.FC = () => {
           path="/products/mid-level/accessory/create"
           element={<CreateAccessory index={0} />}
         />
-        <Route
-          path="/products/premium"
-          element={
-            <Premium
-              id={""}
-              country={""}
-              offerPrice={""}
-              productImage={""}
-              sizes={{
-                sizeVarients: [],
-                country: "",
-                gender: "",
-              }}
-              description={""}
-              normalPrice={""}
-              styles={""}
-              productName={""}
-              colors={[]}
-            />
-          }
-        />
+        <Route path="/products/premium" element={<Premium />} />
         <Route
           path="/products/premium/create"
           element={<CreatePremium index={0} />}
         />
+        <Route path="/subscription" element={<Subscription />} />
       </Routes>
     </div>
   );

@@ -8,25 +8,20 @@ import {
 } from "../product/component/uploadDesign-Image";
 import { ReactComponent as Deleteicon } from "../../../../assets/icons/delete.svg";
 import ProductModule from "../../../../components/productLayoutModule";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { DESIGN_TEXT_IMAGE } from "../../../../constants/firebaseCollection";
 import { db } from "../../../../utils/firebase";
 
 interface IData extends IUploadFiles {
-  handleUpdate: () => Promise<void>;
   uploadImage: IDesigns;
-
   handleFilechange: (e: any) => void;
 }
-const ImageCardModule: React.FC<IData> = ({
-  Images,
-  id,
-  handleUpdate,
-  uploadImage,
-  handleFilechange,
-}) => {
+const ImageCardModule: React.FC<IData> = ({ Images, id }) => {
   const [active, setActive] = useState(false);
   const [isactive, setIsActive] = useState(false);
+  const [isActiveImage, setActiveImage] = useState(true);
+  const [uploadImage, setUploadImage] = useState<IDesigns>({});
+  const [image, setImage] = useState("");
 
   const handleActive = () => {
     setActive(true);
@@ -41,12 +36,56 @@ const ImageCardModule: React.FC<IData> = ({
       console.log(error);
     }
   };
+  const handleFilechange = (e: any) => {
+    const file = e.target.files[0];
+    setUploadImage((e) => ({
+      ...e,
+      Images: file,
+    }));
+    const fileReader = new FileReader();
+    fileReader.onload = (r) => {
+      setImage(r.target?.result as string);
+    };
+    fileReader.readAsDataURL(file);
+  };
+
+  const handleUpdate = async () => {
+    try {
+      setActiveImage(!isActiveImage);
+      const docRef = doc(db, DESIGN_TEXT_IMAGE, id);
+
+      await updateDoc(docRef, {
+        activePost: isActiveImage,
+        Images: image,
+      });
+      console.log("Document successfully updated!");
+      window.location.reload();
+
+      setIsActive(false);
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
+  const handleToggleUpdate = async () => {
+    try {
+      setActiveImage(!isActiveImage);
+      const docRef = doc(db, DESIGN_TEXT_IMAGE, id);
+      await updateDoc(docRef, {
+        activePost: isActiveImage,
+      });
+      console.log("Document successfully updated!");
+      setIsActive(false);
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  };
+
   return (
     <div>
       <div className="design-wrap">
         <div className="toggle-switch">
           <h3>Active</h3>
-          <ToggleSwitch setValue={() => handleUpdate} value={false} />
+          <ToggleSwitch setValue={handleToggleUpdate} value={isActiveImage} />
         </div>
         <div className="logo">
           <img
@@ -98,7 +137,7 @@ const ImageCardModule: React.FC<IData> = ({
             <h3>Change image</h3>
             <div className="product-img">
               {uploadImage["Images"] ? (
-                <img src={Images} alt="products" width={176} height={234} />
+                <img src={image} alt="products" width={176} height={234} />
               ) : (
                 <img src={Images} alt="products" width={176} height={234} />
               )}
@@ -123,7 +162,9 @@ const ImageCardModule: React.FC<IData> = ({
                 </label>
               </div>
               <div className="done-btn">
-                <Button varient="primary">Done</Button>
+                <Button varient="primary" onClick={handleUpdate}>
+                  Done
+                </Button>
               </div>
             </div>
           </div>

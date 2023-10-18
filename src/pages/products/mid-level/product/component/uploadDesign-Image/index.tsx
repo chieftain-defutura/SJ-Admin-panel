@@ -5,15 +5,7 @@ import { ReactComponent as Plus } from "../../../../../../assets/icons/plus.svg"
 import BGimage from "../../../../../../assets/icons/bg-image.svg";
 import Button from "../../../../../../components/button";
 import LayoutModule from "../../../../../../components/layoutModule";
-import {
-  addDoc,
-  collection,
-  doc,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { DESIGN_TEXT_IMAGE } from "../../../../../../constants/firebaseCollection";
 import { db, storage } from "../../../../../../utils/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -33,9 +25,12 @@ export interface IUploadFiles {
   // TextImage: "";
 }
 
-const UploadmidProductImage: React.FC<IDesigns> = () => {
+interface IToggleDate {
+  isActiveImage: boolean;
+}
+
+const UploadmidProductImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
   const [active, setIsActive] = useState(false);
-  // const [isActiveImage, setActiveImage] = useState(true);
   const [uploadImage, setUploadImage] = useState<IDesigns>({});
   const [designLogo, setDesignLogo] = useState("");
   const [data, setData] = useState<IUploadFiles[]>([]);
@@ -59,18 +54,6 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
     setIsActive(true);
   };
 
-  const handleUpdate = async () => {
-    try {
-      const docRef = doc(db, DESIGN_TEXT_IMAGE);
-
-      await updateDoc(docRef, {
-        // isActiveImage,
-      });
-      console.log("Document successfully updated!");
-    } catch (error) {
-      console.error("Error updating document: ", error);
-    }
-  };
   const handleSubmit = async () => {
     setIsActive(!active);
     try {
@@ -98,12 +81,14 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
       const dataRef = await addDoc(collection(db, DESIGN_TEXT_IMAGE), {
         ...urls,
         hashTag,
-        // active: isActiveImage,
         type: IProductCategory.DESIGN_IMAGE,
+        activePost: isActiveImage,
       });
       window.location.reload();
       console.log(dataRef);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleGetData = useCallback(async () => {
@@ -197,7 +182,6 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
             <ImageCardModule
               handleFilechange={handleFilechange}
               uploadImage={uploadImage}
-              handleUpdate={handleUpdate}
               {...i}
               key={index}
             />

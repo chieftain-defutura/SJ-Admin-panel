@@ -35,21 +35,24 @@ export interface IpostData {
 export interface IProductdata {
   id: string;
   country: string;
+  gender: string;
   offerPrice: string;
   productImage: string;
   sizes: {
     sizeVarients: {
-      type: string;
-      value: number;
+      measurement: number;
+      quantity: number;
+      show: boolean;
+      size: string;
     }[];
     country: string;
     gender: string;
-  };
+  }[];
   description: string;
   normalPrice: string;
   styles: string;
   productName: string;
-  colors: string[];
+  colors?: string[];
 }
 export enum IProductCategory {
   MID = "MIDLEVEL-PRODUCTS",

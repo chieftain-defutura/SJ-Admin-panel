@@ -32,8 +32,8 @@ const Sidebar: React.FC = () => {
         <NavLink to="/notification">
           <p>Notification</p>
         </NavLink>
-        <a href="/membership">
-          <p>Membership</p>
+        <a href="/subscription">
+          <p>Subscription</p>
         </a>
         {/* <a href="/account">
           <p>Account</p>

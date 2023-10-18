@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import "../../../../../../styles/createProduct.scss";
 import Input from "../../../../../../components/input";
@@ -7,18 +7,28 @@ import { v4 } from "uuid";
 import { ReactComponent as Delete } from "../../../../../../assets/icons/delete.svg";
 import { Country, defaultSizes } from "../../../../../../data/midproductSize";
 import CreateProductLayout from "../../../../../../layout/createProduct-layout";
-import { addDoc, collection } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db, storage } from "../../../../../../utils/firebase";
 import { PRODUCTS_COLLECTION_NAME } from "../../../../../../constants/firebaseCollection";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import ToggleSwitch from "../../../../../../components/toggleSwitch";
 import ColorModule from "../../../../../../components/color-module";
-import { IProductCategory } from "../../../../../../constants/types";
-import { useNavigate } from "react-router-dom";
+import {
+  IProductCategory,
+  IProductdata,
+} from "../../../../../../constants/types";
+import { useNavigate, useParams } from "react-router-dom";
 import MOdalPopUp from "../../../../../../components/ModalPopupBox";
 
 const initialValue = {
-  gender: "MALE",
   styles: "",
   productName: "",
   normalPrice: "",
@@ -32,6 +42,7 @@ const initialValue = {
   leftSide: false,
   rightSide: false,
   description: "",
+  gender: "MALE",
 };
 
 export interface IFiles {
@@ -39,16 +50,19 @@ export interface IFiles {
   productVideo: File;
 }
 
-export interface Material {
+export interface Material extends IProductdata {
   index: number;
+  existingValues: any;
 }
 
-const CreateMidProduct: React.FC<Material> = () => {
+const EditMidform: React.FC = () => {
   const [image, setImage] = useState("");
   // const [video, setVideo] = useState("");
   const [files, setFiles] = useState<IFiles[]>([]);
   const [active, setActive] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState<typeof initialValue | null>(null);
   console.log(toggle);
 
   const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
@@ -67,6 +81,27 @@ const CreateMidProduct: React.FC<Material> = () => {
     }[]
   >([]);
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const handleGetData = useCallback(async () => {
+    try {
+      if (!id) return;
+      setIsLoading(true);
+      const docref = doc(db, "", id);
+      const data = await getDoc(docref);
+      if (data.exists()) {
+        data.data();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    handleGetData();
+  }, [handleGetData]);
 
   const handleToggle = () => {
     setActive(true);
@@ -96,12 +131,14 @@ const CreateMidProduct: React.FC<Material> = () => {
       );
       console.log(urls);
 
-      const dataRef = await addDoc(collection(db, PRODUCTS_COLLECTION_NAME), {
+      const dataRef = doc(db, PRODUCTS_COLLECTION_NAME);
+      await updateDoc(dataRef, {
         ...value,
         ...urls,
         sizes: sizes,
         type: IProductCategory.MID,
       });
+
       console.log(dataRef);
       navigate("/products/mid-level/product/styles");
     } catch (error) {
@@ -136,7 +173,11 @@ const CreateMidProduct: React.FC<Material> = () => {
   console.log(sizes);
   return (
     <CreateProductLayout>
-      <Formik initialValues={initialValue} onSubmit={handleSubmit}>
+      <Formik
+        initialValues={data || initialValue}
+        onSubmit={handleSubmit}
+        enableReinitialize
+      >
         {({ values, setValues, isSubmitting, setFieldValue }) => (
           <Form>
             <div className="create-product">
@@ -216,7 +257,6 @@ const CreateMidProduct: React.FC<Material> = () => {
                           </div>
                         </label>
                       </div>
-
                       {/* <div className="bg-video">
                         <h4>3D Video</h4>
                         <label htmlFor="3dvideo" className="custom-file-upload">
@@ -601,4 +641,4 @@ const CreateMidProduct: React.FC<Material> = () => {
   );
 };
 
-export default CreateMidProduct;
+export default EditMidform;
