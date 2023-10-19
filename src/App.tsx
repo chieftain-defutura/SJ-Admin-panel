@@ -23,11 +23,14 @@ import Allpost from "./pages/post/component/allPost";
 import PendingPost from "./pages/post/component/pendingPosts";
 import Subscription from "./pages/subscription";
 import EditMidform from "./pages/products/mid-level/product/component/createMid-Product/EditMidform";
+import EditPremium from "./pages/premium/component/EditPremium";
+import Login from "./pages/login";
 
 const App: React.FC = () => {
   return (
     <div>
       <Routes>
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<Dashboard />} />
         <Route path="/post" element={<Post children={undefined} />} />
         <Route path="/post/all-post" element={<Allpost />} />
@@ -45,30 +48,13 @@ const App: React.FC = () => {
         <Route path="/user-subscription" element={<UserSubscription />} />
         <Route
           path="/products/mid-level/product/styles"
-          element={
-            <MidProducts
-              id={""}
-              country={""}
-              offerPrice={""}
-              productImage={""}
-              description={""}
-              normalPrice={""}
-              styles={""}
-              productName={""}
-              colors={[]}
-              gender={""}
-              sizes={[]}
-            />
-          }
+          element={<MidProducts />}
         />
         <Route
           path="/products/mid-level/product/create"
           element={<CreateMidProduct index={0} />}
         />
-        <Route
-          path="/products/mid-level/product/styles/edit/:id"
-          element={<EditMidform />}
-        />
+        <Route path="/products/medium/edit/:id" element={<EditMidform />} />
 
         <Route
           path="/products/mid-level/product/image"
@@ -91,6 +77,7 @@ const App: React.FC = () => {
           path="/products/premium/create"
           element={<CreatePremium index={0} />}
         />
+        <Route path="/products/premium/edit/:id" element={<EditPremium />} />
         <Route path="/subscription" element={<Subscription />} />
       </Routes>
     </div>

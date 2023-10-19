@@ -9,7 +9,7 @@ import { IProductCategory, IProductdata } from "../../../../constants/types";
 import CardModule from "../../../../components/card";
 import Loading from "../../../../components/loading";
 
-const MidProducts: React.FC<IProductdata> = ({ id }) => {
+const MidProducts: React.FC = () => {
   const [data, setData] = useState<IProductdata[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -51,7 +51,7 @@ const MidProducts: React.FC<IProductdata> = ({ id }) => {
         ) : (
           <div className="product-card-layout">
             {data.map((f, i) => (
-              <CardModule {...f} key={i} />
+              <CardModule productType="medium" {...f} key={i} />
             ))}
           </div>
         )}

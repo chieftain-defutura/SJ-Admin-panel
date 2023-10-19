@@ -1,22 +1,18 @@
-import React, { useMemo, useState } from "react";
-import PremiumLayout from "../../../../layout/premium-layout";
-import { addDoc, collection } from "firebase/firestore";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import PremiumLayout from "../../../layout/premium-layout";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { Formik, Field, Form } from "formik";
 import { v4 } from "uuid";
-import Button from "../../../../components/button";
-import Input from "../../../../components/input";
-import { PRODUCTS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
-import { IProductCategory } from "../../../../constants/types";
-import { defaultSizes, Country } from "../../../../data/midproductSize";
-import { storage, db } from "../../../../utils/firebase";
-import {
-  IFiles,
-  Material,
-} from "../../../products/mid-level/product/component/createMid-Product";
-
-import { useNavigate } from "react-router-dom";
-import MOdalPopUp from "../../../../components/ModalPopupBox";
+import Button from "../../../components/button";
+import Input from "../../../components/input";
+import { PRODUCTS_COLLECTION_NAME } from "../../../constants/firebaseCollection";
+import { IProductCategory, IProductdata } from "../../../constants/types";
+import { defaultSizes, Country } from "../../../data/midproductSize";
+import { storage, db } from "../../../utils/firebase";
+import { IFiles } from "../../products/mid-level/product/component/createMid-Product";
+import { useNavigate, useParams } from "react-router-dom";
+import MOdalPopUp from "../../../components/ModalPopupBox";
 
 const initialValue = {
   styles: "",
@@ -27,14 +23,15 @@ const initialValue = {
   gender: "MALE",
 };
 
-const CreatePremium: React.FC<Material> = ({ index }) => {
+const EditPremium: React.FC = () => {
   const [image, setImage] = useState("");
   const [video, setVideo] = useState("");
   const [files, setFiles] = useState<IFiles[]>([]);
   const navigate = useNavigate();
-
   const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
   const [country, setCountry] = useState("");
+  const [data, setData] = useState<typeof initialValue | null>(null);
+  const { id } = useParams();
 
   const [sizes, setSizes] = useState<
     {
@@ -49,8 +46,42 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
     }[]
   >([]);
 
+  const handleGetData = useCallback(async () => {
+    try {
+      if (!id) return;
+      //   setIsLoading(true);
+      const docref = doc(db, PRODUCTS_COLLECTION_NAME, id);
+      const data = await getDoc(docref);
+
+      if (data.exists()) {
+        const tempData = data.data() as IProductdata;
+        console.log(data.data());
+        setData({
+          description: tempData.description,
+          gender: tempData.gender,
+          normalPrice: tempData.normalPrice,
+          offerPrice: tempData.offerPrice,
+          productName: tempData.productName,
+          styles: tempData.styles,
+        });
+        setImage(tempData.productImage);
+        setSizes(tempData.sizes);
+        setVideo(tempData.productVideo);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      //   setIsLoading(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    handleGetData();
+  }, [handleGetData]);
+
   const handleSubmit = async (value: typeof initialValue) => {
     try {
+      if (!id) return alert("id is not found");
       let urls = {};
 
       const imageFiles = Object.entries(files).map((d) => d);
@@ -73,13 +104,14 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
       );
       console.log(urls);
 
-      const dataRef = await addDoc(collection(db, PRODUCTS_COLLECTION_NAME), {
+      const dataRef = doc(db, PRODUCTS_COLLECTION_NAME, id);
+      await updateDoc(dataRef, {
         ...value,
         ...urls,
         sizes: sizes,
-        // gender: gender,
         type: IProductCategory.PREMIUM,
       });
+
       console.log(dataRef);
       navigate("/products/premium");
     } catch (error) {
@@ -112,7 +144,11 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
   console.log("getSizesLists", getSizesLists);
   return (
     <PremiumLayout>
-      <Formik initialValues={initialValue} onSubmit={handleSubmit}>
+      <Formik
+        initialValues={data || initialValue}
+        enableReinitialize
+        onSubmit={handleSubmit}
+      >
         {({ values, setValues, isSubmitting, setFieldValue }) => (
           <Form>
             <div className="create-product">
@@ -429,4 +465,4 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
   );
 };
 
-export default CreatePremium;
+export default EditPremium;

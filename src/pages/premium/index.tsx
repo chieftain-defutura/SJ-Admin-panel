@@ -62,7 +62,7 @@ const Premium: React.FC<{}> = () => {
         ) : (
           <div className="product-card-layout">
             {data.map((f, i) => (
-              <CardModule {...f} key={i} />
+              <CardModule productType="premium" {...f} key={i} />
             ))}
           </div>
         )}
