@@ -24,7 +24,6 @@ const datas = {
 };
 
 const PremiumOrder: React.FC = () => {
-  const [active, setActive] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [data, setData] = useState<IPremiumData[]>();
 
@@ -47,13 +46,6 @@ const PremiumOrder: React.FC = () => {
 
   const handleToggle = () => {
     setIsActive(!isActive);
-  };
-  const handleModalToggle = () => {
-    setActive(true);
-  };
-
-  const handleModalCloseToggle = () => {
-    setActive(false);
   };
 
   if (!FilteredData) return <p>no data</p>;
@@ -140,14 +132,6 @@ const PremiumOrder: React.FC = () => {
               </tbody>
             </table>
           </div>
-          {active && (
-            <LayoutModule
-              handleToggle={handleModalToggle}
-              className="layout-module"
-            >
-              <PremiumModal onClose={handleModalCloseToggle} />
-            </LayoutModule>
-          )}
         </div>
       </Layout>
     </div>
@@ -160,8 +144,18 @@ interface ICardComponent {
   data: IPremiumData;
 }
 const CardComponent: React.FC<ICardComponent> = ({ data }) => {
+  const [active, setActive] = useState(false);
   const [userData, setUserData] = useState<IUserData>();
   const docRef = doc(db, "users", data.userId);
+
+  const handleModalToggle = () => {
+    setActive(true);
+  };
+
+  const handleModalCloseToggle = () => {
+    setActive(false);
+  };
+
   const fetchData = useCallback(async () => {
     try {
       const documentSnapshot = await getDoc(docRef);
@@ -191,6 +185,9 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
       </td>
       <td>{data.productName}</td>
       <td>{data.price}</td>
+      <td>price</td>
+      <td>size</td>
+      <td>Address</td>
       <td>
         <div
           style={{
@@ -211,11 +208,19 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
         <Button
           varient="primary"
           style={{ padding: "9px 38px", fontSize: "12px" }}
-          // onClick={handleModalToggle}
+          onClick={handleModalToggle}
         >
           View details
         </Button>
       </td>
+      {active && (
+        <LayoutModule
+          handleToggle={handleModalToggle}
+          className="layout-module"
+        >
+          <PremiumModal onClose={handleModalCloseToggle} />
+        </LayoutModule>
+      )}
     </tr>
   );
 };
