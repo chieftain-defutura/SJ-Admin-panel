@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import Layout from "../../../../layout";
 import { ReactComponent as ChevronDown } from "../../../../assets/icons/chevron-down.svg";
+import { ReactComponent as DownloadIcon } from "../../../../assets/icons/downloadIcon.svg";
 import TShirtImg from "../../../../assets/images/t-shirt-two.png";
-import TotalRevenue from "../../../../components/dashboard/totalRevenue";
 import SingleCard from "../../../../components/dashboard/SingleCard";
 import { PostTableData } from "../../../../data/postTableData";
 import Button from "../../../../components/button";
 import LayoutModule from "../../../../components/layoutModule";
 import PostModal from "../../ordersModals/postModal";
 import "../../../../styles/postOrder.scss";
+import Chart from "../../../../components/Chart";
 
 const data = {
   heading: "Today post orders",
@@ -46,11 +47,20 @@ const PostOrders: React.FC = () => {
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 1fr",
+              placeContent: "center",
             }}
           >
             <SingleCard data={data} />
-            <div style={{ marginTop: "18px" }}>
-              <TotalRevenue />
+
+            <div
+              style={{
+                borderRadius: "10px",
+                boxShadow: "0px 0px 12px 0px rgba(0, 0, 0, 0.16)",
+                padding: "16px",
+                marginTop: "26px",
+              }}
+            >
+              <Chart />
             </div>
           </div>
           <div className="post-order-text">
@@ -95,6 +105,9 @@ const PostOrders: React.FC = () => {
                   <th>
                     <span>Address</span>
                   </th>
+                  <th>
+                    <span>Details</span>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -111,6 +124,21 @@ const PostOrders: React.FC = () => {
                     <td>{item.price}</td>
                     <td>{item.size}</td>
                     <td>{item.address}</td>
+                    <td>
+                      <div
+                        style={{
+                          background: "#8C73CB",
+                          width: "36px",
+                          height: "32px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: "5px",
+                        }}
+                      >
+                        <DownloadIcon />
+                      </div>
+                    </td>
 
                     <td>
                       <Button

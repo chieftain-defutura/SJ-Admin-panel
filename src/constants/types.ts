@@ -111,7 +111,6 @@ export interface IPremiumData {
   id: string;
   productImage: string;
   productName: string;
-
   styles: string;
   type: string;
 }

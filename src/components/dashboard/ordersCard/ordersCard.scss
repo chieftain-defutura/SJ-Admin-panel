@@ -87,6 +87,9 @@
         font-family: var(--font-semiBold);
         color: var(--secondary-);
         cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }

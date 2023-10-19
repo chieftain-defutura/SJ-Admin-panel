@@ -9,6 +9,9 @@ import Button from "../../../../../components/button";
 const CustomerDetailsModal: React.FC = () => {
   return (
     <div className="customer-details-wrapper">
+      <div className="custom-details-head">
+        <p>Customer details</p>
+      </div>
       <div className="customer-details-container">
         <div>
           <p>Customer name</p>
@@ -33,7 +36,7 @@ const CustomerDetailsModal: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="dont-btn">
+      <div className="custom-done-btn">
         <Button varient="primary">Done</Button>
       </div>
     </div>

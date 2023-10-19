@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Layout from "../../../../layout";
 import { ReactComponent as ChevronDown } from "../../../../assets/icons/chevron-down.svg";
+import { ReactComponent as DownloadIcon } from "../../../../assets/icons/downloadIcon.svg";
 import TShirtImg from "../../../../assets/images/t-shirt-two.png";
-import TotalRevenue from "../../../../components/dashboard/totalRevenue";
-import SingleCard from "../../../../components/dashboard/SingleCard";
 import "../../../../styles/postOrder.scss";
 import Button from "../../../../components/button";
 import LayoutModule from "../../../../components/layoutModule";
@@ -11,11 +10,22 @@ import PremiumModal from "../../ordersModals/premiumModal";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../../../../utils/firebase";
 import { IPremiumData, IUserData } from "../../../../constants/types";
+import Chart from "../../../../components/Chart";
+import SingleCard from "../../../../components/dashboard/SingleCard";
+
+const datas = {
+  heading: "Today Premium orders",
+  orderNumber: 71,
+  todayRevenue: "Today Revenue",
+  today: "11,500",
+  orders: "orders",
+  image: TShirtImg,
+  navigation: "/orders/post-orders",
+};
 
 const PremiumOrder: React.FC = () => {
   const [active, setActive] = useState(false);
   const [isActive, setIsActive] = useState(false);
-
   const [data, setData] = useState<IPremiumData[]>();
 
   const getData = useCallback(async () => {
@@ -32,6 +42,8 @@ const PremiumOrder: React.FC = () => {
   }, [getData]);
 
   const FilteredData = data?.filter((f) => f.type === "Premium-Level");
+
+  console.log("FilteredDataaaaaa", FilteredData);
 
   const handleToggle = () => {
     setIsActive(!isActive);
@@ -60,9 +72,16 @@ const PremiumOrder: React.FC = () => {
               gridTemplateColumns: "1fr 1fr",
             }}
           >
-            {/* <SingleCard data={data} /> */}
-            <div style={{ marginTop: "18px" }}>
-              <TotalRevenue />
+            <SingleCard data={datas} />
+            <div
+              style={{
+                borderRadius: "10px",
+                boxShadow: "0px 0px 12px 0px rgba(0, 0, 0, 0.16)",
+                padding: "16px",
+                marginTop: "26px",
+              }}
+            >
+              <Chart />
             </div>
           </div>
           <div className="post-order-text">
@@ -96,9 +115,9 @@ const PremiumOrder: React.FC = () => {
                   <th>
                     <span>Product</span>
                   </th>
-                  {/* <th>
+                  <th>
                     <span>Quantity</span>
-                  </th> */}
+                  </th>
                   <th>
                     <span>Price</span>
                   </th>
@@ -107,6 +126,9 @@ const PremiumOrder: React.FC = () => {
                   </th>
                   <th>
                     <span>Address</span>
+                  </th>
+                  <th>
+                    <span>Details</span>
                   </th>
                 </tr>
               </thead>
@@ -139,17 +161,14 @@ interface ICardComponent {
 }
 const CardComponent: React.FC<ICardComponent> = ({ data }) => {
   const [userData, setUserData] = useState<IUserData>();
-  const docRef = doc(db, "users", data.userId); // Replace 'documentId' with the actual document ID you want to retrieve
-
-  // Use getDoc to fetch the document
+  const docRef = doc(db, "users", data.userId);
   const fetchData = useCallback(async () => {
     try {
       const documentSnapshot = await getDoc(docRef);
 
       if (documentSnapshot.exists()) {
-        // Document exists, you can access its data
         const data = documentSnapshot.data();
-        console.log("Document data:", data);
+        console.log("Document dataa:", data);
         setUserData(data as any);
       } else {
         console.log("Document does not exist.");
@@ -157,12 +176,10 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
     } catch (error) {
       console.error("Error getting document:", error);
     }
-  }, []);
+  }, [docRef]);
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  console.log(userData);
 
   return (
     <tr>
@@ -174,9 +191,21 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
       </td>
       <td>{data.productName}</td>
       <td>{data.price}</td>
-      {/* <td>{data.styles}</td>
-      <td>{f.sizes}</td>
-      <td>{item.address}</td>  */}
+      <td>
+        <div
+          style={{
+            background: "#8C73CB",
+            width: "36px",
+            height: "32px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "5px",
+          }}
+        >
+          <DownloadIcon />
+        </div>
+      </td>
 
       <td>
         <Button
