@@ -7,15 +7,7 @@ import { v4 } from "uuid";
 import { ReactComponent as Delete } from "../../../../../../assets/icons/delete.svg";
 import { Country, defaultSizes } from "../../../../../../data/midproductSize";
 import CreateProductLayout from "../../../../../../layout/createProduct-layout";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../../../../../../utils/firebase";
 import { PRODUCTS_COLLECTION_NAME } from "../../../../../../constants/firebaseCollection";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
@@ -61,7 +53,6 @@ const EditMidform: React.FC = () => {
   const [files, setFiles] = useState<IFiles[]>([]);
   const [active, setActive] = useState(false);
   const [toggle, setToggle] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<typeof initialValue | null>(null);
   console.log(toggle);
 
@@ -86,16 +77,33 @@ const EditMidform: React.FC = () => {
   const handleGetData = useCallback(async () => {
     try {
       if (!id) return;
-      setIsLoading(true);
-      const docref = doc(db, "", id);
+
+      const docref = doc(db, PRODUCTS_COLLECTION_NAME, id);
       const data = await getDoc(docref);
+
       if (data.exists()) {
-        data.data();
+        const tempData = data.data() as IProductdata;
+        console.log(data.data());
+        setData({
+          description: tempData.description,
+          frontSide: tempData.frontSide,
+          backSide: tempData.backSide,
+          colors: tempData.colors,
+          gender: tempData.gender,
+          leftSide: tempData.leftSide,
+          normalPrice: tempData.normalPrice,
+          offerPrice: tempData.offerPrice,
+          productName: tempData.productName,
+          rightSide: tempData.rightSide,
+          showDesign: tempData.showDesign,
+          showTextDesign: tempData.showTextDesign,
+          styles: tempData.styles,
+        });
+        setImage(tempData.productImage);
+        setSizes(tempData.sizes);
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsLoading(false);
     }
   }, [id]);
 
@@ -109,6 +117,7 @@ const EditMidform: React.FC = () => {
   };
   const handleSubmit = async (value: typeof initialValue) => {
     try {
+      if (!id) return alert("id is not found");
       let urls = {};
 
       const imageFiles = Object.entries(files).map((d) => d);
@@ -131,7 +140,7 @@ const EditMidform: React.FC = () => {
       );
       console.log(urls);
 
-      const dataRef = doc(db, PRODUCTS_COLLECTION_NAME);
+      const dataRef = doc(db, PRODUCTS_COLLECTION_NAME, id);
       await updateDoc(dataRef, {
         ...value,
         ...urls,
@@ -170,7 +179,6 @@ const EditMidform: React.FC = () => {
   }, [gender, country, sizes]);
   console.log("getSizesLists", getSizesLists);
 
-  console.log(sizes);
   return (
     <CreateProductLayout>
       <Formik

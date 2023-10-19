@@ -8,7 +8,9 @@ import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
 import { db } from "../../utils/firebase";
 import { Link } from "react-router-dom";
 
-interface ICardModuleData extends IProductdata {}
+interface ICardModuleData extends IProductdata {
+  productType: "medium" | "premium";
+}
 
 const CardModule: React.FC<ICardModuleData> = ({
   gender,
@@ -21,6 +23,7 @@ const CardModule: React.FC<ICardModuleData> = ({
   id,
   sizes,
   colors,
+  productType,
 }) => {
   const [active, setActive] = useState(false);
   const [isactive, setIsActive] = useState(false);
@@ -177,7 +180,7 @@ const CardModule: React.FC<ICardModuleData> = ({
                     >
                       Delete
                     </Button>
-                    <Link to="/products/mid-level/product/styles/edit">
+                    <Link to={`/products/${productType}/edit/${id}`}>
                       <Button varient="primary">Edit</Button>
                     </Link>
                   </div>

@@ -34,25 +34,32 @@ export interface IpostData {
 
 export interface IProductdata {
   id: string;
-  country: string;
-  gender: string;
+  leftSide: boolean;
+  frontSide: boolean;
+  description: string;
   offerPrice: string;
-  productImage: string;
   sizes: {
     sizeVarients: {
-      measurement: number;
       quantity: number;
-      show: boolean;
       size: string;
+      measurement: number;
+      show: boolean;
     }[];
     country: string;
     gender: string;
   }[];
-  description: string;
-  normalPrice: string;
-  styles: string;
+  backSide: boolean;
   productName: string;
-  colors?: string[];
+  showTextDesign: boolean;
+  colors: string[];
+  normalPrice: string;
+  gender: string;
+  styles: string;
+  productImage: string;
+  productVideo: string;
+  type: string;
+  showDesign: boolean;
+  rightSide: boolean;
 }
 export enum IProductCategory {
   MID = "MIDLEVEL-PRODUCTS",
