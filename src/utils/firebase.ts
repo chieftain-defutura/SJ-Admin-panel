@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
+import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { VAIPID_KEY } from "../constants/firebaseCollection";
@@ -18,6 +19,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 // export const spaceref=ref()
+export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const messaging = getMessaging(app);
 
@@ -29,7 +31,9 @@ export const requestForToken = () => {
         // Perform any other neccessary action with the token
       } else {
         // Show permission request UI
-        console.log("No registration token available. Request permission to generate one.");
+        console.log(
+          "No registration token available. Request permission to generate one."
+        );
       }
     })
     .catch((err) => {
