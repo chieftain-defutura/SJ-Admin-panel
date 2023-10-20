@@ -1,13 +1,26 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Layout from "../../../../layout";
 import { ReactComponent as ChevronDown } from "../../../../assets/icons/chevron-down.svg";
-import TotalRevenue from "../../../../components/dashboard/totalRevenue";
+import { ReactComponent as DownloadIcon } from "../../../../assets/icons/downloadIcon.svg";
 import "../../../../styles/postOrder.scss";
 import Button from "../../../../components/button";
 import LayoutModule from "../../../../components/layoutModule";
 import MidlevelModal from "../../ordersModals/midlevelModal";
+import TShirtImg from "../../../../assets/images/t-shirt-two.png";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../../utils/firebase";
+import Chart from "../../../../components/Chart";
+import SingleCard from "../../../../components/dashboard/SingleCard";
+
+const datas = {
+  heading: "Today Mid-Level orders",
+  orderNumber: 71,
+  todayRevenue: "Today Revenue",
+  today: "11,500",
+  orders: "orders",
+  image: TShirtImg,
+  navigation: "/orders/post-orders",
+};
 
 const MidlevelOrder: React.FC = () => {
   const [active, setActive] = useState(false);
@@ -57,9 +70,16 @@ const MidlevelOrder: React.FC = () => {
               gridTemplateColumns: "1fr 1fr",
             }}
           >
-            {/* <SingleCard data={data} /> */}
-            <div style={{ marginTop: "18px" }}>
-              <TotalRevenue />
+            <SingleCard data={datas} />
+            <div
+              style={{
+                borderRadius: "10px",
+                boxShadow: "0px 0px 12px 0px rgba(0, 0, 0, 0.16)",
+                padding: "16px",
+                marginTop: "26px",
+              }}
+            >
+              <Chart />
             </div>
           </div>
           <div className="post-order-text">
@@ -104,6 +124,9 @@ const MidlevelOrder: React.FC = () => {
                   <th>
                     <span>Address</span>
                   </th>
+                  <th>
+                    <span>Details</span>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -117,9 +140,24 @@ const MidlevelOrder: React.FC = () => {
                     </td>
                     <td>{item.shirt}</td>
                     <td>{item.quantity}</td>
-                    <td>{item.price}</td>
+                    <td>₹ {item.price}</td>
                     <td>{item.size}</td>
                     <td>{item.address}</td>
+                    <td>
+                      <div
+                        style={{
+                          background: "#8C73CB",
+                          width: "36px",
+                          height: "32px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: "5px",
+                        }}
+                      >
+                        <DownloadIcon />
+                      </div>
+                    </td>
 
                     <td>
                       <Button

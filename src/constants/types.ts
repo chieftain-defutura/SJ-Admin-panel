@@ -61,6 +61,117 @@ export interface IProductdata {
   showDesign: boolean;
   rightSide: boolean;
 }
+
+export interface IUserData {
+  address: null;
+  avatar: string;
+  email: string;
+  id: string;
+  name: string;
+  phoneNo: string;
+  profile: string;
+}
+
+export interface IPremiumData {
+  description: string;
+  gender: string;
+  offerPrice: string;
+  productVideo: string;
+  price: string;
+  sizes: {
+    country: string;
+    sizeVarient: {
+      size: string;
+      measurement: number;
+    };
+    status: string;
+    type: string;
+  };
+  orderStatus: {
+    delivery: {
+      status: boolean;
+      createdAt: null;
+      description: string;
+    };
+    manufacturing: {
+      createdAt: null;
+      status: boolean;
+      description: string;
+    };
+    orderplaced: {
+      status: boolean;
+      createdAt: null;
+      description: string;
+    };
+    readyToShip: {
+      status: boolean;
+      description: string;
+      createdAt: null;
+    };
+    shipping: {
+      createdAt: null;
+      description: string;
+      status: boolean;
+    };
+  };
+  userId: string;
+  id: string;
+  productImage: string;
+  productName: string;
+  styles: string;
+  type: string;
+}
+
+export interface IFetchData extends IUserData {
+  description: string;
+  gender: string;
+  offerPrice: string;
+  productVideo: string;
+  price: string;
+  sizes: {
+    country: string;
+    sizeVarient: {
+      size: string;
+      measurement: number;
+    };
+    status: string;
+    type: string;
+  };
+  orderStatus: {
+    delivery: {
+      status: boolean;
+      createdAt: null;
+      description: string;
+    };
+    manufacturing: {
+      createdAt: null;
+      status: boolean;
+      description: string;
+    };
+    orderplaced: {
+      status: boolean;
+      createdAt: null;
+      description: string;
+    };
+    readyToShip: {
+      status: boolean;
+      description: string;
+      createdAt: null;
+    };
+    shipping: {
+      createdAt: null;
+      description: string;
+      status: boolean;
+    };
+  };
+  userId: string;
+  id: string;
+  productImage: string;
+  productName: string;
+
+  styles: string;
+  type: string;
+}
 export enum IProductCategory {
   MID = "MIDLEVEL-PRODUCTS",
   PREMIUM = "PREMIUM-PRODUCTS",

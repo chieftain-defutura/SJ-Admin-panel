@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg";
-import CustomerDetailsModal from "./customerDetails";
 import DeliveryDetailsModal from "./deliveryDetails";
 import ProductDetailsModal from "./productDetails";
 import "../../../../styles/postModal.scss";
@@ -18,10 +17,6 @@ const PremiumModal: React.FC<IPremiumModal> = ({ onClose }) => {
 
   const handleDeliveryClick = () => {
     setActiveSection("delivery");
-  };
-
-  const handleCustomerClick = () => {
-    setActiveSection("customer");
   };
 
   return (
@@ -43,19 +38,11 @@ const PremiumModal: React.FC<IPremiumModal> = ({ onClose }) => {
             <p>Delivery status</p>
             <div className="border-bottom"></div>
           </div>
-          <div
-            className={activeSection === "customer" ? "active" : ""}
-            onClick={handleCustomerClick}
-          >
-            <p>Customer details</p>
-            <div className="border-bottom"></div>
-          </div>
         </div>
         <div className="close-icon" onClick={onClose}>
           <CloseIcon />
         </div>
 
-        {activeSection === "customer" && <CustomerDetailsModal />}
         {activeSection === "delivery" && <DeliveryDetailsModal />}
         {activeSection === "product" && <ProductDetailsModal />}
       </div>

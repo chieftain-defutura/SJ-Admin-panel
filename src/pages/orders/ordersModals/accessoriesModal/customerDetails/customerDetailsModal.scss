@@ -1,4 +1,12 @@
 .customer-details-wrapper {
+  .custom-details-head {
+    margin: 36px 0 16px;
+    p {
+      letter-spacing: -0.28px;
+      font-size: 14px;
+      color: var(--primary-);
+    }
+  }
   .customer-details-container {
     display: flex;
     align-items: center;
@@ -15,11 +23,14 @@
       margin-top: 8px;
     }
   }
-  .dont-btn {
-    position: absolute;
-    bottom: 24px;
-    left: 48%;
-    right: 50%;
-    transform: translate(-50%, -50%);
+  .custom-done-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 22px 0;
+    padding-bottom: 30px;
+    button {
+      padding: 9px 35px;
+    }
   }
 }
