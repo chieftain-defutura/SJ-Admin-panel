@@ -1,0 +1,78 @@
+.admin-control {
+  margin-left: 120px;
+  padding: 32px 24px;
+  .admin-management {
+    display: flex;
+    justify-content: space-between;
+    .total-users {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h3 {
+      font-family: "Arvo-Regular";
+      font-size: 14px;
+      font-weight: 400;
+    }
+  }
+  .add-btn {
+    padding-top: 18px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .admin-info {
+    padding-top: 43px;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 8px;
+
+    .title {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      align-items: center;
+      h4 {
+        color: var(--secondary-);
+        font-weight: 500;
+      }
+    }
+
+    .user-details {
+      padding: 14px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+      h3 {
+        font-weight: 500;
+      }
+      .user-info {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        .user-profile {
+          border: 1px solid var(--gray);
+          width: 20px;
+          height: 20px;
+          border-radius: 20px;
+          background-color: var(--secondary-);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          p {
+            color: aliceblue;
+          }
+        }
+      }
+    }
+    table {
+      //   width: 100%;
+      tr {
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+  }
+}

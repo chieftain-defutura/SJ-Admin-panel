@@ -7,7 +7,7 @@ export const PRODUCTS_COLLECTION_NAME = "Products";
 export const ORDERS_COLLECTION_NAME = "Orders";
 export const NOTIFICATION_COLLECTION_NAME = "Notification";
 export const TRANSECTIONHISTORY_COLLECTION_NAME = "Transections";
-export const ADMIN_COLLECTION_NAME = "Setting";
+export const ADMIN_COLLECTION_NAME = "AdminUsers";
 export const PRODUCTS_STORAGE = "ProductsImages";
 export const DESIGN_TEXT_IMAGE = "Designimages";
 
