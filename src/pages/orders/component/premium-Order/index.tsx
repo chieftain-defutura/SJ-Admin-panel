@@ -12,6 +12,8 @@ import { db } from "../../../../utils/firebase";
 import { IPremiumData, IUserData } from "../../../../constants/types";
 import Chart from "../../../../components/Chart";
 import SingleCard from "../../../../components/dashboard/SingleCard";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import PremiumPdf from "../../../../components/PdfFile/PremiumPdf";
 
 const datas = {
   heading: "Today Premium orders",
@@ -41,8 +43,6 @@ const PremiumOrder: React.FC = () => {
   }, [getData]);
 
   const FilteredData = data?.filter((f) => f.type === "Premium-Level");
-
-  console.log("FilteredDataaaaaa", FilteredData);
 
   const handleToggle = () => {
     setIsActive(!isActive);
@@ -143,6 +143,7 @@ export default PremiumOrder;
 interface ICardComponent {
   data: IPremiumData;
 }
+
 const CardComponent: React.FC<ICardComponent> = ({ data }) => {
   const [active, setActive] = useState(false);
   const [userData, setUserData] = useState<IUserData>();
@@ -170,7 +171,8 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
     } catch (error) {
       console.error("Error getting document:", error);
     }
-  }, [docRef]);
+  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -184,24 +186,34 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
         </div>
       </td>
       <td>{data.productName}</td>
-      <td>{data.price}</td>
-      <td>price</td>
-      <td>size</td>
+      <td>{data.sizes.sizeVarient.quantity}</td>
+      <td>{data.price} INR</td>
+      <td>
+        {data.sizes.sizeVarient.size} - {data.sizes.sizeVarient.measurement}
+      </td>
       <td>Address</td>
       <td>
-        <div
-          style={{
-            background: "#8C73CB",
-            width: "36px",
-            height: "32px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            borderRadius: "5px",
-          }}
-        >
-          <DownloadIcon />
-        </div>
+        <PDFDownloadLink document={<PremiumPdf data={data} />} fileName="FORM">
+          {({ loading }) =>
+            loading ? (
+              <button>Loading document...</button>
+            ) : (
+              <div
+                style={{
+                  background: "#8C73CB",
+                  width: "36px",
+                  height: "32px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "5px",
+                }}
+              >
+                <DownloadIcon />
+              </div>
+            )
+          }
+        </PDFDownloadLink>
       </td>
 
       <td>

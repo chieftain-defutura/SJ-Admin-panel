@@ -1,16 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
-import Layout from "../../../../layout";
 import { ReactComponent as ChevronDown } from "../../../../assets/icons/chevron-down.svg";
 import { ReactComponent as DownloadIcon } from "../../../../assets/icons/downloadIcon.svg";
-import "../../../../styles/postOrder.scss";
-import Button from "../../../../components/button";
 import LayoutModule from "../../../../components/layoutModule";
-import MidlevelModal from "../../ordersModals/midlevelModal";
 import TShirtImg from "../../../../assets/images/t-shirt-two.png";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import SingleCard from "../../../../components/dashboard/SingleCard";
 import { db } from "../../../../utils/firebase";
 import Chart from "../../../../components/Chart";
-import SingleCard from "../../../../components/dashboard/SingleCard";
+import Button from "../../../../components/button";
+import Layout from "../../../../layout";
+import "../../../../styles/postOrder.scss";
+import { IMidLevelData, IUserData } from "../../../../constants/types";
+import PremiumModal from "../../ordersModals/premiumModal";
 
 const datas = {
   heading: "Today Mid-Level orders",
@@ -23,10 +24,9 @@ const datas = {
 };
 
 const MidlevelOrder: React.FC = () => {
-  const [active, setActive] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [data, setData] = useState<IMidLevelData[]>();
 
-  const [data, setData] = useState<any[]>();
   const getData = useCallback(async () => {
     const productData = await getDocs(collection(db, "Orders"));
     const fetchProduct = productData.docs.map((doc) => ({
@@ -41,21 +41,12 @@ const MidlevelOrder: React.FC = () => {
   }, [getData]);
 
   const FilteredData = data?.filter((f) => f.type === "Mid-Level");
-  console.log(FilteredData);
 
   const handleToggle = () => {
     setIsActive(!isActive);
   };
 
-  const handleModalToggle = () => {
-    setActive(true);
-  };
-
-  const handleModalCloseToggle = () => {
-    setActive(false);
-  };
-
-  if (!data) return <p>no data</p>;
+  if (!FilteredData) return <p>no data</p>;
 
   return (
     <div className="mx">
@@ -130,57 +121,12 @@ const MidlevelOrder: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((item, index) => (
-                  <tr key={index}>
-                    <td>
-                      <div className="flex-item row-header">
-                        {/* <img src={item.profileImg} alt="" /> */}
-                        <p>{item.name}</p>
-                      </div>
-                    </td>
-                    <td>{item.shirt}</td>
-                    <td>{item.quantity}</td>
-                    <td>₹ {item.price}</td>
-                    <td>{item.size}</td>
-                    <td>{item.address}</td>
-                    <td>
-                      <div
-                        style={{
-                          background: "#8C73CB",
-                          width: "36px",
-                          height: "32px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          borderRadius: "5px",
-                        }}
-                      >
-                        <DownloadIcon />
-                      </div>
-                    </td>
-
-                    <td>
-                      <Button
-                        varient="primary"
-                        style={{ padding: "9px 38px", fontSize: "12px" }}
-                        onClick={handleModalToggle}
-                      >
-                        View details
-                      </Button>
-                    </td>
-                  </tr>
+                {FilteredData.map((f, index) => (
+                  <CardComponent key={index} data={f} />
                 ))}
               </tbody>
             </table>
           </div>
-          {active && (
-            <LayoutModule
-              handleToggle={handleModalToggle}
-              className="layout-module"
-            >
-              <MidlevelModal onClose={handleModalCloseToggle} />
-            </LayoutModule>
-          )}
         </div>
       </Layout>
     </div>
@@ -188,3 +134,93 @@ const MidlevelOrder: React.FC = () => {
 };
 
 export default MidlevelOrder;
+
+interface ICardComponent {
+  data: IMidLevelData;
+}
+const CardComponent: React.FC<ICardComponent> = ({ data }) => {
+  const [active, setActive] = useState(false);
+  const [userData, setUserData] = useState<IUserData>();
+  const docRef = doc(db, "users", data.userId);
+
+  const handleModalToggle = () => {
+    setActive(true);
+  };
+
+  const handleModalCloseToggle = () => {
+    setActive(false);
+  };
+
+  const fetchData = useCallback(async () => {
+    try {
+      const documentSnapshot = await getDoc(docRef);
+
+      if (documentSnapshot.exists()) {
+        const data = documentSnapshot.data();
+        console.log("Document dataa:", data);
+        setUserData(data as any);
+      } else {
+        console.log("Document does not exist.");
+      }
+    } catch (error) {
+      console.error("Error getting document:", error);
+    }
+  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  console.log("Dataaaa", data);
+
+  return (
+    <tr>
+      <td>
+        <div className="flex-item row-header">
+          <img src={userData?.profile} alt="" />
+          <p>{userData?.name}</p>
+        </div>
+      </td>
+      <td>{data.productName}</td>
+      <td>{data.quantity}</td>
+      <td>{data.price} INR</td>
+      <td>
+        {data.sizes.sizeVarient.size} - {data.sizes.sizeVarient.measurement}
+      </td>
+      <td>Address</td>
+      <td>
+        <div
+          style={{
+            background: "#8C73CB",
+            width: "36px",
+            height: "32px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "5px",
+          }}
+        >
+          <DownloadIcon />
+        </div>
+      </td>
+
+      <td>
+        <Button
+          varient="primary"
+          style={{ padding: "9px 38px", fontSize: "12px" }}
+          onClick={handleModalToggle}
+        >
+          View details
+        </Button>
+      </td>
+      {active && (
+        <LayoutModule
+          handleToggle={handleModalToggle}
+          className="layout-module"
+        >
+          <PremiumModal onClose={handleModalCloseToggle} />
+        </LayoutModule>
+      )}
+    </tr>
+  );
+};

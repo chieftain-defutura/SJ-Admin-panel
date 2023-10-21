@@ -82,11 +82,12 @@ export interface IPremiumData {
     country: string;
     sizeVarient: {
       size: string;
+      quantity: number;
       measurement: number;
     };
-    status: string;
-    type: string;
   };
+  status: string;
+  type: string;
   orderStatus: {
     delivery: {
       status: boolean;
@@ -119,7 +120,102 @@ export interface IPremiumData {
   productImage: string;
   productName: string;
   styles: string;
+}
+
+export interface IMidLevelData {
+  approved: boolean;
+  color: string;
+  description: string;
+  gender: string;
+  id: string;
+  offerPrice: string;
+  orderStatus: {
+    delivery: {
+      createdAt: null;
+      description: string;
+      status: boolean;
+    };
+    manufacturing: {
+      createdAt: null;
+      description: string;
+      status: boolean;
+    };
+    orderplaced: {
+      description: string;
+      status: boolean;
+      createdAt: null;
+    };
+    readyToShip: {
+      createdAt: null;
+      status: boolean;
+      description: string;
+    };
+    shipping: {
+      createdAt: null;
+      status: boolean;
+      description: string;
+    };
+  };
+  price: string;
+  productId: string;
+  productName: string;
+  quantity: string;
+  sizes: {
+    country: string;
+    sizeVarient: {
+      measurement: string;
+      size: string;
+    };
+  };
+  style: string;
+  textAndImage: {
+    position: string;
+    title: string;
+    designs: {
+      hashtag: string;
+      image: string;
+    };
+  };
   type: string;
+  userId: string;
+}
+
+export interface IAccessoryLevel {
+  description: string;
+  id: string;
+  offerPrice: string;
+  orderStatus: {
+    delivery: {
+      status: boolean;
+      description: string;
+      createdAt: null;
+    };
+    manufacturing: {
+      status: boolean;
+      createdAt: null;
+      description: string;
+    };
+    orderplaced: {
+      status: boolean;
+      description: string;
+      createdAt: null;
+    };
+    readyToShip: {
+      createdAt: null;
+      description: string;
+      status: boolean;
+    };
+    shipping: {
+      description: string;
+      createdAt: null;
+      status: boolean;
+    };
+  };
+  price: string;
+  productName: string;
+  status: string;
+  type: string;
+  userId: string;
 }
 
 export interface IFetchData extends IUserData {
