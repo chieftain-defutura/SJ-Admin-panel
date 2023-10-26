@@ -20,6 +20,18 @@
     background-color: rgba(0, 0, 0, 0.8);
     cursor: pointer;
   }
+  .admin-form {
+    width: 448px;
+    padding: 24px;
+    h3 {
+      padding-bottom: 21px;
+    }
+    button {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
   .product-detail-wrap {
     position: relative;
     overflow-y: auto;

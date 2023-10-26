@@ -26,6 +26,7 @@ import EditMidform from "./pages/products/mid-level/product/component/createMid-
 import EditPremium from "./pages/premium/component/EditPremium";
 import Login from "./pages/login";
 import MidLevelPdf from "./components/PdfFile/MidLevelPdf";
+import AdminManagement from "./pages/adminManagement";
 
 const App: React.FC = () => {
   return (
@@ -38,6 +39,7 @@ const App: React.FC = () => {
         <Route path="/post/approved" element={<ApprovedPost />} />
         <Route path="/post/pending" element={<PendingPost />} />
         <Route path="/notification" element={<Notification />} />
+        <Route path="/admin-management" element={<AdminManagement />} />
         <Route path="/orders/premium-orders" element={<PremiumOrders />} />
         <Route path="/orders/post-orders" element={<PostOrders />} />
         <Route path="/orders/midlevel-orders" element={<MidlevelOrder />} />
