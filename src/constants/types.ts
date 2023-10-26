@@ -32,6 +32,15 @@ export interface IpostData {
   type: string;
 }
 
+export interface IAdminData {
+  id: string;
+  userName: string;
+  password: string;
+  role: string;
+  actions: string;
+  email: string;
+  action: string;
+}
 export interface IProductdata {
   id: string;
   leftSide: boolean;

@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Layout from "../../layout";
 import "../../styles/adminManagement.scss";
-import { AdminData } from "../../data/adminData";
 import Button from "../../components/button";
 import LayoutModule from "../../components/layoutModule";
 import { Form, Formik } from "formik";
@@ -13,7 +12,9 @@ import { AuthErrorCodes, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../utils/firebase";
 import { FirebaseError } from "firebase/app";
 import { ADMIN_COLLECTION_NAME } from "../../constants/firebaseCollection";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs, query } from "firebase/firestore";
+import { IAdminData } from "../../constants/types";
+import AdminList from "./adminLists";
 
 const initialValues = {
   userName: "",
@@ -22,8 +23,10 @@ const initialValues = {
   role: "",
   actions: "",
 };
-const AdminManagement: React.FC = () => {
+
+const AdminManagement: React.FC<IAdminData> = ({ id }) => {
   const [active, setActive] = useState(false);
+  const [data, setData] = useState<IAdminData[]>([]);
 
   const validationSchema = Yup.object().shape({
     userName: Yup.string()
@@ -64,6 +67,29 @@ const AdminManagement: React.FC = () => {
       }
     }
   };
+
+  const handleGetData = useCallback(async () => {
+    try {
+      const adminData = query(collection(db, ADMIN_COLLECTION_NAME));
+      const documentSnapshots = await getDocs(adminData);
+      const lastVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
+      console.log(lastVisible);
+      const data = await getDocs(adminData);
+      const fetchedData = data.docs.map((d) => ({
+        id: d.id,
+        ...(d.data() as any),
+      }));
+      console.log(fetchedData);
+      setData(fetchedData);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [setData]);
+
+  useEffect(() => {
+    handleGetData();
+  }, [handleGetData]);
   return (
     <Layout>
       <div className="admin-control">
@@ -72,7 +98,9 @@ const AdminManagement: React.FC = () => {
           <div className="total-users">
             <h3>Total users</h3>
             <Users />
-            <h3>25</h3>
+            {data.map((a, i) => (
+              <h3 key={i}>{a.id.length}</h3>
+            ))}
           </div>
         </div>
         <div className="add-btn">
@@ -115,19 +143,8 @@ const AdminManagement: React.FC = () => {
             <h4>Role</h4>
             <h4>Actions</h4>
           </div>
-          {AdminData.map((a, i) => (
-            <div className="user-details" key={i}>
-              <div className="user-info">
-                <div className="user-profile">
-                  <p>{a.name.slice(0, 1)}</p>
-                </div>
-                <h3>{a.name}</h3>
-              </div>
-              <h3>{a.email}</h3>
-              <h3>{a.role}</h3>
-              <h3>{a.actions}</h3>
-              <Button varient="secondary">Remove</Button>
-            </div>
+          {data.map((a, i) => (
+            <AdminList {...a} key={i} />
           ))}
         </div>
       </div>
