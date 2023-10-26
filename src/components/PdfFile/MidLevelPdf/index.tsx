@@ -171,7 +171,7 @@ const tableData = [
   ],
 ];
 
-const PremiumPdf: React.FC = () => {
+const MidLevelPdf: React.FC = () => {
   return (
     // <PDFViewer style={{ width: "100vw", height: "100vh" }}>
     <Document>
@@ -432,4 +432,4 @@ const PremiumPdf: React.FC = () => {
   );
 };
 
-export default PremiumPdf;
+export default MidLevelPdf;

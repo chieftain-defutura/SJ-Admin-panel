@@ -25,6 +25,7 @@ import Subscription from "./pages/subscription";
 import EditMidform from "./pages/products/mid-level/product/component/createMid-Product/EditMidform";
 import EditPremium from "./pages/premium/component/EditPremium";
 import Login from "./pages/login";
+import MidLevelPdf from "./components/PdfFile/MidLevelPdf";
 
 const App: React.FC = () => {
   return (
@@ -40,6 +41,8 @@ const App: React.FC = () => {
         <Route path="/orders/premium-orders" element={<PremiumOrders />} />
         <Route path="/orders/post-orders" element={<PostOrders />} />
         <Route path="/orders/midlevel-orders" element={<MidlevelOrder />} />
+        <Route path="/orders/midlevel-pdf" element={<MidLevelPdf />} />
+
         <Route
           path="/orders/accessories-orders"
           element={<AccessoriesOrder />}

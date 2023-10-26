@@ -193,10 +193,12 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
       </td>
       <td>Address</td>
       <td>
-        <PDFDownloadLink document={<PremiumPdf data={data} />} fileName="FORM">
+        <PDFDownloadLink document={<PremiumPdf />} fileName="FORM">
           {({ loading }) =>
             loading ? (
-              <button>Loading document...</button>
+              <Button varient="notifi" style={{ fontSize: "12px" }}>
+                Loading document...
+              </Button>
             ) : (
               <div
                 style={{

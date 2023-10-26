@@ -12,6 +12,9 @@ import Layout from "../../../../layout";
 import "../../../../styles/postOrder.scss";
 import { IMidLevelData, IUserData } from "../../../../constants/types";
 import PremiumModal from "../../ordersModals/premiumModal";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import MidLevelPdf from "../../../../components/PdfFile/MidLevelPdf";
+import MidlevelModal from "../../ordersModals/midlevelModal";
 
 const datas = {
   heading: "Today Mid-Level orders",
@@ -171,8 +174,6 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
     fetchData();
   }, [fetchData]);
 
-  console.log("Dataaaa", data);
-
   return (
     <tr>
       <td>
@@ -189,19 +190,29 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
       </td>
       <td>Address</td>
       <td>
-        <div
-          style={{
-            background: "#8C73CB",
-            width: "36px",
-            height: "32px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            borderRadius: "5px",
-          }}
-        >
-          <DownloadIcon />
-        </div>
+        <PDFDownloadLink document={<MidLevelPdf />} fileName="FORM">
+          {({ loading }) =>
+            loading ? (
+              <Button varient="notifi" style={{ fontSize: "12px" }}>
+                Loading document...
+              </Button>
+            ) : (
+              <div
+                style={{
+                  background: "#8C73CB",
+                  width: "36px",
+                  height: "32px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "5px",
+                }}
+              >
+                <DownloadIcon />
+              </div>
+            )
+          }
+        </PDFDownloadLink>
       </td>
 
       <td>
@@ -218,7 +229,7 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
           handleToggle={handleModalToggle}
           className="layout-module"
         >
-          <PremiumModal onClose={handleModalCloseToggle} />
+          <MidlevelModal onClose={handleModalCloseToggle} />
         </LayoutModule>
       )}
     </tr>

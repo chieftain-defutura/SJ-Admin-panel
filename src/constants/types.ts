@@ -122,6 +122,63 @@ export interface IPremiumData {
   styles: string;
 }
 
+export interface IPost {
+  color: string;
+  description: string;
+  gender: string;
+  giftVideo: string;
+  id: string;
+  offerPrice: string;
+  orderStatus: {
+    delivery: {
+      status: boolean;
+      description: string;
+      createdAt: null;
+    };
+    manufacturing: {
+      createdAt: null;
+      description: string;
+      status: boolean;
+    };
+    orderplaced: {
+      createdAt: null;
+      description: string;
+      status: boolean;
+    };
+    readyToShip: {
+      description: string;
+      status: boolean;
+      createdAt: null;
+    };
+    shipping: {
+      createdAt: null;
+      description: string;
+      status: boolean;
+    };
+  };
+  price: string;
+  productCaption: string;
+  productName: string;
+  quantity: string;
+  sizes: {
+    country: string;
+    sizeVarient: {
+      measurement: number;
+      size: string;
+      quantity: number;
+    }[];
+  };
+  status: string;
+  style: string;
+  textAndImage: {
+    position: string;
+    title: string;
+    image: string;
+  };
+  type: string;
+  userId: string;
+}
+
 export interface IMidLevelData {
   approved: boolean;
   color: string;
