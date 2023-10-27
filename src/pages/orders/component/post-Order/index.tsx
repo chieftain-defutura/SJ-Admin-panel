@@ -4,7 +4,6 @@ import { ReactComponent as ChevronDown } from "../../../../assets/icons/chevron-
 import { ReactComponent as DownloadIcon } from "../../../../assets/icons/downloadIcon.svg";
 import TShirtImg from "../../../../assets/images/t-shirt-two.png";
 import SingleCard from "../../../../components/dashboard/SingleCard";
-import { PostTableData } from "../../../../data/postTableData";
 import Button from "../../../../components/button";
 import LayoutModule from "../../../../components/layoutModule";
 import PostModal from "../../ordersModals/postModal";
@@ -15,6 +14,7 @@ import { db } from "../../../../utils/firebase";
 import { IPost, IUserData } from "../../../../constants/types";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import PostPdf from "../../../../components/PdfFile/PostPdf";
+import { POST_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 
 const datas = {
   heading: "Today post orders",
@@ -27,12 +27,11 @@ const datas = {
 };
 
 const PostOrders: React.FC = () => {
-  const [active, setActive] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [data, setData] = useState<IPost[]>();
 
   const getData = useCallback(async () => {
-    const productData = await getDocs(collection(db, "Posts"));
+    const productData = await getDocs(collection(db, POST_COLLECTION_NAME));
     const fetchProduct = productData.docs.map((doc) => ({
       id: doc.id,
       ...(doc.data() as any),
@@ -51,14 +50,6 @@ const PostOrders: React.FC = () => {
   };
 
   if (!FilteredData) return <p>no data</p>;
-
-  const handleModalToggle = () => {
-    setActive(true);
-  };
-
-  const handleModalCloseToggle = () => {
-    setActive(false);
-  };
 
   return (
     <div className="mx">
@@ -138,57 +129,9 @@ const PostOrders: React.FC = () => {
                 {FilteredData.map((f, index) => (
                   <CardComponent key={index} data={f} />
                 ))}
-                {/* {PostTableData.map((item, index) => (
-                  <tr key={index}>
-                    <td>
-                      <div className="flex-item row-header">
-                        <img src={item.profileImg} alt="" />
-                        <p>{item.name}</p>
-                      </div>
-                    </td>
-                    <td>{item.shirt}</td>
-                    <td>{item.quantity}</td>
-                    <td>{item.price}</td>
-                    <td>{item.size}</td>
-                    <td>{item.address}</td>
-                    <td>
-                      <div
-                        style={{
-                          background: "#8C73CB",
-                          width: "36px",
-                          height: "32px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          borderRadius: "5px",
-                        }}
-                      >
-                        <DownloadIcon />
-                      </div>
-                    </td>
-
-                    <td>
-                      <Button
-                        varient="primary"
-                        style={{ padding: "9px 38px", fontSize: "12px" }}
-                        onClick={handleModalToggle}
-                      >
-                        View details
-                      </Button>
-                    </td>
-                  </tr>
-                ))} */}
               </tbody>
             </table>
           </div>
-          {/* {active && (
-            <LayoutModule
-              handleToggle={handleModalToggle}
-              className="layout-module"
-            >
-              <PostModal onClose={handleModalCloseToggle} />
-            </LayoutModule>
-          )} */}
         </div>
       </Layout>
     </div>
@@ -228,7 +171,8 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
     } catch (error) {
       console.error("Error getting document:", error);
     }
-  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     fetchData();

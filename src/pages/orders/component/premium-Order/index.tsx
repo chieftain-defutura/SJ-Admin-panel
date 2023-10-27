@@ -14,6 +14,7 @@ import Chart from "../../../../components/Chart";
 import SingleCard from "../../../../components/dashboard/SingleCard";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import PremiumPdf from "../../../../components/PdfFile/PremiumPdf";
+import { ORDERS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 
 const datas = {
   heading: "Today Premium orders",
@@ -30,7 +31,7 @@ const PremiumOrder: React.FC = () => {
   const [data, setData] = useState<IPremiumData[]>();
 
   const getData = useCallback(async () => {
-    const productData = await getDocs(collection(db, "Orders"));
+    const productData = await getDocs(collection(db, ORDERS_COLLECTION_NAME));
     const fetchProduct = productData.docs.map((doc) => ({
       id: doc.id,
       ...(doc.data() as any),

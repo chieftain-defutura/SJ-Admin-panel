@@ -11,10 +11,10 @@ import Button from "../../../../components/button";
 import Layout from "../../../../layout";
 import "../../../../styles/postOrder.scss";
 import { IMidLevelData, IUserData } from "../../../../constants/types";
-import PremiumModal from "../../ordersModals/premiumModal";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import MidLevelPdf from "../../../../components/PdfFile/MidLevelPdf";
 import MidlevelModal from "../../ordersModals/midlevelModal";
+import { ORDERS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 
 const datas = {
   heading: "Today Mid-Level orders",
@@ -31,7 +31,7 @@ const MidlevelOrder: React.FC = () => {
   const [data, setData] = useState<IMidLevelData[]>();
 
   const getData = useCallback(async () => {
-    const productData = await getDocs(collection(db, "Orders"));
+    const productData = await getDocs(collection(db, ORDERS_COLLECTION_NAME));
     const fetchProduct = productData.docs.map((doc) => ({
       id: doc.id,
       ...(doc.data() as any),

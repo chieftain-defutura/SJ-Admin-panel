@@ -12,10 +12,10 @@ import Chart from "../../../../components/Chart";
 import { IAccessoryLevel, IUserData } from "../../../../constants/types";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../../../../utils/firebase";
-import PremiumModal from "../../ordersModals/premiumModal";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import AccessoryPdf from "../../../../components/PdfFile/AccessoryPdf";
 import AccessoriesModal from "../../ordersModals/accessoriesModal";
+import { ORDERS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 
 const datas = {
   heading: "Today Accessories orders",
@@ -32,7 +32,7 @@ const AccessoriesOrder: React.FC = () => {
   const [data, setData] = useState<IAccessoryLevel[]>();
 
   const getData = useCallback(async () => {
-    const productData = await getDocs(collection(db, "Orders"));
+    const productData = await getDocs(collection(db, ORDERS_COLLECTION_NAME));
     const fetchProduct = productData.docs.map((doc) => ({
       id: doc.id,
       ...(doc.data() as any),
@@ -162,7 +162,7 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
 
       if (documentSnapshot.exists()) {
         const data = documentSnapshot.data();
-        console.log("Document dataa:", data);
+
         setUserData(data as any);
       } else {
         console.log("Document does not exist.");
@@ -170,7 +170,8 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
     } catch (error) {
       console.error("Error getting document:", error);
     }
-  }, [docRef]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     fetchData();
