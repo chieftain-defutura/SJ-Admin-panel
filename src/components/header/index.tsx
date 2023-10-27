@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./header.scss";
-import { ReactComponent as SJlogo } from "../../assets/icons/sjlogo.svg";
-import { ReactComponent as SNlogo } from "../../assets/icons/sn-logo.svg";
+import { ReactComponent as Logo } from "../../assets/logo/logo.svg";
+// import { ReactComponent as SJlogo } from "../../assets/icons/sjlogo.svg";
+// import { ReactComponent as SNlogo } from "../../assets/icons/sn-logo.svg";
 import { ReactComponent as Users } from "../../assets/icons/users.svg";
 import { ReactComponent as Logout } from "../../assets/icons/logout.svg";
 import { Link } from "react-router-dom";
@@ -15,8 +16,7 @@ const Header: React.FC = () => {
     <div className="header-wrap">
       <a href="/">
         <div className="logo">
-          <SJlogo />
-          <SNlogo />
+          <Logo />
         </div>
       </a>
       <div className="drop-down" onClick={() => handleActive()}>
