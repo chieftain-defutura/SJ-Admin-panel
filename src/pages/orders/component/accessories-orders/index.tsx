@@ -167,8 +167,7 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
     } catch (error) {
       console.error("Error getting document:", error);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [docRef]);
 
   useEffect(() => {
     fetchData();
