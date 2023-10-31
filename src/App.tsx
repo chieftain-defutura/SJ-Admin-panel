@@ -32,27 +32,15 @@ const App: React.FC = () => {
   return (
     <div>
       <Routes>
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/post" element={<Post children={undefined} />} />
         <Route path="/post/all-post" element={<Allpost />} />
         <Route path="/post/approved" element={<ApprovedPost />} />
         <Route path="/post/pending" element={<PendingPost />} />
         <Route path="/notification" element={<Notification />} />
-        <Route
-          path="/admin-management"
-          element={
-            <AdminManagement
-              id={""}
-              userName={""}
-              password={""}
-              role={""}
-              actions={""}
-              email={""}
-              action={""}
-            />
-          }
-        />
+        <Route path="/admin-management" element={<AdminManagement />} />
         <Route path="/orders/premium-orders" element={<PremiumOrders />} />
         <Route path="/orders/post-orders" element={<PostOrders />} />
         <Route path="/orders/midlevel-orders" element={<MidlevelOrder />} />

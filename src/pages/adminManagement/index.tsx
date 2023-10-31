@@ -24,7 +24,7 @@ const initialValues = {
   actions: "",
 };
 
-const AdminManagement: React.FC<IAdminData> = ({ id }) => {
+const AdminManagement: React.FC = () => {
   const [active, setActive] = useState(false);
   const [data, setData] = useState<IAdminData[]>([]);
 
@@ -56,6 +56,7 @@ const AdminManagement: React.FC<IAdminData> = ({ id }) => {
 
       console.log("dataStore", dataStore);
       setActive(false);
+      window.location.reload();
     } catch (error) {
       console.log(error);
       if (error instanceof FirebaseError) {
@@ -98,9 +99,8 @@ const AdminManagement: React.FC<IAdminData> = ({ id }) => {
           <div className="total-users">
             <h3>Total users</h3>
             <Users />
-            {data.map((a, i) => (
-              <h3 key={i}>{a.id.length}</h3>
-            ))}
+
+            <h3>{data.length}</h3>
           </div>
         </div>
         <div className="add-btn">
@@ -116,22 +116,28 @@ const AdminManagement: React.FC<IAdminData> = ({ id }) => {
                 onSubmit={handleSubmit}
                 validationSchema={validationSchema}
               >
-                <Form>
-                  <h3>Account management</h3>
-                  <Input name="userName" type="text" placeholder="Name" />
-                  <Input name="email" type="email" placeholder="Email" />
-                  <Input
-                    name="password"
-                    type="password"
-                    placeholder="Password"
-                  />
-                  <Input name="role" type="text" placeholder="Role" />
-                  <Input name="actions" type="text" placeholder="Action" />
-                  <Button varient="primary" type="submit">
-                    <Send />
-                    Done
-                  </Button>
-                </Form>
+                {({ isSubmitting }) => (
+                  <Form>
+                    <h3>Account management</h3>
+                    <Input name="userName" type="text" placeholder="Name" />
+                    <Input name="email" type="email" placeholder="Email" />
+                    <Input
+                      name="password"
+                      type="password"
+                      placeholder="Password"
+                    />
+                    <Input name="role" type="text" placeholder="Role" />
+                    <Input name="actions" type="text" placeholder="Action" />
+                    <Button
+                      varient="primary"
+                      type="submit"
+                      disabled={isSubmitting}
+                    >
+                      <Send />
+                      Done
+                    </Button>
+                  </Form>
+                )}
               </Formik>
             </div>
           </LayoutModule>

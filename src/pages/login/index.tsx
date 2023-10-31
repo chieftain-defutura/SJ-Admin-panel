@@ -34,9 +34,8 @@ const Login: React.FC = () => {
       ).then((userCredential) => {
         console.log(userCredential);
       });
-      navigate("/");
+      navigate("/dashboard");
       console.log(values);
-
       console.log("dataStore", dataStore);
     } catch (error) {
       console.log(error);
