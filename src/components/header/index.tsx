@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./header.scss";
-import { ReactComponent as Logo } from "../../assets/logo/logo.svg";
+import { ReactComponent as Logo } from "../../assets/logo/sprinklenadar-logo.svg";
 // import { ReactComponent as SJlogo } from "../../assets/icons/sjlogo.svg";
 // import { ReactComponent as SNlogo } from "../../assets/icons/sn-logo.svg";
 import { ReactComponent as Users } from "../../assets/icons/users.svg";
