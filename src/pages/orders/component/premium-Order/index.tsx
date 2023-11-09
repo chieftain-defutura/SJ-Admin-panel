@@ -28,6 +28,8 @@ const datas = {
 
 const PremiumOrder: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
+  const [product, setProduct] = useState(false);
+
   const [data, setData] = useState<IPremiumData[]>();
 
   const getData = useCallback(async () => {
@@ -79,23 +81,47 @@ const PremiumOrder: React.FC = () => {
           </div>
           <div className="post-order-text">
             <p>Premium orders</p>
-
-            <div className="drop-down-wrapper">
-              <div className="flex-item" onClick={handleToggle}>
-                <p>Place orders</p>
-                <ChevronDown
-                  className={`drop-down-icon ${isActive ? "rotate" : ""}`}
-                  onClick={handleToggle}
-                />
-              </div>
-              {isActive && (
-                <div className="select-drop-down">
-                  <p>Manufacture</p>
-                  <p>Ready to ship</p>
-                  <p>Shipping</p>
-                  <p>Delivered</p>
+            <div className="filter-section">
+              <div className="drop-down-wrapper">
+                <div className="flex-item" onClick={() => setProduct(!product)}>
+                  <p>Products</p>
+                  <ChevronDown
+                    className={`drop-down-icon ${product ? "rotate" : ""}`}
+                    onClick={() => setProduct(!product)}
+                  />
                 </div>
-              )}
+                {product && (
+                  <div
+                    className="select-drop-down"
+                    onClick={() => setProduct(false)}
+                  >
+                    <p>Blazzer</p>
+                    <p>shirts</p>
+                    <p>Saree</p>
+                    <p>Jacket</p>
+                  </div>
+                )}
+              </div>{" "}
+              <div className="drop-down-wrapper">
+                <div className="flex-item" onClick={handleToggle}>
+                  <p>Place orders</p>
+                  <ChevronDown
+                    className={`drop-down-icon ${isActive ? "rotate" : ""}`}
+                    onClick={handleToggle}
+                  />
+                </div>
+                {isActive && (
+                  <div
+                    className="select-drop-down"
+                    onClick={() => setIsActive(false)}
+                  >
+                    <p>Manufacture</p>
+                    <p>Ready to ship</p>
+                    <p>Shipping</p>
+                    <p>Delivered</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <div className="table-wrapper">

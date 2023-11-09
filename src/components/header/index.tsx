@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 const Header: React.FC = () => {
   const [active, setActive] = useState(false);
   const handleActive = () => {
-    setActive(true);
+    setActive(!active);
   };
   return (
     <div className="header-wrap">

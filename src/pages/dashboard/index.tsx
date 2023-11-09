@@ -7,8 +7,13 @@ import "./dashboard.scss";
 import { OrdersData } from "../../data/ordersData";
 import { Link } from "react-router-dom";
 import Chart from "../../components/Chart";
+import { Field, Formik } from "formik";
 
 const Continents = ["Europe", "Asia", "USA", "Affrica"];
+const initialValues = {
+  Continents: "",
+  DeliveryFees: "",
+};
 
 const Dashboard: React.FC = () => {
   const [continent, setContinent] = useState("");
@@ -16,6 +21,14 @@ const Dashboard: React.FC = () => {
   console.log(price);
 
   console.log(continent);
+
+  const handleSubmit = (values: typeof initialValues) => {
+    try {
+      console.log(values);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="mx">
@@ -68,34 +81,33 @@ const Dashboard: React.FC = () => {
                 <h6>View more</h6>
               </Link>
             </div>
+            <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+              {({ values }) => (
+                <div className="dropdown">
+                  <h3>Delivery charge</h3>
+                  <Field as="select" name="Continents">
+                    <option value="">Select continents</option>
 
-            <div className="dropdown">
-              <h3>Delivery charge</h3>
-              <select
-                name="continent"
-                value={continent}
-                onChange={(e) => setContinent(e.target.value)}
-              >
-                <option value="">Select continents</option>
-
-                {Continents.map((f, i) => (
-                  <option value={f}>{f}</option>
-                ))}
-              </select>
-              <div>
-                {Continents.map((m) => (
-                  <>
-                    {m === continent && (
-                      <input
-                        type="text"
-                        placeholder="0 $"
-                        onChange={(e) => setPrice(e.target.value)}
-                      />
-                    )}
-                  </>
-                ))}
-              </div>
-            </div>
+                    {Continents.map((f, i) => (
+                      <option value={f}>{f}</option>
+                    ))}
+                  </Field>
+                  <div>
+                    {Continents.find((m) => (
+                      <>
+                        {m === continent && (
+                          <Field
+                            as="text"
+                            name="DeliveryFees"
+                            placeholder="0 $"
+                          />
+                        )}
+                      </>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </Formik>
           </div>
         </div>
       </Layout>
