@@ -1,36 +1,37 @@
-import React, { ChangeEvent, useMemo, useState } from "react";
-import { Field, FieldArray, Form, Formik, FormikValues } from "formik";
+import React, { useMemo, useState } from "react";
+import { Field, Form, Formik } from "formik";
 import "../../../../../../styles/createProduct.scss";
 import Input from "../../../../../../components/input";
 import Button from "../../../../../../components/button";
 import { v4 } from "uuid";
-import LayoutModule from "../../../../../../components/layoutModule";
-import { ReactComponent as Plus } from "../../../../../../assets/icons/plus-2.svg";
 import { ReactComponent as Delete } from "../../../../../../assets/icons/delete.svg";
-import { NavLink } from "react-router-dom";
-import {
-  Country,
-  Sizes,
-  defaultSizes,
-} from "../../../../../../data/midproductSize";
+import { Country, defaultSizes } from "../../../../../../data/midproductSize";
 import CreateProductLayout from "../../../../../../layout/createProduct-layout";
-import { addDoc, collection } from "firebase/firestore/lite";
+import { addDoc, collection } from "firebase/firestore";
 import { db, storage } from "../../../../../../utils/firebase";
 import { PRODUCTS_COLLECTION_NAME } from "../../../../../../constants/firebaseCollection";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import ToggleSwitch from "../../../../../../components/toggleSwitch";
 import ColorModule from "../../../../../../components/color-module";
 import { IProductCategory } from "../../../../../../constants/types";
+import { useNavigate } from "react-router-dom";
+import MOdalPopUp from "../../../../../../components/ModalPopupBox";
 
 const initialValue = {
+  gender: "MALE",
   styles: "",
   productName: "",
   normalPrice: "",
   offerPrice: "",
   colors: ["#000000"],
-  detailedFutures: [{ materials: "", cloth: "" }],
+  // detailedFutures: [{ materials: "", cloth: "" }],
   showDesign: false,
   showTextDesign: false,
+  frontSide: false,
+  backSide: false,
+  leftSide: false,
+  rightSide: false,
+  description: "",
 };
 
 export interface IFiles {
@@ -42,13 +43,14 @@ export interface Material {
   index: number;
 }
 
-const CreateMidProduct: React.FC<Material> = ({ index }) => {
+const CreateMidProduct: React.FC<Material> = () => {
   const [image, setImage] = useState("");
-  const [video, setVideo] = useState("");
+  // const [video, setVideo] = useState("");
   const [files, setFiles] = useState<IFiles[]>([]);
   const [active, setActive] = useState(false);
   const [toggle, setToggle] = useState(false);
-  const [material, setMaterial] = useState<Material[]>([]);
+  console.log(toggle);
+
   const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
   const [country, setCountry] = useState("");
 
@@ -60,9 +62,11 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
         size: string;
         measurement: number;
         show: boolean;
+        quantity: number;
       }[];
     }[]
   >([]);
+  const navigate = useNavigate();
 
   const handleToggle = () => {
     setActive(true);
@@ -99,6 +103,7 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
         type: IProductCategory.MID,
       });
       console.log(dataRef);
+      navigate("/products/mid-level/product/styles");
     } catch (error) {
       console.log("error", error);
     }
@@ -125,16 +130,53 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
     } else {
       return data;
     }
-  }, [gender, country]);
+  }, [gender, country, sizes]);
+  console.log("getSizesLists", getSizesLists);
+
   console.log(sizes);
   return (
     <CreateProductLayout>
       <Formik initialValues={initialValue} onSubmit={handleSubmit}>
-        {({ values, setValues, handleChange }) => (
+        {({ values, setValues, isSubmitting, setFieldValue }) => (
           <Form>
             <div className="create-product">
               <div className="style-section">
-                <h3>Select styles</h3>
+                <div className="gender-update">
+                  <h3>Select styles</h3>
+
+                  <div className="gender">
+                    <div
+                      className="male"
+                      onClick={() => setFieldValue("gender", "MALE")}
+                    >
+                      <h3
+                        style={{
+                          color: values.gender === "MALE" ? "" : "#777",
+                          borderBottom:
+                            values.gender === "MALE" ? "2px solid #8C73CB" : "",
+                        }}
+                      >
+                        Male
+                      </h3>
+                    </div>
+                    <div
+                      className="female"
+                      onClick={() => setFieldValue("gender", "FEMALE")}
+                    >
+                      <h3
+                        style={{
+                          color: values.gender === "FEMALE" ? "" : "#777",
+                          borderBottom:
+                            values.gender === "FEMALE"
+                              ? "2px solid #8C73CB"
+                              : "",
+                        }}
+                      >
+                        Female
+                      </h3>
+                    </div>
+                  </div>
+                </div>
 
                 <div className="styles-wrap">
                   <div className="imageupload">
@@ -174,7 +216,8 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                           </div>
                         </label>
                       </div>
-                      <div className="bg-video">
+
+                      {/* <div className="bg-video">
                         <h4>3D Video</h4>
                         <label htmlFor="3dvideo" className="custom-file-upload">
                           <input
@@ -199,7 +242,7 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                             <video src={video}></video>
                           </div>
                         </label>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <div className="product-info">
@@ -263,50 +306,6 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                     ))}
 
                     {active && (
-                      // <LayoutModule
-                      //   handleToggle={handleToggle}
-                      //   className="color-layout"
-                      // >
-                      //   <div className="colorname">
-                      //     <h3>Colour</h3>
-
-                      //     <h3>Hex code</h3>
-                      //   </div>
-                      //   <div className="color-details">
-                      //     <div className="choose-color">
-                      //       <Input
-                      //         name="color"
-                      //         type="color"
-                      //         value={values.colors[values.colors.length - 1]}
-                      //         onChange={(e) => {
-                      //           const updatedColors = [
-                      //             ...values.colors,
-                      //             e.target.value,
-                      //           ];
-                      //           setValues({
-                      //             ...values,
-                      //             colors: updatedColors,
-                      //             colorPickerOpen: false,
-                      //           });
-                      //         }}
-                      //       />
-                      //     </div>
-
-                      //     <div className="color-code">
-                      //       {values.colors.map((f, index) => (
-                      //         <h2 key={index}>{f}</h2>
-                      //       ))}
-                      //     </div>
-                      //   </div>
-                      //   <div className="done-btn">
-                      //     <Button
-                      //       varient="primary"
-                      //       onClick={() => setActive(false)}
-                      //     >
-                      //       Done
-                      //     </Button>
-                      //   </div>
-                      // </LayoutModule>
                       <ColorModule
                         handleToggle={handleToggle}
                         setActive={setActive}
@@ -339,18 +338,28 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                         </select>
                       </div>
                       <div className="gender">
-                        <div
-                          className="male"
-                          // style={{ color: gender ? "black" : "" }}
-                          onClick={(e) => setGender("MALE")}
-                        >
-                          <h3 style={{ color: gender ? "black" : "" }}>Male</h3>
+                        <div className="male" onClick={() => setGender("MALE")}>
+                          <h3
+                            style={{
+                              color: gender === "MALE" ? "" : "#777",
+                              borderBottom:
+                                gender === "MALE" ? "2px solid #8C73CB" : "",
+                            }}
+                          >
+                            Male
+                          </h3>
                         </div>
                         <div
                           className="female"
-                          onClick={(e) => setGender("FEMALE")}
+                          onClick={() => setGender("FEMALE")}
                         >
-                          <h3 style={{ color: gender ? "black" : "" }}>
+                          <h3
+                            style={{
+                              color: gender === "FEMALE" ? "" : "#777",
+                              borderBottom:
+                                gender === "FEMALE" ? "2px solid #8C73CB" : "",
+                            }}
+                          >
                             Female
                           </h3>
                         </div>
@@ -387,9 +396,36 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                                       }}
                                     />
                                     <span>{s.size}</span>
+                                    <div>
+                                      <input
+                                        type="number"
+                                        value={s.measurement}
+                                        onChange={(e) => {
+                                          const newSizes = [...sizes];
+
+                                          setSizes([
+                                            ...newSizes.map((m, ii) => {
+                                              if (ii !== i) return { ...m };
+                                              const sizeVarients =
+                                                m.sizeVarients.map((s, jj) => {
+                                                  if (jj !== j) return { ...s };
+                                                  return {
+                                                    ...s,
+                                                    measurement: Number(
+                                                      e.target.value
+                                                    ),
+                                                  };
+                                                });
+                                              return { ...m, sizeVarients };
+                                            }),
+                                          ]);
+                                        }}
+                                      />
+                                    </div>
+
                                     <input
                                       type="number"
-                                      value={s.measurement}
+                                      value={s.quantity}
                                       onChange={(e) => {
                                         const newSizes = [...sizes];
 
@@ -401,7 +437,7 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                                                 if (jj !== j) return { ...s };
                                                 return {
                                                   ...s,
-                                                  measurement: Number(
+                                                  quantity: Number(
                                                     e.target.value
                                                   ),
                                                 };
@@ -432,7 +468,6 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                       setValue={(value) =>
                         setValues((v) => ({ ...v, showDesign: value }))
                       }
-                      label={""}
                     />
                   </div>
                   <div className="active-img">
@@ -442,12 +477,62 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                       setValue={(value) =>
                         setValues((v) => ({ ...v, showTextDesign: value }))
                       }
-                      label={""}
                     />
                   </div>
                 </div>
-                <div className="position-toggle"></div>
-                <div className="detailes">
+                <div className="position-toggle">
+                  <div>
+                    <h2>Image positions :</h2>
+
+                    <div className="toggle-positions">
+                      <div className="toggles">
+                        <ToggleSwitch
+                          value={values.frontSide}
+                          setValue={(value) =>
+                            setValues((v) => ({ ...v, frontSide: value }))
+                          }
+                        />
+                        <h3>Front side:</h3>
+                      </div>
+                      <div className="toggles">
+                        <ToggleSwitch
+                          value={values.backSide}
+                          setValue={(value) =>
+                            setValues((v) => ({ ...v, backSide: value }))
+                          }
+                        />
+                        <h3>Back side:</h3>
+                      </div>
+                      <div className="toggles">
+                        <ToggleSwitch
+                          value={values.leftSide}
+                          setValue={(value) =>
+                            setValues((v) => ({ ...v, leftSide: value }))
+                          }
+                        />
+                        <h3>Left side:</h3>
+                      </div>
+                      <div className="toggles">
+                        <ToggleSwitch
+                          value={values.rightSide}
+                          setValue={(value) =>
+                            setValues((v) => ({ ...v, rightSide: value }))
+                          }
+                        />
+                        <h3>Right side:</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="description">
+                  <Input
+                    name="description"
+                    type="text"
+                    value={values.description}
+                    label="Description"
+                  />
+                </div>
+                {/* <div className="detailes">
                   <FieldArray name="detailedFutures">
                     {(arrayHelpers) => (
                       <>
@@ -471,7 +556,7 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                                   placeholder="Cloth"
                                 />
                                 <div
-                                  className="delete"
+                                  className="delete-icon"
                                   onClick={() => {
                                     setMaterial((c) => {
                                       arrayHelpers.remove(i);
@@ -496,14 +581,18 @@ const CreateMidProduct: React.FC<Material> = ({ index }) => {
                             </div>
                           ))}
                         </div>
+                       
                       </>
                     )}
                   </FieldArray>
-                </div>
+                </div> */}
               </div>
-              <Button varient="primary" type="submit">
-                Submit
-              </Button>
+              <div className="btn-submit">
+                <Button varient="primary" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Uploading" : "submit"}
+                </Button>
+              </div>
+              {isSubmitting && <MOdalPopUp />}
             </div>
           </Form>
         )}

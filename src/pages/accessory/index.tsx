@@ -1,24 +1,21 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "../../styles/premium.scss";
 import PremiumLayout from "../../layout/premium-layout";
-import { query, collection, getDocs, where } from "firebase/firestore/lite";
+import { query, collection, getDocs, where } from "firebase/firestore";
 import { NavLink } from "react-router-dom";
-import Button from "../../components/button";
-import LayoutModule from "../../components/layoutModule";
 import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
 import { IProductCategory, IProductdata } from "../../constants/types";
-import Tshirt from "../../assets/images/t-shirt-two.png";
 import { db } from "../../utils/firebase";
-import ProductModule from "../../components/productLayoutModule";
+import AccessoryCardModule from "../../components/accessoryCard";
+import Loading from "../../components/loading";
 
 const AccessoryHome = () => {
   const [data, setData] = useState<IProductdata[]>([]);
-  const [active, setActive] = useState(false);
-  const handleToggle = () => {
-    setActive(!active);
-  };
+  const [isLoading, setIsLoading] = useState(true);
+
   const handleGetData = useCallback(async () => {
     try {
+      setIsLoading(true);
       const productData = query(
         collection(db, PRODUCTS_COLLECTION_NAME),
         where("type", "==", IProductCategory.ACCESSORY)
@@ -32,6 +29,8 @@ const AccessoryHome = () => {
       setData(fetchedData);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   }, [setData]);
 
@@ -47,34 +46,15 @@ const AccessoryHome = () => {
             <h4>Add style</h4>
           </NavLink>
         </div>
-        <div className="product-card-layout">
-          {data.map((f, i) => (
-            <div className="product-card" key={i}>
-              <div className="product-img">
-                <img
-                  src={f.productImage}
-                  alt="products"
-                  width={200}
-                  height={250}
-                />
-              </div>
-
-              <div className="product-details">
-                <h3>{f.styles}</h3>
-                <Button varient="primary" onClick={handleToggle}>
-                  View
-                </Button>
-              </div>
-              {active && (
-                <ProductModule handleToggle={handleToggle}>
-                  <div className="product-preview-img">
-                    <h1>hello</h1>
-                  </div>
-                </ProductModule>
-              )}
-            </div>
-          ))}
-        </div>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div className="product-card-layout">
+            {data.map((f, i) => (
+              <AccessoryCardModule {...f} key={i} />
+            ))}
+          </div>
+        )}
       </div>
     </PremiumLayout>
   );

@@ -2,24 +2,29 @@ import React, { useCallback, useEffect, useState } from "react";
 import "../../../../../../styles/uploadDesign.scss";
 import MidprodcutLayout from "../../../../../../layout/midproduct-layout";
 import {
+  Timestamp,
   addDoc,
   collection,
   getDocs,
   query,
   where,
-} from "firebase/firestore/lite";
-import Button from "../../../../../../components/button";
-import LayoutModule from "../../../../../../components/layoutModule";
+} from "firebase/firestore";
 import { DESIGN_TEXT_IMAGE } from "../../../../../../constants/firebaseCollection";
 import { db, storage } from "../../../../../../utils/firebase";
 import { IDesigns, IUploadFiles } from "../uploadDesign-Image";
-import { ReactComponent as Plus } from "../../../../../../assets/icons/plus-2.svg";
-import BGimage from "../../../../../../assets/icons/bg-image.svg";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import { IProductCategory } from "../../../../../../constants/types";
-
-const Textimage = () => {
+import ImageCardModule from "../../../imageCardModule";
+import Button from "../../../../../../components/button";
+import { ReactComponent as Plus } from "../../../../../../assets/icons/plus-2.svg";
+import LayoutModule from "../../../../../../components/layoutModule";
+import BGimage from "../../../../../../assets/icons/bg-image.svg";
+import ImagePriceCard from "../../../../../../components/imagePriceCard";
+interface IToggleDate {
+  isActiveImage: boolean;
+}
+const Textimage: React.FC<IToggleDate> = ({ isActiveImage }) => {
   const [active, setIsActive] = useState(false);
   const [uploadImage, setUploadImage] = useState<IDesigns>({});
   const [textImage, settextImage] = useState("");
@@ -31,7 +36,7 @@ const Textimage = () => {
     const file = e.target.files[0];
     setUploadImage((e) => ({
       ...e,
-      TextImage: file,
+      Images: file,
     }));
     const fileReader = new FileReader();
     fileReader.onload = (r) => {
@@ -47,13 +52,14 @@ const Textimage = () => {
   };
 
   const handleSubmit = async () => {
-    setIsActive(!active);
+    setIsActive(false);
+
     try {
       let urls = {};
 
       let UploadFiles = 0;
       const imageFileUrl = Object.entries(uploadImage).map((f) => f);
-
+      console.log(imageFileUrl);
       await Promise.all(
         imageFileUrl.map(async (f) => {
           const imageRef = ref(storage, `DesignImages/${v4()}`);
@@ -73,16 +79,22 @@ const Textimage = () => {
         ...urls,
         hashTag,
         type: IProductCategory.TEXT_IMAGE,
+        created: Timestamp.now(),
+        activePost: isActiveImage,
       });
+      window.location.reload();
       console.log(dataRef);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleGetData = useCallback(async () => {
     try {
       const productData = query(
         collection(db, DESIGN_TEXT_IMAGE),
-        where("type", "==", "text-images")
+        // orderBy("created"),
+        where("type", "==", IProductCategory.TEXT_IMAGE)
       );
       const data = await getDocs(productData);
       const fetchedData = data.docs.map((d) => ({
@@ -99,23 +111,31 @@ const Textimage = () => {
   useEffect(() => {
     handleGetData();
   }, [handleGetData]);
+
   return (
     <MidprodcutLayout>
       <div className="upload-image">
         <h3>images</h3>
         <div className="upload-wrap">
+          <ImagePriceCard data={data} />
+
           <div className="design-wrap" onClick={handleToggle}>
             <div className="plus-icon">
               <Plus />
             </div>
-            <Button varient="primary">Add image</Button>
+            <div className="add-btn">
+              <Button varient="primary">Add image</Button>
+            </div>
           </div>
           {active && (
-            <LayoutModule handleToggle={handleToggle} className="layout-module">
+            <LayoutModule
+              handleToggle={() => setIsActive(!active)}
+              className="layout-module"
+            >
               <h2>Add text image</h2>
               <div className="layout-wrap">
                 <div className="upload-area">
-                  {uploadImage["TextImage"] ? (
+                  {uploadImage["Images"] ? (
                     <img src={textImage} alt="text" width={200} height={100} />
                   ) : (
                     <img src={BGimage} alt="bg" width={200} height={100} />
@@ -150,19 +170,15 @@ const Textimage = () => {
               </div>
             </LayoutModule>
           )}
+
           {data.map((i, index) => (
-            <div className="design-wrap" key={index}>
-              <div className="logo">
-                <img
-                  src={i.TextImage}
-                  alt=""
-                  width={200}
-                  height={250}
-                  style={{ objectFit: "contain" }}
-                />
-              </div>
-              <Button varient="primary">view</Button>
-            </div>
+            <ImageCardModule
+              handleFilechange={handleFilechange}
+              uploadImage={uploadImage}
+              // handleUpdate={handleUpdate}
+              {...i}
+              key={index}
+            />
           ))}
         </div>
       </div>

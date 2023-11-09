@@ -1,7 +1,7 @@
 import React from "react";
 import "../../styles/midproduct-header.scss";
 
-import { ReactComponent as SNlogo } from "../../assets/icons/sn-logo.svg";
+import { ReactComponent as SNlogo } from "../../assets/logo/sprinklenadar-logo.svg";
 
 const CreateMidProductHeader = () => {
   return (

@@ -140,3 +140,10 @@ input[type="number"]::-webkit-outer-spin-button {
   appearance: none;
   margin: 0;
 }
+.errorMsg {
+  color: red;
+  font-size: 12px;
+  margin-top: -10px;
+  margin-bottom: 12px;
+  text-transform: capitalize;
+}

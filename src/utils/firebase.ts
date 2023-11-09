@@ -1,23 +1,24 @@
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
-import { getFirestore } from "firebase/firestore/lite";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { VAIPID_KEY } from "../constants/firebaseCollection";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDJ5SkpxFFasqUruu6E5PMfnm-6P9ueE7Q",
-  authDomain: "sj-clothing.firebaseapp.com",
-  projectId: "sj-clothing",
-  storageBucket: "sj-clothing.appspot.com",
-  messagingSenderId: "638073995197",
-  appId: "1:638073995197:web:7beb5bb3792613ec951cd4",
-  measurementId: "G-MGEFW61FNK",
+  apiKey: "AIzaSyDdFp04xNN0muNQRmbmAHlzsGEYeZEp5ls",
+  authDomain: "sj-clothing-app.firebaseapp.com",
+  projectId: "sj-clothing-app",
+  storageBucket: "sj-clothing-app.appspot.com",
+  messagingSenderId: "108999029592",
+  appId: "1:108999029592:web:0c0d0ac0d8973cc12a2b2d",
+  measurementId: "G-N9M82Z3P8Q",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
-// export const spaceref=ref()
+export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const messaging = getMessaging(app);
 

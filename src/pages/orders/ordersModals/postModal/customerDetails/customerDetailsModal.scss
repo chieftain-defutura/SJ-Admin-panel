@@ -1,0 +1,42 @@
+.customer-details-wrapper {
+  .custom-details-head {
+    margin: 36px 0 16px;
+    p {
+      letter-spacing: -0.28px;
+      font-size: 14px;
+      color: var(--primary-);
+    }
+  }
+  .customer-details-container {
+    display: flex;
+    align-items: center;
+    gap: 61px;
+    h5 {
+      letter-spacing: -0.24px;
+      font-size: 12px;
+      margin-top: 8px;
+      text-align: center;
+    }
+    .flex-item {
+      gap: 8px;
+      justify-content: center;
+      cursor: pointer;
+      p {
+        text-align: center;
+      }
+    }
+    .icons {
+      margin-top: 8px;
+    }
+  }
+  .custom-done-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 22px 0;
+    padding-bottom: 30px;
+    button {
+      padding: 9px 35px;
+    }
+  }
+}

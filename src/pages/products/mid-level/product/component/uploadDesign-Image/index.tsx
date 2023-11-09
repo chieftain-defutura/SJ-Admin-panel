@@ -5,30 +5,34 @@ import { ReactComponent as Plus } from "../../../../../../assets/icons/plus.svg"
 import BGimage from "../../../../../../assets/icons/bg-image.svg";
 import Button from "../../../../../../components/button";
 import LayoutModule from "../../../../../../components/layoutModule";
-import {
-  addDoc,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore/lite";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { DESIGN_TEXT_IMAGE } from "../../../../../../constants/firebaseCollection";
 import { db, storage } from "../../../../../../utils/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
 import { IProductCategory } from "../../../../../../constants/types";
 
+import ImageCardModule from "../../../imageCardModule";
+import ImagePriceCard from "../../../../../../components/imagePriceCard";
+
 export interface IDesigns {
-  Designs?: File;
-  TextImage?: File;
+  Images?: File;
+  // TextImage?: File;
 }
 export interface IUploadFiles {
-  Designs: "";
-  hashTag: "";
-  TextImage: "";
+  Images: string;
+  hashTag: string;
+  id: string;
+  // TextImage: "";
+  FrontAndBack: string;
+  LeftAndRight: string;
 }
 
-const UploadmidProductImage: React.FC<IDesigns> = () => {
+interface IToggleDate {
+  isActiveImage: boolean;
+}
+
+const UploadmidProductImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
   const [active, setIsActive] = useState(false);
   const [uploadImage, setUploadImage] = useState<IDesigns>({});
   const [designLogo, setDesignLogo] = useState("");
@@ -37,7 +41,7 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
     const file = e.target.files[0];
     setUploadImage((e) => ({
       ...e,
-      Designs: file,
+      Images: file,
     }));
     const fileReader = new FileReader();
     fileReader.onload = (r) => {
@@ -55,6 +59,7 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
 
   const handleSubmit = async () => {
     setIsActive(!active);
+
     try {
       let urls = {};
 
@@ -81,9 +86,13 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
         ...urls,
         hashTag,
         type: IProductCategory.DESIGN_IMAGE,
+        activePost: isActiveImage,
       });
+      window.location.reload();
       console.log(dataRef);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleGetData = useCallback(async () => {
@@ -117,18 +126,25 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
       <div className="upload-image">
         <h3>images</h3>
         <div className="upload-wrap">
+          <ImagePriceCard data={data} />
+
           <div className="design-wrap" onClick={handleToggle}>
             <div className="plus-icon">
               <Plus />
             </div>
-            <Button varient="primary">Add image</Button>
+            <div className="add-btn">
+              <Button varient="primary">Add image</Button>
+            </div>
           </div>
           {active && (
-            <LayoutModule handleToggle={handleToggle} className="layout-module">
+            <LayoutModule
+              handleToggle={() => setIsActive(!active)}
+              className="layout-module"
+            >
               <h2>Add image</h2>
               <div className="layout-wrap">
                 <div className="upload-area">
-                  {uploadImage["Designs"] ? (
+                  {uploadImage["Images"] ? (
                     <img
                       src={designLogo}
                       alt="design-logo"
@@ -136,7 +152,7 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
                       // height={160}
                     />
                   ) : (
-                    <img src={BGimage} alt="image" width={200} height={100} />
+                    <img src={BGimage} alt="Bg" width={200} height={100} />
                   )}
                 </div>
                 <div className="input-area">
@@ -169,23 +185,12 @@ const UploadmidProductImage: React.FC<IDesigns> = () => {
             </LayoutModule>
           )}
           {data.map((i, index) => (
-            <div className="design-wrap" key={index}>
-              <div className="logo">
-                {data ? (
-                  <img
-                    src={i.Designs}
-                    alt=""
-                    width={200}
-                    height={250}
-                    style={{ objectFit: "contain" }}
-                  />
-                ) : (
-                  <img src={i.TextImage} alt="image" width={200} height={100} />
-                )}
-              </div>
-
-              <Button varient="primary">view</Button>
-            </div>
+            <ImageCardModule
+              handleFilechange={handleFilechange}
+              uploadImage={uploadImage}
+              {...i}
+              key={index}
+            />
           ))}
         </div>
       </div>

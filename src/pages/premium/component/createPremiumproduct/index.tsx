@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
 import PremiumLayout from "../../../../layout/premium-layout";
-import { addDoc, collection } from "firebase/firestore/lite";
+import { addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Formik, Field, FieldArray, Form } from "formik";
+import { Formik, Field, Form } from "formik";
 import { v4 } from "uuid";
 import Button from "../../../../components/button";
 import Input from "../../../../components/input";
@@ -14,23 +14,25 @@ import {
   IFiles,
   Material,
 } from "../../../products/mid-level/product/component/createMid-Product";
-import { ReactComponent as Delete } from "../../../../assets/icons/delete-icon.svg";
-import { ReactComponent as Plus } from "../../../../assets/icons/plus.svg";
+
+import { useNavigate } from "react-router-dom";
+import MOdalPopUp from "../../../../components/ModalPopupBox";
 
 const initialValue = {
   styles: "",
   productName: "",
   normalPrice: "",
   offerPrice: "",
-  detailedFutures: [{ materials: "", cloth: "" }],
+  description: "",
+  gender: "MALE",
 };
 
 const CreatePremium: React.FC<Material> = ({ index }) => {
   const [image, setImage] = useState("");
   const [video, setVideo] = useState("");
   const [files, setFiles] = useState<IFiles[]>([]);
-  const [toggle, setToggle] = useState(false);
-  const [material, setMaterial] = useState<Material[]>([]);
+  const navigate = useNavigate();
+
   const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
   const [country, setCountry] = useState("");
 
@@ -40,15 +42,13 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
       country: string;
       sizeVarients: {
         size: string;
+        quantity: number;
         measurement: number;
         show: boolean;
       }[];
     }[]
   >([]);
 
-  const handleToggle = () => {
-    setToggle(true);
-  };
   const handleSubmit = async (value: typeof initialValue) => {
     try {
       let urls = {};
@@ -77,9 +77,11 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
         ...value,
         ...urls,
         sizes: sizes,
+        // gender: gender,
         type: IProductCategory.PREMIUM,
       });
       console.log(dataRef);
+      navigate("/products/premium");
     } catch (error) {
       console.log("error", error);
     }
@@ -106,23 +108,60 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
     } else {
       return data;
     }
-  }, [gender, country]);
-  console.log(sizes);
+  }, [gender, country, sizes]);
+  console.log("getSizesLists", getSizesLists);
   return (
     <PremiumLayout>
       <Formik initialValues={initialValue} onSubmit={handleSubmit}>
-        {({ values, setValues, handleChange }) => (
+        {({ values, setValues, isSubmitting, setFieldValue }) => (
           <Form>
             <div className="create-product">
               <div className="style-section">
-                <h3>Select styles</h3>
+                <div className="gender-update">
+                  <h3>Select styles</h3>
+
+                  <div className="gender">
+                    <div
+                      className="male"
+                      onClick={() => setFieldValue("gender", "MALE")}
+                    >
+                      <h3
+                        style={{
+                          color: values.gender === "MALE" ? "" : "#777",
+                          borderBottom:
+                            values.gender === "MALE" ? "2px solid #8C73CB" : "",
+                        }}
+                      >
+                        Male
+                      </h3>
+                    </div>
+                    <div
+                      className="female"
+                      onClick={() => setFieldValue("gender", "FEMALE")}
+                    >
+                      <h3
+                        style={{
+                          color: values.gender === "FEMALE" ? "" : "#777",
+                          borderBottom:
+                            values.gender === "FEMALE"
+                              ? "2px solid #8C73CB"
+                              : "",
+                        }}
+                      >
+                        Female
+                      </h3>
+                    </div>
+                  </div>
+                </div>
 
                 <div className="styles-wrap">
                   <div className="imageupload">
                     <Field as="select" name="styles">
                       <option value="">select styles</option>
-                      <option value="Round Neck">Round Neck</option>
-                      <option value="V Neck">V Neck</option>
+                      <option value="Saree">Saree</option>
+                      <option value="Blazers">Blazers</option>
+                      <option value="Shirt">Shirt</option>
+                      <option value="Jacket">Jacket</option>
                     </Field>
                     <div className="video-image">
                       <div className="bg-video">
@@ -148,7 +187,7 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                               fileReader.readAsDataURL(file);
                             }}
                             // files={files}
-                            accept="image/jpg,image/png"
+                            // accept="image/jpg,image/png"
                           />
                           <div className="bg-image">
                             <img
@@ -243,18 +282,31 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                         <div className="gender">
                           <div
                             className="male"
-                            // style={{ color: gender ? "black" : "" }}
-                            onClick={(e) => setGender("MALE")}
+                            onClick={() => setGender("MALE")}
                           >
-                            <h3 style={{ color: gender ? "black" : "" }}>
+                            <h3
+                              style={{
+                                color: gender === "MALE" ? "" : "#777",
+                                borderBottom:
+                                  gender === "MALE" ? "2px solid #8C73CB" : "",
+                              }}
+                            >
                               Male
                             </h3>
                           </div>
                           <div
                             className="female"
-                            onClick={(e) => setGender("FEMALE")}
+                            onClick={() => setGender("FEMALE")}
                           >
-                            <h3 style={{ color: gender ? "black" : "" }}>
+                            <h3
+                              style={{
+                                color: gender === "FEMALE" ? "" : "#777",
+                                borderBottom:
+                                  gender === "FEMALE"
+                                    ? "2px solid #8C73CB"
+                                    : "",
+                              }}
+                            >
                               Female
                             </h3>
                           </div>
@@ -315,6 +367,30 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                                           ]);
                                         }}
                                       />
+                                      <input
+                                        type="number"
+                                        value={s.quantity}
+                                        onChange={(e) => {
+                                          const newSizes = [...sizes];
+
+                                          setSizes([
+                                            ...newSizes.map((m, ii) => {
+                                              if (ii !== i) return { ...m };
+                                              const sizeVarients =
+                                                m.sizeVarients.map((s, jj) => {
+                                                  if (jj !== j) return { ...s };
+                                                  return {
+                                                    ...s,
+                                                    quantity: Number(
+                                                      e.target.value
+                                                    ),
+                                                  };
+                                                });
+                                              return { ...m, sizeVarients };
+                                            }),
+                                          ]);
+                                        }}
+                                      />
                                     </div>
                                   ))}
                                 </div>
@@ -325,66 +401,25 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <h3>Detailed Features</h3>
-                    <div className="detailes">
-                      <FieldArray name="detailedFutures">
-                        {(arrayHelpers) => (
-                          <>
-                            <div className="materials">
-                              {values.detailedFutures.map((product, i) => (
-                                <div className="input-colums">
-                                  <>
-                                    <Input
-                                      name={`detailedFutures[${i}].materials`}
-                                      type="text"
-                                      placeholder="Material"
-                                      key={i}
-                                    />
-                                    <Input
-                                      name={`detailedFutures[${i}].cloth`}
-                                      type="text"
-                                      placeholder="Cloth"
-                                    />
-                                    <div
-                                      className="delete"
-                                      onClick={() => {
-                                        setMaterial((c) => {
-                                          arrayHelpers.remove(i);
-                                          return c.filter(
-                                            (i) => i.index !== index
-                                          );
-                                        });
-                                      }}
-                                    >
-                                      <Delete />
-                                    </div>
-                                    <div
-                                      className="plus-icon "
-                                      onClick={() => {
-                                        arrayHelpers.push({
-                                          materials: "",
-                                          cloth: "",
-                                        });
-                                      }}
-                                    >
-                                      <Plus />
-                                    </div>
-                                  </>
-                                </div>
-                              ))}
-                            </div>
-                          </>
-                        )}
-                      </FieldArray>
-                    </div>
+                  <div className="description">
+                    <h3>Description</h3>
+                    <Input
+                      name="description"
+                      type="text"
+                      value={values.description}
+                    />
                   </div>
                 </div>
                 <div className="btn-submit">
-                  <Button varient="primary" type="submit">
-                    Submit
+                  <Button
+                    varient="primary"
+                    type="submit"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Uploading" : "submit"}
                   </Button>
                 </div>
+                {isSubmitting && <MOdalPopUp />}
               </div>
             </div>
           </Form>

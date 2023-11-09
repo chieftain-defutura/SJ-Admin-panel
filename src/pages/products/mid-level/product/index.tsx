@@ -2,34 +2,20 @@ import React, { useCallback, useEffect, useState } from "react";
 import MidprodcutLayout from "../../../../layout/midproduct-layout";
 import "../../../../styles/productLayout.scss";
 import { NavLink } from "react-router-dom";
-import { collection, getDocs, query, where } from "firebase/firestore/lite";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { PRODUCTS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import { db } from "../../../../utils/firebase";
 import { IProductCategory, IProductdata } from "../../../../constants/types";
-import Button from "../../../../components/button";
-import LayoutModule from "../../../../components/layoutModule";
-
-// const sizes=[
-//   {
-//     map:"S",
-//     value:32,
-//     show:false
-//   }
-// ]
-
-// {
-//   country:"india",
-//   gen:"male",sizes:sizes
-// }
+import CardModule from "../../../../components/card";
+import Loading from "../../../../components/loading";
 
 const MidProducts: React.FC = () => {
   const [data, setData] = useState<IProductdata[]>([]);
-  const [active, setActive] = useState(false);
-  const handleToggle = () => {
-    setActive(!active);
-  };
+  const [isLoading, setIsLoading] = useState(true);
+
   const handleGetData = useCallback(async () => {
     try {
+      setIsLoading(true);
       const productData = query(
         collection(db, PRODUCTS_COLLECTION_NAME),
         where("type", "==", IProductCategory.MID)
@@ -43,6 +29,8 @@ const MidProducts: React.FC = () => {
       setData(fetchedData);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   }, [setData]);
 
@@ -58,44 +46,15 @@ const MidProducts: React.FC = () => {
             <h4>Add style</h4>
           </NavLink>
         </div>
-        <div className="product-card-layout">
-          {data.map((f, i) => (
-            <div className="product-card" key={i}>
-              <div className="product-img">
-                <img src={f.productImage} alt="" width={200} height={250} />
-              </div>
-              <div className="product-details">
-                <h3>{f.styles}</h3>
-                <Button varient="primary" onClick={handleToggle}>
-                  View
-                </Button>
-              </div>
-              {active && (
-                <LayoutModule
-                  handleToggle={handleToggle}
-                  className="product-module"
-                >
-                  <h2>preview</h2>
-
-                  <div className="product-preview">
-                    <div>
-                      <h2>Style</h2>
-                      <h3>{f.styles}</h3>
-                    </div>
-                    <div>
-                      <h2>Normal price</h2>
-                      <h3>{f.normalPrice}</h3>
-                    </div>
-                    <div>
-                      <h2>Offer price</h2>
-                      <h3>{f.offerPrice}</h3>
-                    </div>
-                  </div>
-                </LayoutModule>
-              )}
-            </div>
-          ))}
-        </div>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div className="product-card-layout">
+            {data.map((f, i) => (
+              <CardModule productType="medium" {...f} key={i} />
+            ))}
+          </div>
+        )}
       </div>
     </MidprodcutLayout>
   );

@@ -5,11 +5,20 @@
   flex-wrap: wrap;
   gap: 28px;
   .postlist {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    // align-items: center;
     box-sizing: border-box;
-    box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.14);
     max-width: 252px;
     width: 100%;
-    border-radius: 10px;
+    padding: 24px;
+    h3 {
+      font-weight: 500;
+    }
     .post-box {
       padding: 10px 16px;
       display: flex;
@@ -17,7 +26,12 @@
       align-items: center;
     }
     .product-details {
+      display: flex;
+      justify-content: space-between;
       padding: 10px 16px;
+      h3 {
+        font-weight: 500;
+      }
       p {
         padding: 4px 0;
       }
@@ -29,7 +43,7 @@
       gap: 4px;
       padding: 10px 16px;
       button {
-        width: 106px;
+        width: 96px;
       }
     }
     .update-time {
@@ -37,6 +51,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+    .post-img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 200px;
+      height: 200px;
     }
   }
 }

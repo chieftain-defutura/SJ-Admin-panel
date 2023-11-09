@@ -18,6 +18,11 @@
     border-radius: 10px;
     box-shadow: 4px 4px 12px 0px rgba(0, 0, 0, 0.16);
     margin: 22px 0;
+    transition: all 0.3s;
+    cursor: pointer;
+    &:hover {
+      transform: scale(1.05);
+    }
 
     .orders-first-part {
       padding: 16px 31px 16px 48px;
@@ -25,6 +30,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+
       h4 {
         font-size: 14px;
         line-height: 20px;
@@ -65,6 +71,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+
       .flex-item {
         gap: 8px;
         h4 {
@@ -87,6 +94,9 @@
         font-family: var(--font-semiBold);
         color: var(--secondary-);
         cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }

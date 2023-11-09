@@ -37,6 +37,7 @@
     flex-direction: column;
     justify-content: center;
     padding: 24px;
+
     .total-subscription-text {
       gap: 8px;
       margin-bottom: 40px;
@@ -52,6 +53,11 @@
       font-family: var(--font-bold);
       color: var(--primary-);
       text-transform: uppercase;
+      transition: all 0.3s;
+      cursor: pointer;
+      &:hover {
+        transform: scale(1.15);
+      }
     }
     h2 {
       font-size: 14px;
@@ -69,6 +75,39 @@
       width: fit-content;
       margin-top: 45px;
       cursor: pointer;
+    }
+  }
+  .dropdown {
+    h3 {
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding-bottom: 12px;
+    }
+    select {
+      width: 445px;
+      max-width: 100%;
+      padding: 12px 24px;
+      border-radius: 5px;
+      border: 1px solid #d9d9d9;
+      background: #fff;
+      option {
+        width: 440px;
+        max-width: 100%;
+        padding: 12px 24px;
+        border-radius: 5px;
+        border-bottom: 1px solid #d9d9d9;
+        background: #fff;
+        margin-top: 20px;
+      }
+    }
+    input {
+      width: 153px;
+      padding: 14px 24px;
+      border-radius: 5px;
+      border: 1px solid #d9d9d9;
+      background: #fff;
+      margin-top: 24px;
     }
   }
 }

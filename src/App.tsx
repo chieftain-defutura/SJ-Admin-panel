@@ -3,9 +3,7 @@ import "./App.css";
 import Dashboard from "./pages/dashboard";
 import { Route, Routes } from "react-router-dom";
 import Post from "./pages/post";
-import PendingPost from "./pages/post/component/pendingPost";
 import ApprovedPost from "./pages/post/component/approvePost";
-import DenyPost from "./pages/post/component/denyPost";
 import Notification from "./pages/notification";
 import PremiumOrders from "./pages/orders/component/premium-Order";
 import PostOrders from "./pages/orders/component/post-Order";
@@ -21,50 +19,33 @@ import AccessoriesOrder from "./pages/orders/component/accessories-orders";
 import UserPostList from "./pages/dashboard/component/userPostList";
 import UserSubscription from "./pages/dashboard/component/userSubscription";
 import CreateAccessory from "./pages/accessory/component/createAccessory";
+import Allpost from "./pages/post/component/allPost";
+import PendingPost from "./pages/post/component/pendingPosts";
+import Subscription from "./pages/subscription";
+import EditMidform from "./pages/products/mid-level/product/component/createMid-Product/EditMidform";
+import EditPremium from "./pages/premium/component/EditPremium";
+import Login from "./pages/login";
+import MidLevelPdf from "./components/PdfFile/MidLevelPdf";
+import AdminManagement from "./pages/adminManagement";
 
 const App: React.FC = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/post" element={<Post children={undefined} />} />
-        <Route path="/post/pendingpost" element={<PendingPost />} />
-        <Route
-          path="/post/approved"
-          element={
-            <ApprovedPost
-              id={""}
-              color={""}
-              description={""}
-              fontStyle={""}
-              productName={""}
-              createdAt={{
-                seconds: 0,
-                nanoseconds: 0,
-              }}
-              productImage={""}
-              material={""}
-              price={""}
-              royalties={""}
-              giftVidio={""}
-              Style={""}
-              fontColor={""}
-              username={""}
-              hashTag={""}
-              updatedAt={{
-                seconds: 0,
-                nanoseconds: 0,
-              }}
-              size={[]}
-              status={""}
-            />
-          }
-        />
-        <Route path="/post/deny" element={<DenyPost />} />
+        <Route path="/post/all-post" element={<Allpost />} />
+        <Route path="/post/approved" element={<ApprovedPost />} />
+        <Route path="/post/pending" element={<PendingPost />} />
         <Route path="/notification" element={<Notification />} />
+        <Route path="/admin-management" element={<AdminManagement />} />
         <Route path="/orders/premium-orders" element={<PremiumOrders />} />
         <Route path="/orders/post-orders" element={<PostOrders />} />
         <Route path="/orders/midlevel-orders" element={<MidlevelOrder />} />
+        <Route path="/orders/midlevel-pdf" element={<MidLevelPdf />} />
+
         <Route
           path="/orders/accessories-orders"
           element={<AccessoriesOrder />}
@@ -79,13 +60,15 @@ const App: React.FC = () => {
           path="/products/mid-level/product/create"
           element={<CreateMidProduct index={0} />}
         />
+        <Route path="/products/medium/edit/:id" element={<EditMidform />} />
+
         <Route
           path="/products/mid-level/product/image"
-          element={<UploadmidProductImage />}
+          element={<UploadmidProductImage isActiveImage={true} />}
         />
         <Route
           path="/products/mid-level/product/text-image"
-          element={<Textimage />}
+          element={<Textimage isActiveImage={true} />}
         />
         <Route
           path="/products/mid-level/accessory"
@@ -100,6 +83,8 @@ const App: React.FC = () => {
           path="/products/premium/create"
           element={<CreatePremium index={0} />}
         />
+        <Route path="/products/premium/edit/:id" element={<EditPremium />} />
+        <Route path="/subscription" element={<Subscription />} />
       </Routes>
     </div>
   );

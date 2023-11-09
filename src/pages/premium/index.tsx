@@ -1,26 +1,40 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "../../styles/premium.scss";
 import PremiumLayout from "../../layout/premium-layout";
-import { query, collection, getDocs, where } from "firebase/firestore/lite";
+import { query, collection, getDocs, where } from "firebase/firestore";
 import { NavLink } from "react-router-dom";
-import Button from "../../components/button";
-import LayoutModule from "../../components/layoutModule";
 import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
 import { IProductCategory, IProductdata } from "../../constants/types";
 import { db } from "../../utils/firebase";
-
-const Premium = () => {
+import CardModule from "../../components/card";
+import Loading from "../../components/loading";
+import { ReactComponent as Filter } from "../../assets/icons/filter-icon.svg";
+import LayoutModule from "../../components/layoutModule";
+import DragAndDrop from "./component/DragAndDrop";
+const Premium: React.FC<{}> = () => {
   const [data, setData] = useState<IProductdata[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [active, setActive] = useState(false);
-  const handleToggle = () => {
-    setActive(!active);
-  };
+
   const handleGetData = useCallback(async () => {
     try {
+      setIsLoading(true);
       const productData = query(
         collection(db, PRODUCTS_COLLECTION_NAME),
         where("type", "==", IProductCategory.PREMIUM)
+        // limit(3)
       );
+      const documentSnapshots = await getDocs(productData);
+      const lastVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
+      console.log(lastVisible);
+
+      // const getProductData = query(
+      //   collection(db, PRODUCTS_COLLECTION_NAME),
+      //   where("type", "==", IProductCategory.PREMIUM),
+      //   startAfter(lastVisible)
+      // );
+
       const data = await getDocs(productData);
       const fetchedData = data.docs.map((d) => ({
         id: d.id,
@@ -30,6 +44,8 @@ const Premium = () => {
       setData(fetchedData);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   }, [setData]);
 
@@ -44,51 +60,41 @@ const Premium = () => {
           <NavLink to="/products/premium/create">
             <h4>Add style</h4>
           </NavLink>
+          <div onClick={() => setActive(true)}>
+            <Filter />
+          </div>
         </div>
-        <div className="product-card-layout">
-          {data.map((f, i) => (
-            <div className="product-card" key={i}>
-              <div className="product-img">
-                <img
-                  src={f.productImage}
-                  alt="products"
-                  width={200}
-                  height={250}
-                />
+        {active && (
+          <LayoutModule handleToggle={() => setActive(false)}>
+            <div className="drag-and-drop">
+              <div className="heading">
+                {/* <h3>No</h3> */}
+                <h3>Product name</h3>
+                <h3>Visible/Hidden</h3>
+                <h3>Delete</h3>
               </div>
-
-              <div className="product-details">
-                <h3>{f.styles}</h3>
-                <Button varient="primary" onClick={handleToggle}>
-                  View
-                </Button>
+              <div className="products">
+                {data.map((f, index) => (
+                  <DragAndDrop
+                    {...f}
+                    index={index}
+                    data={data}
+                    setData={setData}
+                  />
+                ))}
               </div>
-              {active && (
-                <LayoutModule
-                  handleToggle={handleToggle}
-                  className="product-module"
-                >
-                  <h2>preview</h2>
-
-                  <div className="product-preview">
-                    <div>
-                      <h2>Style</h2>
-                      <h3>{f.styles}</h3>
-                    </div>
-                    <div>
-                      <h2>Normal price</h2>
-                      <h3>{f.normalPrice}</h3>
-                    </div>
-                    <div>
-                      <h2>Offer price</h2>
-                      <h3>{f.offerPrice}</h3>
-                    </div>
-                  </div>
-                </LayoutModule>
-              )}
             </div>
-          ))}
-        </div>
+          </LayoutModule>
+        )}
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div className="product-card-layout">
+            {data.map((f, i) => (
+              <CardModule productType="premium" {...f} key={i} />
+            ))}
+          </div>
+        )}
       </div>
     </PremiumLayout>
   );

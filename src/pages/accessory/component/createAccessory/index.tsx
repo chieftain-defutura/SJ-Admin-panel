@@ -1,54 +1,37 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import PremiumLayout from "../../../../layout/premium-layout";
-import { addDoc, collection } from "firebase/firestore/lite";
+import { addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Formik, Field, FieldArray, Form } from "formik";
+import { Formik, Field, Form } from "formik";
 import { v4 } from "uuid";
 import Button from "../../../../components/button";
 import Input from "../../../../components/input";
 import { PRODUCTS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import { IProductCategory } from "../../../../constants/types";
-import { defaultSizes, Country } from "../../../../data/midproductSize";
 import { storage, db } from "../../../../utils/firebase";
 import {
   IFiles,
   Material,
 } from "../../../products/mid-level/product/component/createMid-Product";
-import { ReactComponent as Delete } from "../../../../assets/icons/delete-icon.svg";
-import { ReactComponent as Plus } from "../../../../assets/icons/plus.svg";
+
+import { useNavigate } from "react-router-dom";
+import MOdalPopUp from "../../../../components/ModalPopupBox";
 
 const initialValue = {
   styles: "",
   productName: "",
   normalPrice: "",
   offerPrice: "",
-  detailedFutures: [{ materials: "", cloth: "" }],
+  description: "",
 };
 
 const CreateAccessory: React.FC<Material> = ({ index }) => {
   const [image, setImage] = useState("");
   const [video, setVideo] = useState("");
   const [files, setFiles] = useState<IFiles[]>([]);
-  const [toggle, setToggle] = useState(false);
-  const [material, setMaterial] = useState<Material[]>([]);
-  const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
-  const [country, setCountry] = useState("");
 
-  const [sizes, setSizes] = useState<
-    {
-      gender: string;
-      country: string;
-      sizeVarients: {
-        size: string;
-        measurement: number;
-        show: boolean;
-      }[];
-    }[]
-  >([]);
+  const navigate = useNavigate();
 
-  const handleToggle = () => {
-    setToggle(true);
-  };
   const handleSubmit = async (value: typeof initialValue) => {
     try {
       let urls = {};
@@ -76,42 +59,20 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
       const dataRef = await addDoc(collection(db, PRODUCTS_COLLECTION_NAME), {
         ...value,
         ...urls,
-        sizes: sizes,
         type: IProductCategory.ACCESSORY,
       });
       console.log(dataRef);
+      navigate("/products/mid-level/accessory");
     } catch (error) {
       console.log("error", error);
     }
     console.log("value", value);
   };
 
-  const getSizesLists = useMemo(() => {
-    if (!gender || !country) return undefined;
-
-    const data = sizes.find(
-      (f) => f.country === country && f.gender === gender
-    );
-    console.log(data);
-    if (!data) {
-      setSizes((e) => [
-        ...e,
-        {
-          gender: gender,
-          country: country,
-          sizeVarients: [...defaultSizes],
-        },
-      ]);
-      return;
-    } else {
-      return data;
-    }
-  }, [gender, country]);
-  console.log(sizes);
   return (
     <PremiumLayout>
       <Formik initialValues={initialValue} onSubmit={handleSubmit}>
-        {({ values, setValues, handleChange }) => (
+        {({ values, setValues, isSubmitting }) => (
           <Form>
             <div className="create-product">
               <div className="style-section">
@@ -121,8 +82,10 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
                   <div className="imageupload">
                     <Field as="select" name="styles">
                       <option value="">select styles</option>
-                      <option value="Round Neck">Round Neck</option>
-                      <option value="V Neck">V Neck</option>
+                      <option value="pillow">pillow</option>
+                      <option value="Bed">Bed</option>
+                      <option value="Bed-shit">Bed shit</option>
+                      <option value="Bed-cover">Bed cover</option>
                     </Field>
                     <div className="video-image">
                       <div className="bg-video">
@@ -220,64 +183,20 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
                   </div>
                 </div>
               </div>
-              <div className="detailes">
-                <FieldArray name="detailedFutures">
-                  {(arrayHelpers) => (
-                    <>
-                      <div className="add-btn">
-                        <h3>Detailed Features</h3>
-                      </div>
-
-                      <div className="materials">
-                        {values.detailedFutures.map((product, i) => (
-                          <div className="input-colums">
-                            <>
-                              <Input
-                                name={`detailedFutures[${i}].materials`}
-                                type="text"
-                                placeholder="Material"
-                                key={i}
-                              />
-                              <Input
-                                name={`detailedFutures[${i}].cloth`}
-                                type="text"
-                                placeholder="Cloth"
-                              />
-                              <div
-                                className="delete"
-                                onClick={() => {
-                                  setMaterial((c) => {
-                                    arrayHelpers.remove(i);
-                                    return c.filter((i) => i.index !== index);
-                                  });
-                                }}
-                              >
-                                <Delete />
-                              </div>
-                              <div
-                                className="plus-icon "
-                                onClick={() => {
-                                  arrayHelpers.push({
-                                    materials: "",
-                                    cloth: "",
-                                  });
-                                }}
-                              >
-                                <Plus />
-                              </div>
-                            </>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </FieldArray>
+              <div className="description">
+                <h3>Description</h3>
+                <Input
+                  name="description"
+                  type="text"
+                  value={values.description}
+                />
               </div>
               <div className="btn-submit">
-                <Button varient="primary" type="submit">
-                  Submit
+                <Button varient="primary" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Uploading" : "submit"}
                 </Button>
               </div>
+              {isSubmitting && <MOdalPopUp />}
             </div>
           </Form>
         )}

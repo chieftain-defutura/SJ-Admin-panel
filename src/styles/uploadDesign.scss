@@ -10,10 +10,10 @@
     .design-wrap {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      // align-items: center;
       justify-content: space-between;
       margin-top: 34px;
-      padding: 54px 24px 24px 24px;
+      padding: 24px;
       width: 248px;
       height: 372px;
       max-width: 100%;
@@ -33,6 +33,60 @@
         svg {
           width: 64px;
           height: 64px;
+        }
+      }
+      .toggle-switch {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        h3 {
+          font-family: "Gilroy-Medium";
+          font-weight: 500;
+        }
+      }
+      .update {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .add-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .delete-module {
+        position: relative;
+        overflow-y: auto;
+        margin: 0 auto;
+        box-sizing: border-box;
+        border-radius: 10px;
+        background-color: #fff;
+        width: 580px;
+        height: 181px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        .content-delete {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        h3 {
+          padding-bottom: 12px;
+        }
+        p {
+          color: var(--gray);
+          font-weight: 500;
+          font-size: 12px;
+          line-height: 20px;
+        }
+        .delete-section-btn {
+          padding-top: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: space-evenly;
         }
       }
     }

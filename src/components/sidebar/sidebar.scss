@@ -2,7 +2,18 @@
   max-width: 272px;
   width: 100%;
   padding-top: 32px;
-  background-color: var(--primary-);
+  background: var(
+    --gradient,
+    linear-gradient(
+      180deg,
+      #bf94e4 0%,
+      #d7b4e8 21.77%,
+      #ecd1ec 41.55%,
+      #f6e5f6 57.73%,
+      #cadaf1 75.51%,
+      #91b1e1 100%
+    )
+  );
   height: calc(100vh - 68px);
   overflow-x: hidden;
   overflow-y: scroll;
@@ -15,17 +26,19 @@
   }
   p {
     padding: 12px 24px;
-    color: #eee;
+    color: var(--primary-);
     font-size: 13px;
     font-weight: 400;
     border-bottom: 2px solid rgba(140, 115, 203, 0.1);
     &:hover {
       background: var(--New, linear-gradient(90deg, #462d85 0%, #db00ff 100%));
+      color: #fff;
     }
   }
   .active {
     p {
       background: var(--New, linear-gradient(90deg, #462d85 0%, #db00ff 100%));
+      color: #fff;
     }
   }
 }

@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import "./userPostList.scss";
 import Layout from "../../../../layout";
 import Button from "../../../../components/button";
 import { userPostData } from "../../../../data/userPostListData";
+import LayoutModule from "../../../../components/layoutModule";
+import UserTotalPostModal from "../../../orders/ordersModals/userTotalPostModal";
 
 const UserPostList: React.FC = () => {
+  const [active, setActive] = useState(false);
+
+  const handleModalToggle = () => {
+    setActive(true);
+  };
+
+  const handleModalCloseToggle = () => {
+    setActive(false);
+  };
   return (
     <div className="mx">
       <Layout>
@@ -47,6 +58,7 @@ const UserPostList: React.FC = () => {
                       <Button
                         varient="primary"
                         style={{ padding: "9px 38px", fontSize: "12px" }}
+                        onClick={handleModalToggle}
                       >
                         View details
                       </Button>
@@ -56,6 +68,14 @@ const UserPostList: React.FC = () => {
               </tbody>
             </table>
           </div>
+          {active && (
+            <LayoutModule
+              handleToggle={handleModalToggle}
+              className="layout-module"
+            >
+              <UserTotalPostModal onClose={handleModalCloseToggle} />
+            </LayoutModule>
+          )}
         </div>
       </Layout>
     </div>
