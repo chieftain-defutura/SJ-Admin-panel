@@ -3,12 +3,14 @@ import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg"
 import DeliveryDetailsModal from "./deliveryDetails";
 import ProductDetailsModal from "./productDetails";
 import "../../../../styles/postModal.scss";
+import { IAccessoryLevel } from "../../../../constants/types";
 
 interface IAccessoriesModal {
   onClose: () => void;
+  data: IAccessoryLevel;
 }
 
-const AccessoriesModal: React.FC<IAccessoriesModal> = ({ onClose }) => {
+const AccessoriesModal: React.FC<IAccessoriesModal> = ({ onClose, data }) => {
   const [activeSection, setActiveSection] = useState("product");
 
   const handleProductClick = () => {
@@ -43,8 +45,8 @@ const AccessoriesModal: React.FC<IAccessoriesModal> = ({ onClose }) => {
           <CloseIcon />
         </div>
 
-        {activeSection === "delivery" && <DeliveryDetailsModal />}
-        {activeSection === "product" && <ProductDetailsModal />}
+        {activeSection === "delivery" && <DeliveryDetailsModal data={data} />}
+        {activeSection === "product" && <ProductDetailsModal data={data} />}
       </div>
     </div>
   );

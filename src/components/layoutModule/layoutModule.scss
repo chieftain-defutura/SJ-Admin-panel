@@ -48,6 +48,31 @@
       margin: 12px;
     }
   }
+  .drag-and-drop {
+    padding: 24px;
+    .heading {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      padding: 11px 8px;
+      border-radius: 5px;
+      background: rgba(229, 206, 245, 0.5);
+      margin-top: 4px;
+      .product-name {
+        display: flex;
+        gap: 12px;
+      }
+      h3 {
+        font-weight: 500;
+      }
+      h4 {
+        color: var(--primary-);
+        font-size: 12px;
+        font-weight: 500;
+      }
+    }
+  }
   .layout-module-children {
     overflow-y: auto;
     // height: 100%;

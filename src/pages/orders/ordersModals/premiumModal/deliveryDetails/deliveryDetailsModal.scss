@@ -6,12 +6,18 @@
     gap: 32px;
     .first-column {
       .flex-content {
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
         align-items: center;
-        justify-content: space-between;
         .checkbox-input {
           .unstyled {
             list-style-type: none;
+            input {
+              width: 20px;
+              height: 20px;
+              border-radius: 5px;
+            }
             .styled-checkbox {
               position: absolute;
               opacity: 0;
@@ -64,21 +70,27 @@
         }
 
         .calender-content {
+          // cursor: pointer;
           input[type="date"] {
-            padding: 5px;
-            border: 1px solid #eee;
+            // background-color: var(--secondary-);
+            padding: 15px;
+            font-family: "Roboto Mono", monospace;
+            color: #ffffff;
+            font-size: 18px;
+            border: 1px solid #777;
+            outline: none;
             border-radius: 5px;
-            font-size: 12px;
-            color: var(--primary-);
           }
         }
       }
       .text-area-input {
         margin-top: 8px;
-        textarea {
+
+        input {
           padding: 12px;
           border-radius: 5px;
           border: 1px solid #ddd;
+          width: 100%;
         }
       }
     }

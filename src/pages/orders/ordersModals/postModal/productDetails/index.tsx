@@ -4,8 +4,13 @@ import ShirtImg from "../../../../../assets/images/post-logo.png";
 import ShirtTwoImg from "../../../../../assets/images/t-shirt.png";
 import "./productDetailsModal.scss";
 import CustomerDetailsModal from "../customerDetails";
+import { IPost } from "../../../../../constants/types";
 
-const ProductDetailsModal: React.FC = () => {
+interface IDetailsdata {
+  data: IPost;
+  onClose: () => void;
+}
+const ProductDetailsModal: React.FC<IDetailsdata> = ({ data, onClose }) => {
   const [activeSection, setActiveSection] = useState("Image");
 
   return (
@@ -41,15 +46,15 @@ const ProductDetailsModal: React.FC = () => {
           <div className="product-items flex-item">
             <div className="product-text">
               <p>Product</p>
-              <h5>Black blazer</h5>
+              <h5>{data.productName}</h5>
             </div>
             <div className="product-text">
               <p>Color</p>
-              <h5>White</h5>
+              <h5>{data.color}</h5>
             </div>
             <div className="product-text">
               <p>Style</p>
-              <h5>Round neck</h5>
+              <h5>{data.style}</h5>
             </div>
             <div className="product-text">
               <p>Size</p>
@@ -66,7 +71,7 @@ const ProductDetailsModal: React.FC = () => {
             </div>
             <div className="product-text">
               <p>Price</p>
-              <h5>450 INR</h5>
+              <h5>{data.price} INR</h5>
             </div>
           </div>
           <div>

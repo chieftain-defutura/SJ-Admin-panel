@@ -6,7 +6,6 @@ import {
   addDoc,
   collection,
   getDocs,
-  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -21,6 +20,7 @@ import Button from "../../../../../../components/button";
 import { ReactComponent as Plus } from "../../../../../../assets/icons/plus-2.svg";
 import LayoutModule from "../../../../../../components/layoutModule";
 import BGimage from "../../../../../../assets/icons/bg-image.svg";
+import ImagePriceCard from "../../../../../../components/imagePriceCard";
 interface IToggleDate {
   isActiveImage: boolean;
 }
@@ -50,19 +50,6 @@ const Textimage: React.FC<IToggleDate> = ({ isActiveImage }) => {
   const handleToggle = () => {
     setIsActive(true);
   };
-
-  // const handleUpdate = async () => {
-  //   try {
-  //     const docRef = doc(db, DESIGN_TEXT_IMAGE);
-
-  //     await updateDoc(docRef, {
-  //       isActiveImage,
-  //     });
-  //     console.log("Document successfully updated!");
-  //   } catch (error) {
-  //     console.error("Error updating document: ", error);
-  //   }
-  // };
 
   const handleSubmit = async () => {
     setIsActive(false);
@@ -106,8 +93,8 @@ const Textimage: React.FC<IToggleDate> = ({ isActiveImage }) => {
     try {
       const productData = query(
         collection(db, DESIGN_TEXT_IMAGE),
-        orderBy("created"),
-        where("type", "==", "text-images")
+        // orderBy("created"),
+        where("type", "==", IProductCategory.TEXT_IMAGE)
       );
       const data = await getDocs(productData);
       const fetchedData = data.docs.map((d) => ({
@@ -130,6 +117,8 @@ const Textimage: React.FC<IToggleDate> = ({ isActiveImage }) => {
       <div className="upload-image">
         <h3>images</h3>
         <div className="upload-wrap">
+          <ImagePriceCard data={data} />
+
           <div className="design-wrap" onClick={handleToggle}>
             <div className="plus-icon">
               <Plus />

@@ -228,12 +228,15 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
           View details
         </Button>
       </td>
+
+      {/* {active && <DeliveryDetailsModal data={data} />} */}
+
       {active && (
         <LayoutModule
           handleToggle={handleModalToggle}
           className="layout-module"
         >
-          <AccessoriesModal onClose={handleModalCloseToggle} />
+          <AccessoriesModal onClose={handleModalCloseToggle} data={data} />
         </LayoutModule>
       )}
     </tr>

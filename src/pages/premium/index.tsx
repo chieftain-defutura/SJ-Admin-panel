@@ -8,9 +8,13 @@ import { IProductCategory, IProductdata } from "../../constants/types";
 import { db } from "../../utils/firebase";
 import CardModule from "../../components/card";
 import Loading from "../../components/loading";
+import { ReactComponent as Filter } from "../../assets/icons/filter-icon.svg";
+import LayoutModule from "../../components/layoutModule";
+import DragAndDrop from "./component/DragAndDrop";
 const Premium: React.FC<{}> = () => {
   const [data, setData] = useState<IProductdata[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [active, setActive] = useState(false);
 
   const handleGetData = useCallback(async () => {
     try {
@@ -56,7 +60,32 @@ const Premium: React.FC<{}> = () => {
           <NavLink to="/products/premium/create">
             <h4>Add style</h4>
           </NavLink>
+          <div onClick={() => setActive(true)}>
+            <Filter />
+          </div>
         </div>
+        {active && (
+          <LayoutModule handleToggle={() => setActive(false)}>
+            <div className="drag-and-drop">
+              <div className="heading">
+                {/* <h3>No</h3> */}
+                <h3>Product name</h3>
+                <h3>Visible/Hidden</h3>
+                <h3>Delete</h3>
+              </div>
+              <div className="products">
+                {data.map((f, index) => (
+                  <DragAndDrop
+                    {...f}
+                    index={index}
+                    data={data}
+                    setData={setData}
+                  />
+                ))}
+              </div>
+            </div>
+          </LayoutModule>
+        )}
         {isLoading ? (
           <Loading />
         ) : (

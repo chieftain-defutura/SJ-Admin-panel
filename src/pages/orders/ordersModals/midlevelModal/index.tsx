@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg";
-import DeliveryDetailsModal from "./deliveryDetails";
 import ProductDetailsModal from "./productDetails";
 import "../../../../styles/postModal.scss";
+import { IMidLevelData } from "../../../../constants/types";
+import DeliveryDetailsModal from "./deliveryDetails";
 
 interface IMidlevelModal {
   onClose: () => void;
+  data: IMidLevelData;
 }
 
-const MidlevelModal: React.FC<IMidlevelModal> = ({ onClose }) => {
+const MidlevelModal: React.FC<IMidlevelModal> = ({ onClose, data }) => {
   const [activeSection, setActiveSection] = useState("product");
 
   const handleProductClick = () => {
@@ -43,7 +45,7 @@ const MidlevelModal: React.FC<IMidlevelModal> = ({ onClose }) => {
           <CloseIcon />
         </div>
 
-        {activeSection === "delivery" && <DeliveryDetailsModal />}
+        {activeSection === "delivery" && <DeliveryDetailsModal data={data} />}
         {activeSection === "product" && <ProductDetailsModal />}
       </div>
     </div>

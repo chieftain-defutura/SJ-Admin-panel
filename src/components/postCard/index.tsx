@@ -4,6 +4,10 @@ import Button from "../button";
 import { IpostData } from "../../constants/types";
 import ProductModule from "../productLayoutModule";
 import Tshirt from "../../assets/images/post-logo.png";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../utils/firebase";
+import { POST_COLLECTION_NAME } from "../../constants/firebaseCollection";
+import { useNavigate } from "react-router-dom";
 
 interface IcardData extends IpostData {
   // isActive: boolean;
@@ -11,6 +15,7 @@ interface IcardData extends IpostData {
 }
 
 const PostCard: React.FC<IcardData> = ({
+  userId,
   textAndImage,
   productName,
   style,
@@ -19,9 +24,31 @@ const PostCard: React.FC<IcardData> = ({
   detailedFeatures,
   color,
   quantity,
-  handleUpdate,
+  id,
 }) => {
   const [isActive, setIsActive] = useState(false);
+  const navigate = useNavigate();
+
+  const handleUpdate = async (status: "approved" | "deny") => {
+    try {
+      const updateRef = doc(db, POST_COLLECTION_NAME, id);
+
+      await updateDoc(updateRef, {
+        status: status,
+      });
+      if ("deny") {
+        navigate("/post/pending");
+      }
+      if ("approved") {
+        navigate("/post/approved");
+      }
+      console.log(updateRef);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <div className="product-list">
@@ -32,7 +59,7 @@ const PostCard: React.FC<IcardData> = ({
           <div className="post-img">
             <img src={Tshirt} alt="textAndImage" width={200} height={200} />
           </div>
-          <h3>user name</h3>
+          <h3>username</h3>
 
           <div className="product-details">
             <div>
@@ -50,7 +77,7 @@ const PostCard: React.FC<IcardData> = ({
             <Button varient="primary" onClick={() => setIsActive(true)}>
               View Details
             </Button>
-            <Button varient="secondary" onClick={handleUpdate}>
+            <Button varient="secondary" onClick={() => handleUpdate("deny")}>
               Deny
             </Button>
           </div>
@@ -127,10 +154,18 @@ const PostCard: React.FC<IcardData> = ({
                 ))}
 
                 <div className="edit-btn">
-                  <Button varient="secondary" onClick={() => setIsActive(true)}>
+                  <Button
+                    varient="secondary"
+                    onClick={() => handleUpdate("deny")}
+                  >
                     Deny
                   </Button>
-                  <Button varient="primary">Approve</Button>
+                  <Button
+                    varient="primary"
+                    onClick={() => handleUpdate("approved")}
+                  >
+                    Approve
+                  </Button>
                 </div>
                 {/* {isactive && (
                     <LayoutModule

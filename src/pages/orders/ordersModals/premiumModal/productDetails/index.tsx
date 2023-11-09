@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { ReactComponent as DownloadCloud } from "../../../../../assets/icons/downloadCloud.svg";
-import ShirtImg from "../../../../../assets/images/t-shirt.png";
 // import ShirtTwoImg from "../../../../../assets/images/t-shirt.png";
 import "./productDetailsModal.scss";
 import CustomerDetailsModal from "../customerDetails";
+import { IPremiumData } from "../../../../../constants/types";
 
-const ProductDetailsModal: React.FC = () => {
+interface IDetailsdata {
+  data: IPremiumData;
+}
+const ProductDetailsModal: React.FC<IDetailsdata> = ({ data }) => {
   const [activeSection, setActiveSection] = useState("Image");
 
   return (
@@ -20,45 +23,46 @@ const ProductDetailsModal: React.FC = () => {
               <p>Image</p>
             </div>
             {/* <div
-            className={activeSection === "Design" ? "active" : ""}
-            onClick={() => setActiveSection("Design")}
-          >
-            <p>Design</p>
-          </div> */}
+      className={activeSection === "Design" ? "active" : ""}
+      onClick={() => setActiveSection("Design")}
+    >
+      <p>Design</p>
+    </div> */}
           </div>
           {activeSection === "Image" && (
             <div className="image">
-              <img src={ShirtImg} alt="" />
+              <img src={data.productImage} alt="" />
             </div>
           )}
           {/* {activeSection === "Design" && (
-          <div className="image">
-            <img src={ShirtTwoImg} alt="" />
-          </div>
-        )} */}
+    <div className="image">
+      <img src={ShirtTwoImg} alt="" />
+    </div>
+  )} */}
         </div>
         <div className="product-wrapper">
           <div className="product-items flex-item">
             <div className="product-text">
               <p>Product</p>
-              <h5>Black blazer</h5>
+              <h5>{data.productName}</h5>
             </div>
             <div className="product-text">
               <p>Color</p>
+              {/* <div style={{width:"30px",height:"30px",border:"1px solid #000" }}></div> */}
               <h5>White</h5>
             </div>
             <div className="product-text">
               <p>Style</p>
-              <h5>Round neck</h5>
+              <h5>{data.styles}</h5>
             </div>
             <div className="product-text">
               <p>Size</p>
-              <h5>XXL</h5>
+              <h5>{data.sizes.sizeVarient.size}</h5>
             </div>
           </div>
           <div className="price-content flex-item">
             <div className="product-text">
-              <p>Text ( Front side )</p>
+              <p>text ( Front side )</p>
               <h5>
                 THE T-SHIRT <br />
                 MOCK-UP
@@ -66,7 +70,7 @@ const ProductDetailsModal: React.FC = () => {
             </div>
             <div className="product-text">
               <p>Price</p>
-              <h5>450 INR</h5>
+              <h5>{data.price} INR</h5>
             </div>
           </div>
           <div>
@@ -88,6 +92,7 @@ const ProductDetailsModal: React.FC = () => {
           </div>
         </div>
       </div>
+
       <CustomerDetailsModal />
     </div>
   );

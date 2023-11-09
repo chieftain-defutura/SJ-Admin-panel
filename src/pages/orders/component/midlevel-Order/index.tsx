@@ -231,7 +231,7 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
           handleToggle={handleModalToggle}
           className="layout-module"
         >
-          <MidlevelModal onClose={handleModalCloseToggle} />
+          <MidlevelModal onClose={handleModalCloseToggle} data={data} />
         </LayoutModule>
       )}
     </tr>

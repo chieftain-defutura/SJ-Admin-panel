@@ -1,164 +1,94 @@
 import React from "react";
 import "./deliveryDetailsModal.scss";
 import Button from "../../../../../components/button";
+import { IPost, IPremiumData } from "../../../../../constants/types";
+import { Form, Formik } from "formik";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../../../utils/firebase";
+import { ORDERS_COLLECTION_NAME } from "../../../../../constants/firebaseCollection";
+import ConfirmOrder from "../../premiumModal/deliveryDetails/confirmOrder";
 
-const DeliveryDetailsModal: React.FC = () => {
+export const initialValues = {
+  orderStatus: {
+    delivery: { createdAt: "", description: "", status: false },
+    manufacturing: { createdAt: "", description: "", status: false },
+    orderPlaced: { createdAt: "", description: "", status: false },
+    readyToShip: { createdAt: "", description: "", status: false },
+    shipping: { createdAt: "", description: "", status: false },
+  },
+};
+interface IDetailsdata {
+  data: IPost;
+  onClose: () => void;
+}
+
+const DeliveryDetailsModal: React.FC<IDetailsdata> = ({ data, onClose }) => {
+  const handleSubmit = async (value: typeof initialValues) => {
+    console.log(value);
+    try {
+      const updateRef = doc(db, ORDERS_COLLECTION_NAME, data.id);
+      await updateDoc(updateRef, {
+        orderStatus: value,
+      });
+      console.log(updateRef);
+      console.log(value);
+    } catch (error) {
+      console.log("updateError", error);
+    }
+  };
+
   return (
     <div className="delivery-details-modal-wrapper">
-      <div className="order-conformed-content">
-        <div className="first-column">
-          <div className="flex-content">
-            <div className="checkbox-input">
-              <ul className="unstyled">
-                <li>
-                  <input
-                    className="styled-checkbox"
-                    type="checkbox"
-                    id="styled-checkbox-1"
-                    value="value1"
-                  />
-                  <label htmlFor="styled-checkbox-1">Order conformed</label>
-                </li>
-              </ul>
+      <Formik onSubmit={handleSubmit} initialValues={initialValues}>
+        {({ values, setValues }) => (
+          <Form>
+            <>
+              <div className="order-conformed-content">
+                <ConfirmOrder
+                  title="Order placed"
+                  status={"orderStatus.orderPlaced.status"}
+                  creayedAt={"orderStatus.orderPlaced.createdAt"}
+                  descriptionName={"orderStatus.orderPlaced.description"}
+                />
+                <ConfirmOrder
+                  title="manifacturing"
+                  status={"orderStatus.manufacturing.status"}
+                  creayedAt={"orderStatus.manufacturing.createdAt"}
+                  descriptionName={"orderStatus.manufacturing.description"}
+                />
+              </div>
+              <div className="order-conformed-content">
+                <ConfirmOrder
+                  title="Ready to ship"
+                  status={"orderStatus.readyToShip.status"}
+                  creayedAt={"orderStatus.readyToShip.createdAt"}
+                  descriptionName={"orderStatus.readyToShip.description"}
+                />
+                <ConfirmOrder
+                  title="Shipping"
+                  status={"orderStatus.shipping.status"}
+                  creayedAt={"orderStatus.shipping.createdAt"}
+                  descriptionName={"orderStatus.shipping.description"}
+                />
+              </div>
+              <div className="order-conformed-content">
+                <ConfirmOrder
+                  title="Deliverd"
+                  status={"orderStatus.delivery.status"}
+                  creayedAt={"orderStatus.delivery.createdAt"}
+                  descriptionName={"orderStatus.delivery.description"}
+                />
+              </div>
+            </>
+
+            <div className="done-btn">
+              <Button varient="primary" type="submit" onClick={onClose}>
+                Done
+              </Button>
             </div>
-            <div className="calender-content">
-              <input type="date" />
-            </div>
-          </div>
-          <div className="text-area-input">
-            <textarea
-              name=""
-              id=""
-              cols={47}
-              rows={3}
-              placeholder="Message..."
-            ></textarea>
-          </div>
-        </div>
-        <div className="first-column">
-          <div className="flex-content">
-            <div className="checkbox-input">
-              <ul className="unstyled">
-                <li>
-                  <input
-                    className="styled-checkbox"
-                    type="checkbox"
-                    id="styled-checkbox-1"
-                    value="value1"
-                  />
-                  <label htmlFor="styled-checkbox-1">Order conformed</label>
-                </li>
-              </ul>
-            </div>
-            <div className="calender-content">
-              <input type="date" />
-            </div>
-          </div>
-          <div className="text-area-input">
-            <textarea
-              name=""
-              id=""
-              cols={44}
-              rows={3}
-              placeholder="Message..."
-            ></textarea>
-          </div>
-        </div>
-      </div>
-      <div className="order-conformed-content">
-        <div className="first-column">
-          <div className="flex-content">
-            <div className="checkbox-input">
-              <ul className="unstyled">
-                <li>
-                  <input
-                    className="styled-checkbox"
-                    type="checkbox"
-                    id="styled-checkbox-1"
-                    value="value1"
-                  />
-                  <label htmlFor="styled-checkbox-1">Order conformed</label>
-                </li>
-              </ul>
-            </div>
-            <div className="calender-content">
-              <input type="date" />
-            </div>
-          </div>
-          <div className="text-area-input">
-            <textarea
-              name=""
-              id=""
-              cols={47}
-              rows={3}
-              placeholder="Message..."
-            ></textarea>
-          </div>
-        </div>
-        <div className="first-column">
-          <div className="flex-content">
-            <div className="checkbox-input">
-              <ul className="unstyled">
-                <li>
-                  <input
-                    className="styled-checkbox"
-                    type="checkbox"
-                    id="styled-checkbox-1"
-                    value="value1"
-                  />
-                  <label htmlFor="styled-checkbox-1">Order conformed</label>
-                </li>
-              </ul>
-            </div>
-            <div className="calender-content">
-              <input type="date" />
-            </div>
-          </div>
-          <div className="text-area-input">
-            <textarea
-              name=""
-              id=""
-              cols={44}
-              rows={3}
-              placeholder="Message..."
-            ></textarea>
-          </div>
-        </div>
-      </div>
-      <div className="order-conformed-content">
-        <div className="first-column">
-          <div className="flex-content">
-            <div className="checkbox-input">
-              <ul className="unstyled">
-                <li>
-                  <input
-                    className="styled-checkbox"
-                    type="checkbox"
-                    id="styled-checkbox-1"
-                    value="value1"
-                  />
-                  <label htmlFor="styled-checkbox-1">Order conformed</label>
-                </li>
-              </ul>
-            </div>
-            <div className="calender-content">
-              <input type="date" />
-            </div>
-          </div>
-          <div className="text-area-input">
-            <textarea
-              name=""
-              id=""
-              cols={47}
-              rows={3}
-              placeholder="Message..."
-            ></textarea>
-          </div>
-        </div>
-      </div>
-      <div className="done-btn">
-        <Button varient="primary">Done</Button>
-      </div>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };

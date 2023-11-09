@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/login.scss";
 import Input from "../../components/input";
 import Button from "../../components/button";
@@ -18,6 +18,8 @@ const initialValue = {
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const validationSchema = Yup.object().shape({
     Email: Yup.string().email("Invalid email").required("Email is required"),
     Password: Yup.string()
@@ -41,13 +43,23 @@ const Login: React.FC = () => {
       console.log(error);
       if (error instanceof FirebaseError) {
         if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
-          // setErrorMessage("Invalid password");
+          setErrorMessage("Invalid password");
         } else if (error.code === AuthErrorCodes.USER_DELETED) {
-          // setErrorMessage("User not found");
+          setErrorMessage("User not found");
         }
       }
     }
   };
+
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
 
   return (
     <div className="mx">

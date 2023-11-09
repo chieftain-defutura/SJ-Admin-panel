@@ -3,8 +3,13 @@ import { ReactComponent as DownloadCloud } from "../../../../../assets/icons/dow
 import ShirtImg from "../../../../../assets/images/post-logo.png";
 import "./productDetailsModal.scss";
 import CustomerDetailsModal from "../customerDetails";
+import { IAccessoryLevel } from "../../../../../constants/types";
 
-const ProductDetailsModal: React.FC = () => {
+interface IPropdata {
+  data: IAccessoryLevel;
+}
+
+const ProductDetailsModal: React.FC<IPropdata> = ({ data }) => {
   const [activeSection, setActiveSection] = useState("Image");
 
   return (
@@ -40,7 +45,7 @@ const ProductDetailsModal: React.FC = () => {
           <div className="product-items flex-item">
             <div className="product-text">
               <p>Product</p>
-              <h5>Black blazer</h5>
+              <h5>{data.productName}</h5>
             </div>
             <div className="product-text">
               <p>Color</p>
@@ -65,15 +70,15 @@ const ProductDetailsModal: React.FC = () => {
             </div>
             <div className="product-text">
               <p>Price</p>
-              <h5>450 INR</h5>
+              <h5>{data.price} INR</h5>
             </div>
           </div>
           <div>
             <p>Detailed features</p>
             <div className="flex-item material-content">
               <div>
-                <p style={{ marginTop: "14px" }}>Material</p>
-                <h5 style={{ marginTop: "8px" }}>cotton 70 % cool</h5>
+                <p style={{ marginTop: "14px" }}>Description</p>
+                <h5 style={{ marginTop: "8px" }}>{data.description}</h5>
               </div>
               <div>
                 <p>Discount</p>

@@ -149,6 +149,8 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
   const [active, setActive] = useState(false);
   const [userData, setUserData] = useState<IUserData>();
   const docRef = doc(db, "users", data.userId);
+  console.log(data);
+  console.log(userData);
 
   const handleModalToggle = () => {
     setActive(true);
@@ -195,7 +197,7 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
       </td>
       <td>Address</td>
       <td>
-        <PDFDownloadLink document={<PremiumPdf />} fileName="FORM">
+        <PDFDownloadLink document={<PremiumPdf data={data} />} fileName="FORM">
           {({ loading }) =>
             loading ? (
               <Button varient="notifi" style={{ fontSize: "12px" }}>
@@ -234,7 +236,7 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
           handleToggle={handleModalToggle}
           className="layout-module"
         >
-          <PremiumModal onClose={handleModalCloseToggle} />
+          <PremiumModal onClose={handleModalCloseToggle} data={data} />
         </LayoutModule>
       )}
     </tr>

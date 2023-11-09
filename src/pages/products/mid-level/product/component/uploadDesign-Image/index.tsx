@@ -13,6 +13,7 @@ import { v4 } from "uuid";
 import { IProductCategory } from "../../../../../../constants/types";
 
 import ImageCardModule from "../../../imageCardModule";
+import ImagePriceCard from "../../../../../../components/imagePriceCard";
 
 export interface IDesigns {
   Images?: File;
@@ -23,6 +24,8 @@ export interface IUploadFiles {
   hashTag: string;
   id: string;
   // TextImage: "";
+  FrontAndBack: string;
+  LeftAndRight: string;
 }
 
 interface IToggleDate {
@@ -56,6 +59,7 @@ const UploadmidProductImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
 
   const handleSubmit = async () => {
     setIsActive(!active);
+
     try {
       let urls = {};
 
@@ -122,6 +126,8 @@ const UploadmidProductImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
       <div className="upload-image">
         <h3>images</h3>
         <div className="upload-wrap">
+          <ImagePriceCard data={data} />
+
           <div className="design-wrap" onClick={handleToggle}>
             <div className="plus-icon">
               <Plus />

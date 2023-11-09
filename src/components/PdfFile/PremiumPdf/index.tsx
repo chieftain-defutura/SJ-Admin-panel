@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Document,
   Page,
@@ -11,6 +11,10 @@ import {
 import Logo from "../../../assets/logo/logo.png";
 import GilroyBold from "../../../assets/fonts/Gilroy-Bold.ttf";
 import GilroyMedium from "../../../assets/fonts/Gilroy-Medium.ttf";
+import { IPremiumData, IUserData } from "../../../constants/types";
+import { getDocs, collection, getDoc, doc } from "firebase/firestore";
+import { ORDERS_COLLECTION_NAME } from "../../../constants/firebaseCollection";
+import { db } from "../../../utils/firebase";
 
 Font.register({
   family: "GilroyBold",
@@ -144,34 +148,102 @@ const styles = StyleSheet.create({
   },
 });
 
-const tableData = [
-  [
-    "1",
-    "boAt Stone 620 Bluetooth Speaker with 12W RMS Stereo Sound, 10HRS Playtime, TWS Feature, IPX4, Muli-Compatibility Mode(Black) | B09GFRV7L5 (B09GFRV7L5)",
-    "1,694.07",
-    "0.00",
-    "1",
-    "1,694.07",
-    "18%",
-    "IGST",
-    "304.93",
-    "1,999,0",
-  ],
-  [
-    "",
-    "Shipping Charges",
-    "1,127.12",
-    "-1.27.12",
-    "",
-    "0.00",
-    "18%",
-    "IGST",
-    "0.00",
-    "0.00",
-  ],
-];
+// const tableData = [
+//   [
+//     "1",
+//     "boAt Stone 620 Bluetooth Speaker with 12W RMS Stereo Sound, 10HRS Playtime, TWS Feature, IPX4, Muli-Compatibility Mode(Black) | B09GFRV7L5 (B09GFRV7L5)",
+//     "1,694.07",
+//     "0.00",
+//     "1",
+//     "1,694.07",
+//     "18%",
+//     "IGST",
+//     "304.93",
+//     "1,999,0",
+//   ],
+//   [
+//     "",
+//     "Shipping Charges",
+//     "1,127.12",
+//     "-1.27.12",
+//     "",
+//     "0.00",
+//     "18%",
+//     "IGST",
+//     "0.00",
+//     "0.00",
+//   ],
+// ];
 
-const PremiumPdf: React.FC = () => {
+// const Data = [
+//   {
+//     name: "vicky",
+//     mobile: 9360200645,
+//     address: "iuwgdi3gfdy3fdu1fdu1udc1ugdc1kdjk1hdcj",
+//   },
+//   {
+//     name: "vicky",
+//     mobile: 9360200645,
+//     address: "iuwgdi3gfdy3fdu1fdu1udc1ugdc1kdjk1hdcj",
+//   },
+//   {
+//     name: "vicky",
+//     mobile: 9360200645,
+//     address: "iuwgdi3gfdy3fdu1fdu1udc1ugdc1kdjk1hdcj",
+//   },
+//   {
+//     name: "vicky",
+//     mobile: 9360200645,
+//     address: "iuwgdi3gfdy3fdu1fdu1udc1ugdc1kdjk1hdcj",
+//   },
+//   {
+//     name: "vicky",
+//     mobile: 9360200645,
+//     address: "iuwgdi3gfdy3fdu1fdu1udc1ugdc1kdjk1hdcj",
+//   },
+// ];
+
+interface IPdfData {
+  // userData: IUserData | undefined;
+  data: IPremiumData;
+}
+
+const PremiumPdf: React.FC<IPdfData> = ({ data }) => {
+  const [userData, setUserData] = useState<IUserData>();
+
+  const [datas, setData] = useState<IPremiumData[]>([]);
+  const docRef = doc(db, "users", data.userId);
+
+  const getData = useCallback(async () => {
+    const productData = await getDocs(collection(db, ORDERS_COLLECTION_NAME));
+    const fetchProduct = productData.docs.map((doc) => ({
+      id: doc.id,
+      ...(doc.data() as any),
+    }));
+    setData(fetchProduct);
+  }, []);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const documentSnapshot = await getDoc(docRef);
+
+      if (documentSnapshot.exists()) {
+        const data = documentSnapshot.data();
+        console.log("Document dataa:", data);
+        setUserData(data as any);
+      } else {
+        console.log("Document does not exist.");
+      }
+    } catch (error) {
+      console.error("Error getting document:", error);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    getData();
+    fetchData();
+  }, [getData, fetchData]);
   return (
     // <PDFViewer style={{ width: "100vw", height: "100vh" }}>
     <Document>
@@ -209,8 +281,9 @@ const PremiumPdf: React.FC = () => {
             }}
           >
             <Text style={styles.head}>Billing Address :</Text>
-            <Text style={styles.text}>Arun</Text>
-            <Text style={styles.text}>
+
+            <Text style={styles.text}>{userData?.address}</Text>
+            {/* <Text style={styles.text}>
               No 6 A-block sterling little flower apartment,
             </Text>
             <Text style={styles.text}>Guduvanchery</Text>
@@ -219,7 +292,7 @@ const PremiumPdf: React.FC = () => {
             </Text>
             <Text style={styles.text}>603202</Text>
             <Text style={styles.text}>IN</Text>
-            <Text style={styles.head}>State/UT Code: 33</Text>
+            <Text style={styles.head}>State/UT Code: 33</Text> */}
           </View>
         </View>
 
@@ -249,8 +322,10 @@ const PremiumPdf: React.FC = () => {
             }}
           >
             <Text style={styles.head}>Shipping Address :</Text>
-            <Text style={styles.text}>Arun</Text>
-            <Text style={styles.text}>
+            <Text style={styles.text}>{userData?.name}</Text>
+
+            <Text style={styles.text}>{userData?.address}</Text>
+            {/* <Text style={styles.text}>
               No 6 A-block sterling little flower apartment,
             </Text>
             <Text style={styles.text}>Guduvanchery</Text>
@@ -263,7 +338,7 @@ const PremiumPdf: React.FC = () => {
             <View style={styles.flexContent}>
               <Text style={styles.head}>Place of supply: </Text>
               <Text style={styles.text}> TAMIL NADU</Text>
-            </View>
+            </View> */}
             <View style={styles.flexContent}>
               <Text style={styles.head}>Place of delivery: </Text>
               <Text style={styles.text}> TAMIL NADU</Text>
@@ -301,28 +376,30 @@ const PremiumPdf: React.FC = () => {
             </Text>
           </View>
           <View>
-            {tableData.map((row, rowIndex) => (
+            {datas.map((row, rowIndex) => (
               <View key={rowIndex} style={styles.row}>
-                {row.map((cell, cellIndex) => (
-                  <Text
-                    key={cellIndex}
-                    style={[
-                      styles.tableCell,
-                      { flex: cellIndex === 1 ? 4 : 1 },
-                    ]}
-                  >
-                    {cell}
-                  </Text>
-                ))}
+                {/* {row.map((cell, cellIndex) => ( */}
+                <Text
+                  key={rowIndex}
+                  style={[styles.tableCell, { flex: rowIndex === 1 ? 4 : 1 }]}
+                >
+                  {row.description}
+                </Text>
+                {/* ))} */}
               </View>
             ))}
           </View>
         </View>
         <View style={styles.totalContent}>
           <Text style={styles.totalText}>TOTAL: </Text>
+          {/* {datas.map((f, i) => (
+            
+            ))} */}
           <View style={styles.totalHead}>
             <Text style={[styles.tableHead, { fontSize: 11 }]}>304.93</Text>
-            <Text style={[styles.tableHead, { fontSize: 11 }]}>1,999.00</Text>
+            <Text style={[styles.tableHead, { fontSize: 11 }]}>
+              {/* {f.price} */}
+            </Text>
           </View>
         </View>
         <View style={styles.amountHead}>

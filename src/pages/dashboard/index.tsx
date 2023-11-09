@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../../layout";
 import { ReactComponent as SubscribedIcon } from "../../assets/icons/subscribed.svg";
 import TotalRevenue from "../../components/dashboard/totalRevenue";
@@ -8,7 +8,15 @@ import { OrdersData } from "../../data/ordersData";
 import { Link } from "react-router-dom";
 import Chart from "../../components/Chart";
 
+const Continents = ["Europe", "Asia", "USA", "Affrica"];
+
 const Dashboard: React.FC = () => {
+  const [continent, setContinent] = useState("");
+  const [price, setPrice] = useState("");
+  console.log(price);
+
+  console.log(continent);
+
   return (
     <div className="mx">
       <Layout>
@@ -35,7 +43,7 @@ const Dashboard: React.FC = () => {
           <div
             style={{
               display: "flex",
-              alignItems: "center",
+              // alignItems: "center",
               gap: "32px",
               flexWrap: "wrap",
             }}
@@ -59,6 +67,34 @@ const Dashboard: React.FC = () => {
               <Link to="/user-post-list">
                 <h6>View more</h6>
               </Link>
+            </div>
+
+            <div className="dropdown">
+              <h3>Delivery charge</h3>
+              <select
+                name="continent"
+                value={continent}
+                onChange={(e) => setContinent(e.target.value)}
+              >
+                <option value="">Select continents</option>
+
+                {Continents.map((f, i) => (
+                  <option value={f}>{f}</option>
+                ))}
+              </select>
+              <div>
+                {Continents.map((m) => (
+                  <>
+                    {m === continent && (
+                      <input
+                        type="text"
+                        placeholder="0 $"
+                        onChange={(e) => setPrice(e.target.value)}
+                      />
+                    )}
+                  </>
+                ))}
+              </div>
             </div>
           </div>
         </div>
