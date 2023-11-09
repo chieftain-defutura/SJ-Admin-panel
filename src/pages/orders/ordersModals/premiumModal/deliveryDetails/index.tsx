@@ -27,7 +27,13 @@ const DeliveryDetailsModal: React.FC<IDetailsdata> = ({ data }) => {
     try {
       const updateRef = doc(db, ORDERS_COLLECTION_NAME, data.id);
       await updateDoc(updateRef, {
-        value,
+        orderStatus: {
+          delivery: value.orderStatus.delivery,
+          manufacturing: value.orderStatus.manufacturing,
+          orderPlaced: value.orderStatus.orderPlaced,
+          readyToShip: value.orderStatus.readyToShip,
+          shipping: value.orderStatus.shipping,
+        },
       });
       console.log(updateRef);
       console.log(value);
