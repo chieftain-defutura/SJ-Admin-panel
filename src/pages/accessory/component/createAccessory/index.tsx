@@ -27,7 +27,7 @@ const initialValue = {
 
 const CreateAccessory: React.FC<Material> = ({ index }) => {
   const [image, setImage] = useState("");
-  const [video, setVideo] = useState("");
+  // const [video, setVideo] = useState("");
   const [files, setFiles] = useState<IFiles[]>([]);
 
   const navigate = useNavigate();
@@ -124,7 +124,7 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
                           </div>
                         </label>
                       </div>
-                      <div className="bg-video">
+                      {/* <div className="bg-video">
                         <h4>3D Video</h4>
                         <label htmlFor="3dvideo" className="custom-file-upload">
                           <input
@@ -149,7 +149,7 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
                             <video src={video} width={200} height={200} />
                           </div>
                         </label>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <div className="product-info">

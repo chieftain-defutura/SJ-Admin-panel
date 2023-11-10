@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Layout from "../../layout";
 import { ReactComponent as SubscribedIcon } from "../../assets/icons/subscribed.svg";
 import TotalRevenue from "../../components/dashboard/totalRevenue";
@@ -7,24 +7,73 @@ import "./dashboard.scss";
 import { OrdersData } from "../../data/ordersData";
 import { Link } from "react-router-dom";
 import Chart from "../../components/Chart";
-import { Field, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
+import Input from "../../components/input";
+import Button from "../../components/button";
+import { addDoc, collection, getDocs } from "firebase/firestore";
+import { db } from "../../utils/firebase";
 
-const Continents = ["Europe", "Asia", "USA", "Affrica"];
+const Continents = ["Europe"];
+
+interface IDeliverData {
+  Continents: string;
+  DeliveryFees: string;
+  id: string;
+}
 const initialValues = {
   Continents: "",
   DeliveryFees: "",
 };
 
 const Dashboard: React.FC = () => {
-  const [continent, setContinent] = useState("");
-  const [price, setPrice] = useState("");
-  console.log(price);
+  const [data, setData] = useState<IDeliverData[]>([]);
+  // const [Active, setActive] = useState(false);
+  // const handleToggle = () => {
+  //   setActive(!Active);
+  // };
+  console.log(data);
 
-  console.log(continent);
+  // const handleUpdateData = (value: typeof initialValues) => {
+  //   try {
+  //     {
+  //       data.map((f) => {
+  //         const updateFee = doc(db, "DeliveryFees", f.id);
+  //         const dataRef = updateDoc(updateFee, {
+  //           ...value,
+  //         });
+  //         console.log(dataRef);
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const handleSubmit = (values: typeof initialValues) => {
+  const getData = useCallback(async () => {
     try {
-      console.log(values);
+      const DeliveryData = await getDocs(collection(db, "DeliveryFees"));
+      const fetchProduct = DeliveryData.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as any),
+      }));
+      setData(fetchProduct);
+    } catch (error) {}
+  }, []);
+  useEffect(() => {
+    getData();
+  }, [getData]);
+
+  const handleSubmit = async (values: typeof initialValues) => {
+    try {
+      if (data) {
+        const DeliveryData = await addDoc(collection(db, "DeliveryFees"), {
+          ...values,
+        });
+        console.log(DeliveryData);
+      } else {
+        // const updateData= doc(db,"DeliveryFees",)
+        // await updateDoc(updateData)
+      }
     } catch (error) {
       console.log(error);
     }
@@ -57,6 +106,7 @@ const Dashboard: React.FC = () => {
             style={{
               display: "flex",
               // alignItems: "center",
+              justifyContent: "space-between",
               gap: "32px",
               flexWrap: "wrap",
             }}
@@ -82,30 +132,44 @@ const Dashboard: React.FC = () => {
               </Link>
             </div>
             <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-              {({ values }) => (
-                <div className="dropdown">
-                  <h3>Delivery charge</h3>
-                  <Field as="select" name="Continents">
-                    <option value="">Select continents</option>
+              {({ isSubmitting }) => (
+                <Form>
+                  <div className="dropdown">
+                    <h3>Delivery charge</h3>
+                    <Field as="select" name="Continents">
+                      <option value="">Select continents</option>
 
-                    {Continents.map((f, i) => (
-                      <option value={f}>{f}</option>
-                    ))}
-                  </Field>
-                  <div>
-                    {Continents.find((m) => (
-                      <>
-                        {m === continent && (
-                          <Field
-                            as="text"
-                            name="DeliveryFees"
-                            placeholder="0 $"
-                          />
-                        )}
-                      </>
-                    ))}
+                      {Continents.map((f, i) => (
+                        <option value={f} key={i}>
+                          {f}
+                        </option>
+                      ))}
+                    </Field>
+                    <div>
+                      <Input
+                        type="number"
+                        name="DeliveryFees"
+                        placeholder="0 $"
+                        disabled={isSubmitting}
+                      />
+                    </div>
+
+                    <Button
+                      varient="primary"
+                      type="submit"
+                      // onClick={() => handleUpdateData}
+                    >
+                      {isSubmitting ? "saved" : "save"}
+                    </Button>
+                    {/* {isSubmitting && (
+                      <LayoutModule handleToggle={handleToggle}>
+                        <div style={{ padding: "24px", borderRadius: "5px" }}>
+                          <p> Delivery Fees will be updated</p>
+                        </div>
+                      </LayoutModule>
+                    )} */}
                   </div>
-                </div>
+                </Form>
               )}
             </Formik>
           </div>

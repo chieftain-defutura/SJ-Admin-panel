@@ -95,10 +95,9 @@ const PremiumOrder: React.FC = () => {
                     className="select-drop-down"
                     onClick={() => setProduct(false)}
                   >
-                    <p>Blazzer</p>
-                    <p>shirts</p>
-                    <p>Saree</p>
-                    <p>Jacket</p>
+                    {data?.map((f, i) => (
+                      <div key={i}>{f.styles}</div>
+                    ))}
                   </div>
                 )}
               </div>{" "}
