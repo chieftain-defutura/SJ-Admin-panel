@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../styles/login.scss";
 import Input from "../../components/input";
 import Button from "../../components/button";
@@ -19,6 +19,7 @@ const initialValue = {
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const parent = useRef(null);
 
   const validationSchema = Yup.object().shape({
     Email: Yup.string().email("Invalid email").required("Email is required"),
@@ -70,6 +71,13 @@ const Login: React.FC = () => {
           validationSchema={validationSchema}
         >
           <Form>
+            <div ref={parent}>
+              {errorMessage && (
+                <div className="error-window">
+                  <p>{errorMessage}</p>
+                </div>
+              )}
+            </div>
             <div className="login-input">
               <Input type="email" name="Email" placeholder="Email" />
             </div>

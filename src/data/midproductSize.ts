@@ -18,7 +18,7 @@ export const Sizes = [
     sizeVarients: [{ size: "", maturements: "", show: false }],
   },
 ];
-export const Country = ["India", "Canada", "America"];
+export const Country = ["Euro", "Asia", "America"];
 
 export const defaultSizes = [
   { size: "S", measurement: 28, show: false, quantity: 1 },

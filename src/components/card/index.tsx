@@ -27,6 +27,7 @@ const CardModule: React.FC<ICardModuleData> = ({
 }) => {
   const [active, setActive] = useState(false);
   const [isactive, setIsActive] = useState(false);
+
   const handleToggle = () => {
     setActive(!active);
   };

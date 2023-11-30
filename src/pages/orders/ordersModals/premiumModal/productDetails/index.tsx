@@ -90,6 +90,15 @@ const ProductDetailsModal: React.FC<IDetailsdata> = ({ data }) => {
               <DownloadCloud style={{ marginTop: "8px" }} />
             </div>
           </div>
+
+          <div>
+            <p>Gift messages</p>
+            <h5>{data.giftMessage.giftMessage}</h5>
+          </div>
+          <div>
+            <p>From</p>
+            <h5>{data.giftMessage.from}</h5>
+          </div>
         </div>
       </div>
 

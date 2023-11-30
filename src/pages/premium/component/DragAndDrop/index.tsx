@@ -1,35 +1,40 @@
-import { deleteDoc, doc, updateDoc } from "firebase/firestore";
-import React, { useState, useRef } from "react";
-import { PRODUCTS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
-import { db } from "../../../../utils/firebase";
+import React, { useState } from "react";
 import ToggleSwitch from "../../../../components/toggleSwitch";
 import { IProductdata } from "../../../../constants/types";
 import { ReactComponent as FilterIcon } from "../../../../assets/icons/filter-2.svg";
 import { ReactComponent as Delete } from "../../../../assets/icons/delete.svg";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { PRODUCTS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
+import { db } from "../../../../utils/firebase";
 
 interface IData extends IProductdata {
   index: number;
-  data: IProductdata[];
-  setData: React.Dispatch<React.SetStateAction<IProductdata[]>>;
+  dragPerson: React.MutableRefObject<number>;
+  draggedOverPerson: React.MutableRefObject<number>;
+
+  handleSort: () => void;
 }
 
 const DragAndDrop: React.FC<IData> = ({
-  id,
   productName,
   index,
-  data,
-  setData,
+  dragPerson,
+  draggedOverPerson,
+  id,
+
+  handleSort,
 }) => {
   const [hidde, setHidde] = useState(true);
-  const dragPerson = useRef<number>(0);
-  const draggedOverPerson = useRef<number>(0);
+
   const handleToggleUpdate = async () => {
     try {
       setHidde(!hidde);
+
       const docRef = doc(db, PRODUCTS_COLLECTION_NAME, id);
       await updateDoc(docRef, {
         activePost: hidde,
       });
+
       //   setHidde(false);
       console.log("Document successfully updated!");
     } catch (error) {
@@ -40,18 +45,12 @@ const DragAndDrop: React.FC<IData> = ({
     try {
       const docRef = doc(db, PRODUCTS_COLLECTION_NAME, id);
       await deleteDoc(docRef);
-      window.location.reload();
-    } catch (error) {}
-  };
 
-  const handleSort = () => {
-    const peopleClone = [...data];
-    const temp = peopleClone[dragPerson.current];
-    peopleClone[draggedOverPerson.current] = temp;
-    setData(peopleClone);
+      // window.location.reload();
+    } catch (error) {
+      console.log("Delete docs", error);
+    }
   };
-  console.log(data);
-
   return (
     <div>
       <div
@@ -60,6 +59,7 @@ const DragAndDrop: React.FC<IData> = ({
         onDragStart={() => (dragPerson.current = index)}
         onDragEnter={() => (draggedOverPerson.current = index)}
         onDragEnd={handleSort}
+        onDragOver={(e) => e.preventDefault}
       >
         {/* <h4>{data.length}</h4> */}
         <div className="product-name">

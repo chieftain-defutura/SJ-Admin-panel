@@ -21,6 +21,7 @@ import { ReactComponent as Plus } from "../../../../../../assets/icons/plus-2.sv
 import LayoutModule from "../../../../../../components/layoutModule";
 import BGimage from "../../../../../../assets/icons/bg-image.svg";
 import ImagePriceCard from "../../../../../../components/imagePriceCard";
+import Loading from "../../../../../../components/loading";
 interface IToggleDate {
   isActiveImage: boolean;
 }
@@ -28,9 +29,11 @@ const Textimage: React.FC<IToggleDate> = ({ isActiveImage }) => {
   const [active, setIsActive] = useState(false);
   const [uploadImage, setUploadImage] = useState<IDesigns>({});
   const [textImage, settextImage] = useState("");
+  const [originalImage, setOriginalImage] = useState("");
   //   const [fileSize, setFileSize] = useState(false);
   const [data, setData] = useState<IUploadFiles[]>([]);
   const [hashTag, setHashtag] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleFilechange = (e: any) => {
     const file = e.target.files[0];
@@ -44,6 +47,19 @@ const Textimage: React.FC<IToggleDate> = ({ isActiveImage }) => {
     };
     fileReader.readAsDataURL(file);
   };
+
+  const handlechange = (e: any) => {
+    const file = e.target.files[0];
+    setUploadImage((e) => ({
+      ...e,
+      OriginalImages: file,
+    }));
+    const fileReader = new FileReader();
+    fileReader.onload = (r) => {
+      setOriginalImage(r.target?.result as string);
+    };
+    fileReader.readAsDataURL(file);
+  };
   console.log(textImage);
   console.log(hashTag);
 
@@ -53,7 +69,6 @@ const Textimage: React.FC<IToggleDate> = ({ isActiveImage }) => {
 
   const handleSubmit = async () => {
     setIsActive(false);
-
     try {
       let urls = {};
 
@@ -91,6 +106,7 @@ const Textimage: React.FC<IToggleDate> = ({ isActiveImage }) => {
 
   const handleGetData = useCallback(async () => {
     try {
+      setIsLoading(true);
       const productData = query(
         collection(db, DESIGN_TEXT_IMAGE),
         // orderBy("created"),
@@ -105,6 +121,8 @@ const Textimage: React.FC<IToggleDate> = ({ isActiveImage }) => {
       setData(fetchedData);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   }, [setData]);
 
@@ -114,74 +132,105 @@ const Textimage: React.FC<IToggleDate> = ({ isActiveImage }) => {
 
   return (
     <MidprodcutLayout>
-      <div className="upload-image">
-        <h3>images</h3>
-        <div className="upload-wrap">
-          <ImagePriceCard data={data} />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div className="upload-image">
+          <h3>images</h3>
+          <div className="upload-wrap">
+            <ImagePriceCard data={data} />
 
-          <div className="design-wrap" onClick={handleToggle}>
-            <div className="plus-icon">
-              <Plus />
+            <div className="design-wrap" onClick={handleToggle}>
+              <div className="plus-icon">
+                <Plus />
+              </div>
+              <div className="add-btn">
+                <Button varient="primary">Add image</Button>
+              </div>
             </div>
-            <div className="add-btn">
-              <Button varient="primary">Add image</Button>
-            </div>
-          </div>
-          {active && (
-            <LayoutModule
-              handleToggle={() => setIsActive(!active)}
-              className="layout-module"
-            >
-              <h2>Add text image</h2>
-              <div className="layout-wrap">
-                <div className="upload-area">
-                  {uploadImage["Images"] ? (
-                    <img src={textImage} alt="text" width={200} height={100} />
-                  ) : (
-                    <img src={BGimage} alt="bg" width={200} height={100} />
-                  )}
+            {active && (
+              <LayoutModule
+                handleToggle={() => setIsActive(!active)}
+                className="layout-module"
+              >
+                <h2>Add text image</h2>
+                <div className="layout-wrap">
+                  <div className="upload-area">
+                    {uploadImage["Images"] ? (
+                      <img
+                        src={textImage}
+                        alt="text"
+                        width={200}
+                        height={100}
+                      />
+                    ) : (
+                      <img src={BGimage} alt="bg" width={200} height={100} />
+                    )}
+                  </div>
+                  <div className="upload-area">
+                    {uploadImage["OriginalImages"] ? (
+                      <img
+                        src={originalImage}
+                        alt="design-logo"
+                        // width={164}
+                        // height={160}
+                      />
+                    ) : (
+                      <img src={BGimage} alt="Bg" width={200} height={100} />
+                    )}
+                  </div>
+                  <div className="input-area">
+                    <label htmlFor="tag">
+                      #tag
+                      <input
+                        type="text"
+                        value={hashTag}
+                        onChange={(e) => setHashtag(e.target.value)}
+                        id="tag"
+                        placeholder="#tag"
+                      />
+                    </label>
+                  </div>
                 </div>
-                <div className="input-area">
-                  <label htmlFor="tag">
-                    #tag
+                <div className="btn-upload">
+                  <label htmlFor="icon-image" className="custom-file-upload">
                     <input
-                      type="text"
-                      value={hashTag}
-                      onChange={(e) => setHashtag(e.target.value)}
-                      id="tag"
-                      placeholder="#tag"
+                      type="file"
+                      id="icon-image"
+                      name="icon"
+                      onChange={handleFilechange}
                     />
+                    Change Image
                   </label>
+                  <label
+                    htmlFor="original-image"
+                    className="custom-file-upload"
+                  >
+                    <input
+                      type="file"
+                      id="original-image"
+                      name="collapse-img"
+                      onChange={handlechange}
+                    />
+                    Change original image
+                  </label>
+                  <Button varient="primary" onClick={handleSubmit}>
+                    Done
+                  </Button>
                 </div>
-              </div>
-              <div className="btn-upload">
-                <label htmlFor="icon-image" className="custom-file-upload">
-                  <input
-                    type="file"
-                    id="icon-image"
-                    name="icon"
-                    onChange={handleFilechange}
-                  />
-                  Change Image
-                </label>
-                <Button varient="primary" onClick={handleSubmit}>
-                  Done
-                </Button>
-              </div>
-            </LayoutModule>
-          )}
+              </LayoutModule>
+            )}
 
-          {data.map((i, index) => (
-            <ImageCardModule
-              handleFilechange={handleFilechange}
-              uploadImage={uploadImage}
-              // handleUpdate={handleUpdate}
-              {...i}
-              key={index}
-            />
-          ))}
+            {data.map((i, index) => (
+              <ImageCardModule
+                // handleUpdate={handleUpdate}
+                {...i}
+                key={index}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </MidprodcutLayout>
   );
 };

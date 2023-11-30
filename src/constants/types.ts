@@ -85,6 +85,10 @@ export interface IPremiumData {
   description: string;
   gender: string;
   offerPrice: string;
+  giftMessage: {
+    from: string;
+    giftMessage: string;
+  };
   productVideo: string;
   price: string;
   sizes: {

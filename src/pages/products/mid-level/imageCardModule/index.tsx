@@ -8,15 +8,15 @@ import {
 } from "../product/component/uploadDesign-Image";
 import { ReactComponent as Deleteicon } from "../../../../assets/icons/delete.svg";
 import ProductModule from "../../../../components/productLayoutModule";
-import { deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { Timestamp, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { DESIGN_TEXT_IMAGE } from "../../../../constants/firebaseCollection";
 import { db } from "../../../../utils/firebase";
 
 interface IData extends IUploadFiles {
-  uploadImage: IDesigns;
-  handleFilechange: (e: any) => void;
+  // uploadImage: IDesigns;
+  // handleFilechange: (e: any) => void;
 }
-const ImageCardModule: React.FC<IData> = ({ Images, id }) => {
+const ImageCardModule: React.FC<IData> = ({ Images, id, OriginalImages }) => {
   const [active, setActive] = useState(false);
   const [isactive, setIsActive] = useState(false);
   const [isActiveImage, setActiveImage] = useState(true);
@@ -46,6 +46,7 @@ const ImageCardModule: React.FC<IData> = ({ Images, id }) => {
     fileReader.onload = (r) => {
       setImage(r.target?.result as string);
     };
+
     fileReader.readAsDataURL(file);
   };
 
@@ -57,6 +58,7 @@ const ImageCardModule: React.FC<IData> = ({ Images, id }) => {
       await updateDoc(docRef, {
         activePost: isActiveImage,
         Images: image,
+        created: Timestamp.now(),
       });
       console.log("Document successfully updated!");
       window.location.reload();
@@ -114,11 +116,7 @@ const ImageCardModule: React.FC<IData> = ({ Images, id }) => {
               <h3>Delete</h3>
             </div>
             <div className="content-delete">
-              <p>
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam,""
-              </p>
+              <p>Would you like me to delete the post?</p>
             </div>
             <div className="delete-section-btn">
               <Button varient="notifi" onClick={() => setIsActive(false)}>
@@ -142,6 +140,7 @@ const ImageCardModule: React.FC<IData> = ({ Images, id }) => {
                 <img src={Images} alt="products" width={176} height={234} />
               )}
             </div>
+
             <div className="layout-wrap">
               {/* <div className="upload-area">
                 {uploadImage["Images"] ? (

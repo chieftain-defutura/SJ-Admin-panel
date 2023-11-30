@@ -10,7 +10,7 @@ import Chart from "../../components/Chart";
 import { Field, Form, Formik } from "formik";
 import Input from "../../components/input";
 import Button from "../../components/button";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 
 const Continents = ["Europe"];
@@ -33,21 +33,19 @@ const Dashboard: React.FC = () => {
   // };
   console.log(data);
 
-  // const handleUpdateData = (value: typeof initialValues) => {
-  //   try {
-  //     {
-  //       data.map((f) => {
-  //         const updateFee = doc(db, "DeliveryFees", f.id);
-  //         const dataRef = updateDoc(updateFee, {
-  //           ...value,
-  //         });
-  //         console.log(dataRef);
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const handleUpdateData = (value: typeof initialValues) => {
+    try {
+      data.map((f) => {
+        const updateFee = doc(db, "DeliveryFees", f.id);
+        const dataRef = updateDoc(updateFee, {
+          ...value,
+        });
+        console.log(dataRef);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getData = useCallback(async () => {
     try {
@@ -63,21 +61,21 @@ const Dashboard: React.FC = () => {
     getData();
   }, [getData]);
 
-  const handleSubmit = async (values: typeof initialValues) => {
-    try {
-      if (data) {
-        const DeliveryData = await addDoc(collection(db, "DeliveryFees"), {
-          ...values,
-        });
-        console.log(DeliveryData);
-      } else {
-        // const updateData= doc(db,"DeliveryFees",)
-        // await updateDoc(updateData)
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleSubmit = async (values: typeof initialValues) => {
+  //   try {
+  //     if (data) {
+  //       const DeliveryData = await addDoc(collection(db, "DeliveryFees"), {
+  //         ...values,
+  //       });
+  //       console.log(DeliveryData);
+  //     } else {
+  //       // const updateData= doc(db,"DeliveryFees",)
+  //       // await updateDoc(updateData)
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div className="mx">
@@ -131,7 +129,7 @@ const Dashboard: React.FC = () => {
                 <h6>View more</h6>
               </Link>
             </div>
-            <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+            <Formik initialValues={initialValues} onSubmit={handleUpdateData}>
               {({ isSubmitting }) => (
                 <Form>
                   <div className="dropdown">

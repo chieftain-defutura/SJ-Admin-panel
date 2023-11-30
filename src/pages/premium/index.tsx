@@ -1,7 +1,15 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../../styles/premium.scss";
 import PremiumLayout from "../../layout/premium-layout";
-import { query, collection, getDocs, where } from "firebase/firestore";
+import {
+  query,
+  collection,
+  getDocs,
+  where,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { NavLink } from "react-router-dom";
 import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
 import { IProductCategory, IProductdata } from "../../constants/types";
@@ -15,6 +23,8 @@ const Premium: React.FC<{}> = () => {
   const [data, setData] = useState<IProductdata[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [active, setActive] = useState(false);
+  const dragPerson = useRef<number>(0);
+  const draggedOverPerson = useRef<number>(0);
 
   const handleGetData = useCallback(async () => {
     try {
@@ -28,12 +38,6 @@ const Premium: React.FC<{}> = () => {
       const lastVisible =
         documentSnapshots.docs[documentSnapshots.docs.length - 1];
       console.log(lastVisible);
-
-      // const getProductData = query(
-      //   collection(db, PRODUCTS_COLLECTION_NAME),
-      //   where("type", "==", IProductCategory.PREMIUM),
-      //   startAfter(lastVisible)
-      // );
 
       const data = await getDocs(productData);
       const fetchedData = data.docs.map((d) => ({
@@ -52,6 +56,14 @@ const Premium: React.FC<{}> = () => {
   useEffect(() => {
     handleGetData();
   }, [handleGetData]);
+
+  const handleSort = () => {
+    const peopleClone = [...data];
+    const temp = peopleClone[dragPerson.current];
+    peopleClone[dragPerson.current] = peopleClone[draggedOverPerson.current];
+    peopleClone[draggedOverPerson.current] = temp;
+    setData(peopleClone);
+  };
 
   return (
     <PremiumLayout>
@@ -76,10 +88,11 @@ const Premium: React.FC<{}> = () => {
               <div className="products">
                 {data.map((f, index) => (
                   <DragAndDrop
+                    dragPerson={dragPerson}
+                    draggedOverPerson={draggedOverPerson}
+                    handleSort={handleSort}
                     {...f}
                     index={index}
-                    data={data}
-                    setData={setData}
                   />
                 ))}
               </div>

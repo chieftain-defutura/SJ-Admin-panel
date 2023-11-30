@@ -329,7 +329,7 @@ const CreateMidProduct: React.FC<Material> = () => {
                           value={country}
                           onChange={(e) => setCountry(e.target.value)}
                         >
-                          <option value="">Select country</option>
+                          <option value="">Select continent</option>
                           {Country.map((f, i) => (
                             <option id={f} value={f} key={i}>
                               {f}
