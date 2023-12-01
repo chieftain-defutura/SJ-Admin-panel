@@ -30,6 +30,7 @@ const initialValue = {
 const CreatePremium: React.FC<Material> = ({ index }) => {
   const [image, setImage] = useState("");
   const [video, setVideo] = useState("");
+  const [fabricImage, setFabricImage] = useState("");
   const [files, setFiles] = useState<IFiles[]>([]);
   const navigate = useNavigate();
 
@@ -165,7 +166,7 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                     </Field>
                     <div className="video-image">
                       <div className="bg-video">
-                        <h4>Image</h4>
+                        <h4> Product image</h4>
                         <label
                           htmlFor="product-image"
                           className="custom-file-upload"
@@ -193,8 +194,44 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                             <img
                               src={image}
                               alt=""
-                              width={200}
-                              height={200}
+                              width={150}
+                              height={150}
+                              style={{ objectFit: "contain" }}
+                            />
+                          </div>
+                        </label>
+                      </div>
+                      <div className="bg-video">
+                        <h4>Fabric image</h4>
+                        <label
+                          htmlFor="fabric-image"
+                          className="custom-file-upload"
+                        >
+                          <input
+                            type="file"
+                            id="fabric-image"
+                            name="image"
+                            onChange={(e: any) => {
+                              const file = e.target.files[0];
+                              setFiles((e) => ({
+                                ...e,
+                                fabricImage: file,
+                              }));
+                              const fileReader = new FileReader();
+                              fileReader.onload = (r) => {
+                                setFabricImage(r.target?.result as string);
+                              };
+                              fileReader.readAsDataURL(file);
+                            }}
+                            // files={files}
+                            // accept="image/jpg,image/png"
+                          />
+                          <div className="bg-image">
+                            <img
+                              src={fabricImage}
+                              alt=""
+                              width={150}
+                              height={150}
                               style={{ objectFit: "contain" }}
                             />
                           </div>
@@ -222,7 +259,7 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                             accept="video/mp4,video/x-m4v,video/*"
                           />
                           <div className="bg-image">
-                            <video src={video} width={200} height={200} />
+                            <video src={video} width={150} height={150} />
                           </div>
                         </label>
                       </div>

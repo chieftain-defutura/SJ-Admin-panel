@@ -122,6 +122,7 @@ button:disabled {
 }
 .custom-file-upload {
   display: flex;
+
   align-items: center;
   flex-direction: column;
   cursor: pointer;

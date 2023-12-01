@@ -37,6 +37,7 @@ const initialValue = {
 export interface IFiles {
   productImage: File;
   productVideo: File;
+  fabricImage: File;
 }
 
 export interface Material {
@@ -212,7 +213,7 @@ const CreateMidProduct: React.FC<Material> = () => {
                             accept="image/jpg,image/png"
                           />
                           <div className="bg-image">
-                            <img src={image} alt="" width={200} height={200} />
+                            <img src={image} alt="" width={150} height={150} />
                           </div>
                         </label>
                       </div>
