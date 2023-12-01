@@ -1,15 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../../styles/premium.scss";
 import PremiumLayout from "../../layout/premium-layout";
-import {
-  query,
-  collection,
-  getDocs,
-  where,
-  deleteDoc,
-  doc,
-  updateDoc,
-} from "firebase/firestore";
+import { query, collection, getDocs, where } from "firebase/firestore";
 import { NavLink } from "react-router-dom";
 import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
 import { IProductCategory, IProductdata } from "../../constants/types";
@@ -35,8 +27,7 @@ const Premium: React.FC<{}> = () => {
         // limit(3)
       );
       const documentSnapshots = await getDocs(productData);
-      const lastVisible =
-        documentSnapshots.docs[documentSnapshots.docs.length - 1];
+      const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
       console.log(lastVisible);
 
       const data = await getDocs(productData);

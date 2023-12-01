@@ -41,6 +41,7 @@ const Dashboard: React.FC = () => {
           ...value,
         });
         console.log(dataRef);
+        return null;
       });
     } catch (error) {
       console.log(error);

@@ -1,7 +1,7 @@
 import React from "react";
 import "./deliveryDetailsModal.scss";
 import Button from "../../../../../components/button";
-import { IPost, IPremiumData } from "../../../../../constants/types";
+import { IPost } from "../../../../../constants/types";
 import { Form, Formik } from "formik";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../utils/firebase";
@@ -40,7 +40,7 @@ const DeliveryDetailsModal: React.FC<IDetailsdata> = ({ data, onClose }) => {
   return (
     <div className="delivery-details-modal-wrapper">
       <Formik onSubmit={handleSubmit} initialValues={initialValues}>
-        {({ values, setValues }) => (
+        {() => (
           <Form>
             <>
               <div className="order-conformed-content">

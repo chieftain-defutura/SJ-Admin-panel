@@ -1,19 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
+import _ from "lodash";
 import "../../../../../../styles/uploadDesign.scss";
 import MidprodcutLayout from "../../../../../../layout/midproduct-layout";
 import { ReactComponent as Plus } from "../../../../../../assets/icons/plus.svg";
 import BGimage from "../../../../../../assets/icons/bg-image.svg";
 import Button from "../../../../../../components/button";
 import LayoutModule from "../../../../../../components/layoutModule";
+import { Timestamp, addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import {
-  Timestamp,
-  addDoc,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
-import { DESIGN_TEXT_IMAGE } from "../../../../../../constants/firebaseCollection";
+  DESIGN_TEXT_IMAGE,
+  PRODUCTS_COLLECTION_NAME,
+} from "../../../../../../constants/firebaseCollection";
 import { db, storage } from "../../../../../../utils/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { v4 } from "uuid";
@@ -22,10 +19,10 @@ import { IProductCategory } from "../../../../../../constants/types";
 import ImageCardModule from "../../../imageCardModule";
 import ImagePriceCard from "../../../../../../components/imagePriceCard";
 import Loading from "../../../../../../components/loading";
+import UploadColorImage from "./UploadColorImage";
 
 export interface IDesigns {
   Images?: File;
-  OriginalImages?: File;
 }
 export interface IUploadFiles {
   Images: string;
@@ -44,9 +41,40 @@ const UploadmidProductImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
   const [active, setIsActive] = useState(false);
   const [uploadImage, setUploadImage] = useState<IDesigns>({});
   const [designLogo, setDesignLogo] = useState("");
-  const [originalImage, setOriginalImage] = useState("");
   const [data, setData] = useState<IUploadFiles[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [colors, setColors] = useState<string[]>([]);
+  const [colorsFile, setColorsFile] = useState<(File | null)[]>([]);
+  const [colorsPreviewImage, setColorsPreviewImage] = useState<(string | null)[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleGetColors = useCallback(async () => {
+    try {
+      const productData = query(
+        collection(db, PRODUCTS_COLLECTION_NAME),
+        where("type", "==", IProductCategory.MID)
+      );
+      const data = await getDocs(productData);
+      const fetchedData = data.docs.map((d) => ({
+        id: d.id,
+        ...(d.data() as any),
+      }));
+      const tempColors: string[] = [];
+      console.log(fetchedData);
+      fetchedData.forEach((m: any) => m.colors.forEach((c: string) => tempColors.push(c)));
+      console.log(tempColors);
+      const uniqColors = _.uniq(tempColors);
+      setColors(uniqColors);
+      setColorsFile([...uniqColors.map((m) => null)]);
+      setColorsPreviewImage([...uniqColors.map((m) => null)]);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    handleGetColors();
+  }, [handleGetColors]);
 
   const handleFilechange = (e: any) => {
     const file = e.target.files[0];
@@ -63,19 +91,6 @@ const UploadmidProductImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
     fileReader.readAsDataURL(file);
   };
 
-  const handlechange = (e: any) => {
-    const file = e.target.files[0];
-    setUploadImage((e) => ({
-      ...e,
-      OriginalImages: file,
-    }));
-    const fileReader = new FileReader();
-    fileReader.onload = (r) => {
-      setOriginalImage(r.target?.result as string);
-    };
-    fileReader.readAsDataURL(file);
-  };
-
   const [hashTag, setHashtag] = useState("");
   console.log(designLogo);
   console.log(hashTag);
@@ -85,10 +100,13 @@ const UploadmidProductImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
   };
 
   const handleSubmit = async () => {
-    setIsActive(!active);
+    if (colorsFile.some((s) => s === null)) return alert("Upload original images to proceed");
 
     try {
+      setLoading(true);
+
       let urls = {};
+      let originalImages: { url: string; colorCode: string }[] = [];
 
       let UploadFiles = 0;
       const imageFileUrl = Object.entries(uploadImage).map((f) => f);
@@ -107,15 +125,33 @@ const UploadmidProductImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
           urls = { ...urls, [f[0]]: downloadURL };
         })
       );
+
+      await Promise.all(
+        colorsFile.map(async (f, index) => {
+          if (!f) return null;
+          const imageRef = ref(storage, `DesignImages/${v4()}`);
+          const uploadFile = uploadBytesResumable(imageRef, f);
+
+          await uploadFile;
+
+          const downloadURL = await getDownloadURL(uploadFile.snapshot.ref);
+          console.log("imageurl", downloadURL);
+          originalImages.push({ colorCode: colors[index], url: downloadURL });
+        })
+      );
       console.log(urls);
+      console.log(originalImages);
 
       const dataRef = await addDoc(collection(db, DESIGN_TEXT_IMAGE), {
         ...urls,
+        originalImages,
         hashTag,
         type: IProductCategory.DESIGN_IMAGE,
         activePost: isActiveImage,
         created: Timestamp.now(),
       });
+      setIsActive(!active);
+      setLoading(false);
       window.location.reload();
       console.log(dataRef);
     } catch (error) {
@@ -152,6 +188,26 @@ const UploadmidProductImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
     handleGetData();
   }, [handleGetData]);
 
+  const handleChangeColorsFile = (index: number, files: FileList | null) => {
+    if (!files) return;
+    const file = files[0];
+
+    const tempColorsFile = [...colorsFile];
+    tempColorsFile[index] = file;
+    setColorsFile([...tempColorsFile]);
+
+    const fileReader = new FileReader();
+    fileReader.onload = (r) => {
+      const tempColorsPreviewImage = [...colorsPreviewImage];
+      tempColorsPreviewImage[index] = r.target?.result as string;
+      setColorsPreviewImage([...tempColorsPreviewImage]);
+    };
+
+    fileReader.readAsDataURL(file);
+  };
+
+  console.log(colors);
+
   return (
     <MidprodcutLayout>
       {isLoading ? (
@@ -171,10 +227,7 @@ const UploadmidProductImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
               </div>
             </div>
             {active && (
-              <LayoutModule
-                handleToggle={() => setIsActive(!active)}
-                className="layout-module"
-              >
+              <LayoutModule handleToggle={() => setIsActive(!active)} className="layout-module">
                 <h2>Add image</h2>
                 <div className="layout-wrap">
                   <div className="upload-area">
@@ -189,7 +242,7 @@ const UploadmidProductImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
                       <img src={BGimage} alt="Bg" width={200} height={100} />
                     )}
                   </div>
-                  <div className="upload-area">
+                  {/* <div className="upload-area">
                     {uploadImage["OriginalImages"] ? (
                       <img
                         src={originalImage}
@@ -200,7 +253,7 @@ const UploadmidProductImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
                     ) : (
                       <img src={BGimage} alt="Bg" width={200} height={100} />
                     )}
-                  </div>
+                  </div> */}
 
                   <div className="input-area">
                     <label htmlFor="tag">
@@ -217,18 +270,10 @@ const UploadmidProductImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
                 </div>
                 <div className="btn-upload">
                   <label htmlFor="icon-image" className="custom-file-upload">
-                    <input
-                      type="file"
-                      id="icon-image"
-                      name="icon"
-                      onChange={handleFilechange}
-                    />
-                    Change previw image
+                    <input type="file" id="icon-image" name="icon" onChange={handleFilechange} />
+                    Change preview image
                   </label>
-                  <label
-                    htmlFor="original-image"
-                    className="custom-file-upload"
-                  >
+                  {/* <label htmlFor="original-image" className="custom-file-upload">
                     <input
                       type="file"
                       id="original-image"
@@ -236,11 +281,27 @@ const UploadmidProductImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
                       onChange={handlechange}
                     />
                     Change original image
-                  </label>
-                  <Button varient="primary" onClick={handleSubmit}>
-                    Done
-                  </Button>
+                  </label> */}
                 </div>
+                <div className="colors-list">
+                  {colors.map((color, index) => (
+                    <UploadColorImage
+                      key={index.toString()}
+                      index={index}
+                      color={color}
+                      handleChangeColorsFile={handleChangeColorsFile}
+                      previewImage={colorsPreviewImage[index]}
+                    />
+                  ))}
+                </div>
+                <Button
+                  disabled={loading}
+                  varient="primary"
+                  style={{ width: "100%" }}
+                  onClick={handleSubmit}
+                >
+                  {loading ? "Uploading please wait..." : "Done"}
+                </Button>
               </LayoutModule>
             )}
 
