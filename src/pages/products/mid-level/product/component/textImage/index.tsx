@@ -46,12 +46,10 @@ const TextImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
   const [colors, setColors] = useState<string[]>([]);
   const [colorsFile, setColorsFile] = useState<(File | null)[]>([]);
   const [colorsPreviewImage, setColorsPreviewImage] = useState<(string | null)[]>([]);
-  const [isColorsFetched, setIsColorsFetched] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const handleGetColors = useCallback(async () => {
     try {
-      setIsColorsFetched(true);
       const productData = query(
         collection(db, PRODUCTS_COLLECTION_NAME),
         where("type", "==", IProductCategory.MID)
@@ -71,8 +69,6 @@ const TextImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
       setColorsPreviewImage([...uniqColors.map((m) => null)]);
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsColorsFetched(false);
     }
   }, []);
 
