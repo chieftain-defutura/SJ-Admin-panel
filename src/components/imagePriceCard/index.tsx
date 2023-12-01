@@ -24,6 +24,7 @@ const ImagePriceCard: React.FC<IImagePrice> = ({ data }) => {
           imagePrices: values,
         });
         console.log(dataRef);
+        return null;
       });
     } catch (error) {
       console.log(error);
