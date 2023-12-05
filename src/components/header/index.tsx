@@ -5,12 +5,20 @@ import { ReactComponent as Logo } from "../../assets/logo/sprinklenadar-logo.svg
 // import { ReactComponent as SNlogo } from "../../assets/icons/sn-logo.svg";
 import { ReactComponent as Users } from "../../assets/icons/users.svg";
 import { ReactComponent as Logout } from "../../assets/icons/logout.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../utils/firebase";
 
 const Header: React.FC = () => {
   const [active, setActive] = useState(false);
+  const navigate = useNavigate();
   const handleActive = () => {
     setActive(!active);
+  };
+  const handleSignout = () => {
+    signOut(auth).then((val) => {
+      navigate("/");
+    });
   };
   return (
     <div className="header-wrap">
@@ -49,7 +57,7 @@ const Header: React.FC = () => {
                 <Users />
               </div>
             </Link>
-            <div className="admin-details">
+            <div className="admin-details" onClick={handleSignout}>
               <h2>Logout</h2>
               <Logout />
             </div>

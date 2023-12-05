@@ -10,11 +10,11 @@ import { ORDERS_COLLECTION_NAME } from "../../../../../constants/firebaseCollect
 
 export const initialValues = {
   orderStatus: {
-    delivery: { createdAt: "", description: "", status: false },
-    manufacturing: { createdAt: "", description: "", status: false },
-    orderPlaced: { createdAt: "", description: "", status: false },
-    readyToShip: { createdAt: "", description: "", status: false },
-    shipping: { createdAt: "", description: "", status: false },
+    delivery: { createdAt: null, description: "", status: false },
+    manufacturing: { createdAt: null, description: "", status: false },
+    orderPlaced: { createdAt: null, description: "", status: false },
+    readyToShip: { createdAt: null, description: "", status: false },
+    shipping: { createdAt: null, description: "", status: false },
   },
 };
 interface IDetailsdata {
@@ -22,6 +22,8 @@ interface IDetailsdata {
 }
 
 const DeliveryDetailsModal: React.FC<IDetailsdata> = ({ data }) => {
+  console.log("DeliveryDetailsModal", data);
+
   const handleSubmit = async (value: typeof initialValues) => {
     console.log(value);
     try {
@@ -44,7 +46,7 @@ const DeliveryDetailsModal: React.FC<IDetailsdata> = ({ data }) => {
 
   return (
     <div className="delivery-details-modal-wrapper">
-      <Formik onSubmit={handleSubmit} initialValues={initialValues}>
+      <Formik onSubmit={handleSubmit} initialValues={data.orderStatus as any}>
         {({ values, setValues }) => (
           <Form>
             <>

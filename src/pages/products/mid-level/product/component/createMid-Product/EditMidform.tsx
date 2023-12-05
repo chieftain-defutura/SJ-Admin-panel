@@ -261,7 +261,7 @@ const EditMidform: React.FC = () => {
                             accept="image/jpg,image/png"
                           />
                           <div className="bg-image">
-                            <img src={image} alt="" width={200} height={200} />
+                            <img src={image} alt="" width={150} height={150} />
                           </div>
                         </label>
                       </div>
@@ -357,12 +357,12 @@ const EditMidform: React.FC = () => {
                       <ColorModule
                         handleToggle={handleToggle}
                         setActive={setActive}
-                        handleChange={(color) =>
-                          setValues((v) => ({
-                            ...v,
-                            colors: [...v.colors, color],
-                          }))
-                        }
+                        // handleChange={(color) =>
+                        //   setValues((v) => ({
+                        //     ...v,
+                        //     colors: [...v.colors, color],
+                        //   }))
+                        // }
                       />
                     )}
                   </div>

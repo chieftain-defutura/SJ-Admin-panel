@@ -27,6 +27,7 @@ const initialValues = {
 
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<IDeliverData[]>([]);
+  const [save, setSave] = useState(false);
   // const [Active, setActive] = useState(false);
   // const handleToggle = () => {
   //   setActive(!Active);
@@ -41,6 +42,7 @@ const Dashboard: React.FC = () => {
           ...value,
         });
         console.log(dataRef);
+        setSave(true);
         return null;
       });
     } catch (error) {
@@ -51,6 +53,7 @@ const Dashboard: React.FC = () => {
   const getData = useCallback(async () => {
     try {
       const DeliveryData = await getDocs(collection(db, "DeliveryFees"));
+
       const fetchProduct = DeliveryData.docs.map((doc) => ({
         id: doc.id,
         ...(doc.data() as any),
@@ -131,10 +134,10 @@ const Dashboard: React.FC = () => {
               </Link>
             </div>
             <Formik initialValues={initialValues} onSubmit={handleUpdateData}>
-              {({ isSubmitting }) => (
-                <Form>
-                  <div className="dropdown">
-                    <h3>Delivery charge</h3>
+              <Form>
+                <div className="dropdown">
+                  <h3>Delivery charge</h3>
+                  <div className="deliveryfee">
                     <Field as="select" name="Continents">
                       <option value="">Select continents</option>
 
@@ -149,27 +152,20 @@ const Dashboard: React.FC = () => {
                         type="number"
                         name="DeliveryFees"
                         placeholder="0 $"
-                        disabled={isSubmitting}
+                        disabled={save}
                       />
                     </div>
-
-                    <Button
-                      varient="primary"
-                      type="submit"
-                      // onClick={() => handleUpdateData}
-                    >
-                      {isSubmitting ? "saved" : "save"}
-                    </Button>
-                    {/* {isSubmitting && (
-                      <LayoutModule handleToggle={handleToggle}>
-                        <div style={{ padding: "24px", borderRadius: "5px" }}>
-                          <p> Delivery Fees will be updated</p>
-                        </div>
-                      </LayoutModule>
-                    )} */}
                   </div>
-                </Form>
-              )}
+
+                  <Button
+                    varient="primary"
+                    type="submit"
+                    // onClick={() => handleUpdateData}
+                  >
+                    {save ? "saved" : "save"}
+                  </Button>
+                </div>
+              </Form>
             </Formik>
           </div>
         </div>

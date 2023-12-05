@@ -39,7 +39,7 @@ const App: React.FC = () => {
         <Route path="/post/all-post" element={<Allpost />} />
         <Route path="/post/approved" element={<ApprovedPost />} />
         <Route path="/post/pending" element={<PendingPost />} />
-        <Route path="/notification" element={<Notification />} />
+        {/* <Route path="/notification" element={<Notification />} /> */}
         <Route path="/admin-management" element={<AdminManagement />} />
         <Route path="/orders/premium-orders" element={<PremiumOrders />} />
         <Route path="/orders/post-orders" element={<PostOrders />} />

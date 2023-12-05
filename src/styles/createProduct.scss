@@ -195,7 +195,7 @@
       .color-layout {
         position: relative;
         width: 349px;
-        height: 210px;
+        height: 250px;
         overflow-y: auto;
         margin: 0 auto;
         box-sizing: border-box;
@@ -205,6 +205,18 @@
         .choose-color {
           input {
             padding: 0%;
+          }
+        }
+        .colornameinput {
+          padding-top: 12px;
+          input {
+            outline: none;
+            background: transparent;
+            border: 1px solid var(--gray);
+            border-radius: 5px;
+            color: var(--primary-);
+            padding: 4px;
+            width: 100px;
           }
         }
         .colorname {
@@ -220,6 +232,7 @@
           grid-template-columns: 1fr 1fr;
           align-items: center;
           gap: 20px;
+          padding-top: 12px;
         }
         .done-btn {
           display: flex;

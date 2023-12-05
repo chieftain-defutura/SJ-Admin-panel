@@ -8,6 +8,7 @@ import { AuthErrorCodes, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
+import Loading from "../../components/loading";
 // import { ReactComponent as Mail } from "../../assets/icons/mail.svg";
 // import { ReactComponent as Lock } from "../../assets/icons/lock.svg";
 
@@ -18,7 +19,10 @@ const initialValue = {
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  console.log(errorMessage);
+
   const parent = useRef(null);
 
   const validationSchema = Yup.object().shape({
@@ -37,6 +41,7 @@ const Login: React.FC = () => {
       ).then((userCredential) => {
         console.log(userCredential);
       });
+
       navigate("/dashboard");
       console.log(values);
       console.log("dataStore", dataStore);
@@ -49,6 +54,8 @@ const Login: React.FC = () => {
           setErrorMessage("User not found");
         }
       }
+    } finally {
+      setLoading(true);
     }
   };
 
@@ -64,34 +71,38 @@ const Login: React.FC = () => {
 
   return (
     <div className="mx">
-      <div className="login-home">
-        <Formik
-          initialValues={initialValue}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-        >
-          <Form>
-            <div ref={parent}>
-              {errorMessage && (
-                <div className="error-window">
-                  <p>{errorMessage}</p>
-                </div>
-              )}
-            </div>
-            <div className="login-input">
-              <Input type="email" name="Email" placeholder="Email" />
-            </div>
-            <div className="login-input">
-              <Input name="Password" type="password" placeholder="Password" />
-            </div>
-            <div className="login-btn">
-              <Button varient="primary" type="submit">
-                Submit
-              </Button>
-            </div>
-          </Form>
-        </Formik>
-      </div>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="login-home">
+          <Formik
+            initialValues={initialValue}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            <Form>
+              <div ref={parent}>
+                {errorMessage && (
+                  <div className="error-window">
+                    <p style={{ color: "red" }}>{errorMessage}</p>
+                  </div>
+                )}
+              </div>
+              <div className="login-input">
+                <Input type="email" name="Email" placeholder="Email" />
+              </div>
+              <div className="login-input">
+                <Input name="Password" type="password" placeholder="Password" />
+              </div>
+              <div className="login-btn">
+                <Button varient="primary" type="submit">
+                  Submit
+                </Button>
+              </div>
+            </Form>
+          </Formik>
+        </div>
+      )}
     </div>
   );
 };

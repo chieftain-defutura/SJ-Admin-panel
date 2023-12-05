@@ -108,22 +108,22 @@ export interface IPremiumData {
       description: string;
     };
     manufacturing: {
-      createdAt: null;
+      createdAt: null | string;
       status: boolean;
       description: string;
     };
     orderplaced: {
       status: boolean;
-      createdAt: null;
+      createdAt: null | string;
       description: string;
     };
     readyToShip: {
       status: boolean;
       description: string;
-      createdAt: null;
+      createdAt: null | string;
     };
     shipping: {
-      createdAt: null;
+      createdAt: null | string;
       description: string;
       status: boolean;
     };

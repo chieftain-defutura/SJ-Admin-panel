@@ -4,16 +4,29 @@ import LayoutModule from "../layoutModule";
 
 interface IModule {
   handleToggle: () => void;
-  handleChange: (color: string) => void;
   setActive: (value: React.SetStateAction<boolean>) => void;
 }
 
-const ColorModule: React.FC<IModule> = ({
-  handleToggle,
-  setActive,
-  handleChange,
-}) => {
-  const [color, setColor] = useState("#00000");
+const ColorModule: React.FC<IModule> = ({ handleToggle, setActive }) => {
+  const [color, setColor] = useState({
+    color: "#000000",
+    colorName: "",
+  });
+  console.log(color);
+
+  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setColor((prevValues) => ({
+      ...prevValues,
+      color: e.target.value,
+    }));
+  };
+
+  const handleColorNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setColor((prevValues) => ({
+      ...prevValues,
+      colorName: e.target.value,
+    }));
+  };
   return (
     <LayoutModule handleToggle={handleToggle} className="color-layout">
       <div className="colorname">
@@ -25,21 +38,28 @@ const ColorModule: React.FC<IModule> = ({
         <div className="choose-color">
           <input
             type="color"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
+            value={color.color}
+            onChange={handleColorChange}
           />
         </div>
 
         <div className="color-code">
-          <h2>{color}</h2>
+          <h2>{color.color}</h2>
         </div>
+      </div>
+      <div className="colornameinput">
+        <input
+          type="text"
+          value={color.colorName}
+          onChange={handleColorNameChange}
+        />
       </div>
       <div className="done-btn">
         <Button
           varient="primary"
           onClick={() => {
             setActive(false);
-            handleChange(color);
+            setColor(color);
           }}
         >
           Done

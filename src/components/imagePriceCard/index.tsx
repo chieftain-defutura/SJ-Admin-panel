@@ -1,6 +1,6 @@
 import { doc, updateDoc } from "firebase/firestore";
 import { Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Form } from "formik";
 import { DESIGN_TEXT_IMAGE } from "../../constants/firebaseCollection";
 import { db } from "../../utils/firebase";
@@ -16,6 +16,7 @@ interface IImagePrice {
 }
 
 const ImagePriceCard: React.FC<IImagePrice> = ({ data }) => {
+  const [save, setSave] = useState(false);
   const handleUpdate = async (values: typeof initialValue) => {
     try {
       data.map((f) => {
@@ -24,6 +25,7 @@ const ImagePriceCard: React.FC<IImagePrice> = ({ data }) => {
           imagePrices: values,
         });
         console.log(dataRef);
+        setSave(true);
         return null;
       });
     } catch (error) {
@@ -56,8 +58,8 @@ const ImagePriceCard: React.FC<IImagePrice> = ({ data }) => {
               </div>
 
               <div className="add-btn">
-                <Button varient="primary" type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Saved" : "Save"}
+                <Button varient="primary" type="submit">
+                  {save ? "saved" : "Save"}
                 </Button>
               </div>
             </div>

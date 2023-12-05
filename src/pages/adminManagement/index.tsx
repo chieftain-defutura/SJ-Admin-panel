@@ -53,12 +53,12 @@ const AdminManagement: React.FC = () => {
         ...values,
       });
       console.log(dataRef);
-
       console.log("dataStore", dataStore);
       setActive(false);
       window.location.reload();
     } catch (error) {
       console.log(error);
+      alert("Email already used");
       if (error instanceof FirebaseError) {
         if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
           // setErrorMessage("Invalid password");

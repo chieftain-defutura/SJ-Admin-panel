@@ -23,7 +23,8 @@ const initialValue = {
   productName: "",
   normalPrice: "",
   offerPrice: "",
-  colors: ["#000000"],
+  colors: [{ color: "#000000", colorName: "" }],
+
   // detailedFutures: [{ materials: "", cloth: "" }],
   showDesign: false,
   showTextDesign: false,
@@ -217,33 +218,6 @@ const CreateMidProduct: React.FC<Material> = () => {
                           </div>
                         </label>
                       </div>
-
-                      {/* <div className="bg-video">
-                        <h4>3D Video</h4>
-                        <label htmlFor="3dvideo" className="custom-file-upload">
-                          <input
-                            type="file"
-                            id="3dvideo"
-                            name="video"
-                            onChange={(e: any) => {
-                              const file = e.target.files[0];
-                              setFiles((e) => ({
-                                ...e,
-                                productVideo: file,
-                              }));
-                              const fileReader = new FileReader();
-                              fileReader.onload = (r) => {
-                                setVideo(r.target?.result as string);
-                              };
-                              fileReader.readAsDataURL(file);
-                            }}
-                            accept="video/mp4,video/x-m4v,video/*"
-                          />
-                          <div className="bg-image">
-                            <video src={video}></video>
-                          </div>
-                        </label>
-                      </div> */}
                     </div>
                   </div>
                   <div className="product-info">
@@ -290,7 +264,7 @@ const CreateMidProduct: React.FC<Material> = () => {
                       <div className="color-wrap" key={index}>
                         <div
                           style={{
-                            backgroundColor: color,
+                            backgroundColor: color.color,
                           }}
                           className="color-circle"
                           key={index}
@@ -310,12 +284,12 @@ const CreateMidProduct: React.FC<Material> = () => {
                       <ColorModule
                         handleToggle={handleToggle}
                         setActive={setActive}
-                        handleChange={(color) =>
-                          setValues((v) => ({
-                            ...v,
-                            colors: [...v.colors, color],
-                          }))
-                        }
+                        // handleChange={(color,) =>
+                        //   setValues((v) => ({
+                        //     ...v,
+                        //     colors: [...v.colors, color],
+                        //   }))
+                        // }
                       />
                     )}
                   </div>
