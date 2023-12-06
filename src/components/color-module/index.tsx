@@ -7,6 +7,11 @@ interface IModule {
   setActive: (value: React.SetStateAction<boolean>) => void;
 }
 
+interface ColorData {
+  color: string;
+  colorName: string;
+}
+
 const ColorModule: React.FC<IModule> = ({ handleToggle, setActive }) => {
   const [color, setColor] = useState({
     color: "#000000",
