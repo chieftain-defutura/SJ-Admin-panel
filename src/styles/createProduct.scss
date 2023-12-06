@@ -183,12 +183,15 @@
         align-items: center;
         gap: 6px;
         flex-wrap: wrap;
-        justify-content: space-evenly;
+        // justify-content: space-evenly;
         .color-circle {
           width: 32px;
           height: 32px;
           border: 1px solid var(--border);
           border-radius: 30px;
+        }
+        p {
+          text-align: center;
         }
       }
 

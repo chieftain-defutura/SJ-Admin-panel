@@ -19,13 +19,13 @@ import {
 } from "../../../../../../constants/types";
 import { useNavigate, useParams } from "react-router-dom";
 import MOdalPopUp from "../../../../../../components/ModalPopupBox";
+import { ColorData } from ".";
 
 const initialValue = {
   styles: "",
   productName: "",
   normalPrice: "",
   offerPrice: "",
-  colors: ["#000000"],
   // detailedFutures: [{ materials: "", cloth: "" }],
   showDesign: false,
   showTextDesign: false,
@@ -58,6 +58,7 @@ const EditMidform: React.FC = () => {
 
   const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
   const [country, setCountry] = useState("");
+  const [colors, setColors] = useState<ColorData[]>([]);
 
   const [sizes, setSizes] = useState<
     {
@@ -74,6 +75,10 @@ const EditMidform: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const handleAddColor = (currentColor: ColorData) => {
+    setColors((c) => [...c, currentColor]);
+    setActive(false);
+  };
   const handleGetData = useCallback(async () => {
     try {
       if (!id) return;
@@ -88,7 +93,6 @@ const EditMidform: React.FC = () => {
           description: tempData.description,
           frontSide: tempData.frontSide,
           backSide: tempData.backSide,
-          colors: tempData.colors,
           gender: tempData.gender,
           leftSide: tempData.leftSide,
           normalPrice: tempData.normalPrice,
@@ -146,6 +150,7 @@ const EditMidform: React.FC = () => {
         ...urls,
         sizes: sizes,
         type: IProductCategory.MID,
+        colors,
       });
 
       console.log(dataRef);
@@ -333,36 +338,35 @@ const EditMidform: React.FC = () => {
                       Add
                     </Button>
 
-                    {values.colors.map((color, index) => (
-                      <div className="color-wrap" key={index}>
-                        <div
-                          style={{
-                            backgroundColor: color,
-                          }}
-                          className="color-circle"
-                          key={index}
-                        ></div>
-                        <Delete
-                          onClick={() => {
-                            const updatedColors = values.colors.filter(
-                              (f) => f !== color
-                            );
-                            setValues((c) => ({ ...c, colors: updatedColors }));
-                          }}
-                        />
-                      </div>
+                    {colors.map((color, index) => (
+                      <>
+                        <div className="color-wrap" key={index}>
+                          <div>
+                            <div
+                              style={{
+                                backgroundColor: color.color,
+                              }}
+                              className="color-circle"
+                              key={index}
+                            ></div>
+                            <p>{color.colorName}</p>
+                          </div>
+                          <Delete
+                            onClick={() => {
+                              const updatedColors = colors.filter(
+                                (f) => f.color !== color.color
+                              );
+                              setColors(updatedColors);
+                            }}
+                          />
+                        </div>
+                      </>
                     ))}
 
                     {active && (
                       <ColorModule
-                        handleToggle={handleToggle}
-                        setActive={setActive}
-                        // handleChange={(color) =>
-                        //   setValues((v) => ({
-                        //     ...v,
-                        //     colors: [...v.colors, color],
-                        //   }))
-                        // }
+                        handleAddColor={handleAddColor}
+                        handleToggle={() => setActive(false)}
                       />
                     )}
                   </div>

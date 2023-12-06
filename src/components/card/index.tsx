@@ -164,7 +164,7 @@ const CardModule: React.FC<ICardModuleData> = ({
                         <div className="color-section">
                           <div
                             style={{
-                              backgroundColor: color,
+                              backgroundColor: color.color,
                             }}
                             className="color-circle"
                             key={i}

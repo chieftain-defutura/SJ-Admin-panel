@@ -23,8 +23,6 @@ const initialValue = {
   productName: "",
   normalPrice: "",
   offerPrice: "",
-  colors: [{ color: "#000000", colorName: "" }],
-
   // detailedFutures: [{ materials: "", cloth: "" }],
   showDesign: false,
   showTextDesign: false,
@@ -45,12 +43,20 @@ export interface Material {
   index: number;
 }
 
+export interface ColorData {
+  color: string;
+  colorName: string;
+}
+
 const CreateMidProduct: React.FC<Material> = () => {
   const [image, setImage] = useState("");
   // const [video, setVideo] = useState("");
   const [files, setFiles] = useState<IFiles[]>([]);
   const [active, setActive] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const [colors, setColors] = useState<ColorData[]>([]);
+  console.log(colors);
+
   console.log(toggle);
 
   const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
@@ -73,6 +79,11 @@ const CreateMidProduct: React.FC<Material> = () => {
   const handleToggle = () => {
     setActive(true);
     setToggle(true);
+  };
+
+  const handleAddColor = (currentColor: ColorData) => {
+    setColors((c) => [...c, currentColor]);
+    setActive(false);
   };
   const handleSubmit = async (value: typeof initialValue) => {
     try {
@@ -103,6 +114,7 @@ const CreateMidProduct: React.FC<Material> = () => {
         ...urls,
         sizes: sizes,
         type: IProductCategory.MID,
+        colors,
       });
       console.log(dataRef);
       navigate("/products/mid-level/product/styles");
@@ -260,36 +272,35 @@ const CreateMidProduct: React.FC<Material> = () => {
                       Add
                     </Button>
 
-                    {values.colors.map((color, index) => (
-                      <div className="color-wrap" key={index}>
-                        <div
-                          style={{
-                            backgroundColor: color.color,
-                          }}
-                          className="color-circle"
-                          key={index}
-                        ></div>
-                        <Delete
-                          onClick={() => {
-                            const updatedColors = values.colors.filter(
-                              (f) => f !== color
-                            );
-                            setValues((c) => ({ ...c, colors: updatedColors }));
-                          }}
-                        />
-                      </div>
+                    {colors.map((color, index) => (
+                      <>
+                        <div className="color-wrap" key={index}>
+                          <div>
+                            <div
+                              style={{
+                                backgroundColor: color.color,
+                              }}
+                              className="color-circle"
+                              key={index}
+                            ></div>
+                            <p>{color.colorName}</p>
+                          </div>
+                          <Delete
+                            onClick={() => {
+                              const updatedColors = colors.filter(
+                                (f) => f.color !== color.color
+                              );
+                              setColors(updatedColors);
+                            }}
+                          />
+                        </div>
+                      </>
                     ))}
 
                     {active && (
                       <ColorModule
-                        handleToggle={handleToggle}
-                        setActive={setActive}
-                        // handleChange={(color,) =>
-                        //   setValues((v) => ({
-                        //     ...v,
-                        //     colors: [...v.colors, color],
-                        //   }))
-                        // }
+                        handleAddColor={handleAddColor}
+                        handleToggle={() => setActive(false)}
                       />
                     )}
                   </div>

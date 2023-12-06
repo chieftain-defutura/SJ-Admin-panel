@@ -15,7 +15,7 @@ const Chart: React.FC = () => {
   const chartData = {
     series: [
       {
-        data: [21, 22, 10, 28, 16, 20, 30],
+        data: [1000, 22, 10, 208, 16, 20, 3000],
       },
     ],
     options: {

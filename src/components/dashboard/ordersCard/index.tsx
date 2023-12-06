@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 interface OrdersCardProps {
   data: {
     heading: string;
-    orderNumber: number;
+    orderNumber?: number;
     todayRevenue: string;
     today: string;
     orders: string;
@@ -23,9 +23,9 @@ const OrdersCard: React.FC<OrdersCardProps> = ({ data }) => {
         <div key={index} className="orders-content">
           <div className="orders-first-part">
             <h4>{f.heading}</h4>
-            <h1>{f.orderNumber}</h1>
+            <h1>{f?.orderNumber || 0}</h1>
             <div className="flex-content">
-              <p>{f.todayRevenue}</p>
+              <p>{0}</p>
               <h3>{f.today}</h3>
             </div>
           </div>

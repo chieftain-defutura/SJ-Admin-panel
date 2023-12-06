@@ -60,7 +60,10 @@ export interface IProductdata {
   backSide: boolean;
   productName: string;
   showTextDesign: boolean;
-  colors: string[];
+  colors: {
+    color: string;
+    colorName: string;
+  }[];
   normalPrice: string;
   gender: string;
   styles: string;
