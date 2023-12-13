@@ -20,6 +20,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import MOdalPopUp from "../../../../../../components/ModalPopupBox";
 import { ColorData } from ".";
+import Bgimg from "../../../../../../assets/images/bg-img.png";
 
 const initialValue = {
   styles: "",
@@ -266,7 +267,16 @@ const EditMidform: React.FC = () => {
                             accept="image/jpg,image/png"
                           />
                           <div className="bg-image">
-                            <img src={image} alt="" width={150} height={150} />
+                            {image ? (
+                              <img
+                                src={image}
+                                alt=""
+                                width={120}
+                                height={120}
+                              />
+                            ) : (
+                              <img src={Bgimg} alt="" width={70} height={70} />
+                            )}{" "}
                           </div>
                         </label>
                       </div>

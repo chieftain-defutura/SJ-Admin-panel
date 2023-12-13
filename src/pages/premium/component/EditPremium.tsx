@@ -13,6 +13,7 @@ import { storage, db } from "../../../utils/firebase";
 import { IFiles } from "../../products/mid-level/product/component/createMid-Product";
 import { useNavigate, useParams } from "react-router-dom";
 import MOdalPopUp from "../../../components/ModalPopupBox";
+import Bgimg from "../../../assets/images/bg-img.png";
 
 const initialValue = {
   styles: "",
@@ -228,13 +229,23 @@ const EditPremium: React.FC = () => {
                             // accept="image/jpg,image/png"
                           />
                           <div className="bg-image">
-                            <img
-                              src={image}
-                              alt=""
-                              width={150}
-                              height={150}
-                              style={{ objectFit: "contain" }}
-                            />
+                            {image ? (
+                              <img
+                                src={image}
+                                alt=""
+                                width={120}
+                                height={120}
+                                style={{ objectFit: "contain" }}
+                              />
+                            ) : (
+                              <img
+                                src={Bgimg}
+                                alt=""
+                                width={70}
+                                height={70}
+                                style={{ objectFit: "contain" }}
+                              />
+                            )}
                           </div>
                         </label>
                       </div>
@@ -264,13 +275,23 @@ const EditPremium: React.FC = () => {
                             // accept="image/jpg,image/png"
                           />
                           <div className="bg-image">
-                            <img
-                              src={fabricImage}
-                              alt=""
-                              width={150}
-                              height={150}
-                              style={{ objectFit: "contain" }}
-                            />
+                            {fabricImage ? (
+                              <img
+                                src={fabricImage}
+                                alt=""
+                                width={120}
+                                height={120}
+                                style={{ objectFit: "contain" }}
+                              />
+                            ) : (
+                              <img
+                                src={Bgimg}
+                                alt=""
+                                width={70}
+                                height={70}
+                                style={{ objectFit: "contain" }}
+                              />
+                            )}
                           </div>
                         </label>
                       </div>
@@ -296,7 +317,11 @@ const EditPremium: React.FC = () => {
                             accept="video/mp4,video/x-m4v,video/*"
                           />
                           <div className="bg-image">
-                            <video src={video} width={150} height={150} />
+                            {video ? (
+                              <video src={video} width={120} height={120} />
+                            ) : (
+                              <img src={Bgimg} width={70} height={70} />
+                            )}
                           </div>
                         </label>
                       </div>

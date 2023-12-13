@@ -69,7 +69,6 @@ const App: React.FC = () => {
     return onAuthStateChanged(auth, (datas) => {
       if (datas) {
         setAdminDetails(datas);
-      } else {
       }
     });
   }, [setAdminDetails]);
@@ -80,12 +79,7 @@ const App: React.FC = () => {
         <Loading />
       ) : (
         <Routes>
-          {!admin ? (
-            <Route>
-              <Route path="/login" element={<Login />} />
-              <Route path="*" element={<Navigate to={"/login"} />} />
-            </Route>
-          ) : (
+          {admin ? (
             <Route>
               <Route path="/login" element={<Navigate to="/" />} />
               <Route path="/" element={<Dashboard />} />
@@ -93,7 +87,6 @@ const App: React.FC = () => {
               <Route path="/post/all-post" element={<Allpost />} />
               <Route path="/post/approved" element={<ApprovedPost />} />
               <Route path="/post/pending" element={<PendingPost />} />
-              {/* <Route path="/notification" element={<Notification />} /> */}
               <Route path="/admin-management" element={<AdminManagement />} />
               <Route
                 path="/orders/premium-orders"
@@ -151,6 +144,11 @@ const App: React.FC = () => {
               />
               <Route path="/subscription" element={<Subscription />} />
               <Route path="/settings" element={<Settings />} />
+            </Route>
+          ) : (
+            <Route>
+              <Route path="/login" element={<Login />} />
+              <Route path="*" element={<Navigate to={"/login"} />} />
             </Route>
           )}
         </Routes>

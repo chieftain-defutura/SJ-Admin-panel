@@ -16,6 +16,7 @@ import ColorModule from "../../../../../../components/color-module";
 import { IProductCategory } from "../../../../../../constants/types";
 import { useNavigate } from "react-router-dom";
 import MOdalPopUp from "../../../../../../components/ModalPopupBox";
+import Bgimg from "../../../../../../assets/images/bg-img.png";
 
 const initialValue = {
   gender: "MALE",
@@ -226,7 +227,16 @@ const CreateMidProduct: React.FC<Material> = () => {
                             accept="image/jpg,image/png"
                           />
                           <div className="bg-image">
-                            <img src={image} alt="" width={150} height={150} />
+                            {image ? (
+                              <img
+                                src={image}
+                                alt=""
+                                width={120}
+                                height={120}
+                              />
+                            ) : (
+                              <img src={Bgimg} alt="" width={70} height={70} />
+                            )}
                           </div>
                         </label>
                       </div>
