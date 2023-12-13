@@ -27,7 +27,8 @@ const Premium: React.FC<{}> = () => {
         // limit(3)
       );
       const documentSnapshots = await getDocs(productData);
-      const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+      const lastVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
       console.log(lastVisible);
 
       const data = await getDocs(productData);

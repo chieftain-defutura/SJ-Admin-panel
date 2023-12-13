@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import {
   Document,
   Page,
@@ -12,9 +12,6 @@ import Logo from "../../../assets/logo/logo.png";
 import GilroyBold from "../../../assets/fonts/Gilroy-Bold.ttf";
 import GilroyMedium from "../../../assets/fonts/Gilroy-Medium.ttf";
 import { IPremiumData, IUserData } from "../../../constants/types";
-import { getDocs, collection, getDoc, doc } from "firebase/firestore";
-import { ORDERS_COLLECTION_NAME } from "../../../constants/firebaseCollection";
-import { db } from "../../../utils/firebase";
 
 Font.register({
   family: "GilroyBold",
@@ -204,46 +201,47 @@ const styles = StyleSheet.create({
 // ];
 
 interface IPdfData {
-  // userData: IUserData | undefined;
+  userData: IUserData | undefined;
   data: IPremiumData;
 }
 
-const PremiumPdf: React.FC<IPdfData> = ({ data }) => {
-  const [userData, setUserData] = useState<IUserData>();
+const PremiumPdf: React.FC<IPdfData> = ({ data, userData }) => {
+  // const [userData, setUserData] = useState<IUserData>();
+  // console.log(userData);
 
-  const [datas, setData] = useState<IPremiumData[]>([]);
-  const docRef = doc(db, "users", data.userId);
+  // const [datas, setData] = useState<IPremiumData[]>([]);
+  // const docRef = doc(db, "users", data.userId);
 
-  const getData = useCallback(async () => {
-    const productData = await getDocs(collection(db, ORDERS_COLLECTION_NAME));
-    const fetchProduct = productData.docs.map((doc) => ({
-      id: doc.id,
-      ...(doc.data() as any),
-    }));
-    setData(fetchProduct);
-  }, []);
+  // const getData = useCallback(async () => {
+  //   const productData = await getDocs(collection(db, ORDERS_COLLECTION_NAME));
+  //   const fetchProduct = productData.docs.map((doc) => ({
+  //     id: doc.id,
+  //     ...(doc.data() as any),
+  //   }));
+  //   setData(fetchProduct);
+  // }, []);
 
-  const fetchData = useCallback(async () => {
-    try {
-      const documentSnapshot = await getDoc(docRef);
+  // const fetchData = useCallback(async () => {
+  //   try {
+  //     const documentSnapshot = await getDoc(docRef);
 
-      if (documentSnapshot.exists()) {
-        const data = documentSnapshot.data();
-        console.log("Document dataa:", data);
-        setUserData(data as any);
-      } else {
-        console.log("Document does not exist.");
-      }
-    } catch (error) {
-      console.error("Error getting document:", error);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //     if (documentSnapshot.exists()) {
+  //       const data = documentSnapshot.data();
+  //       console.log("Document dataa:", data);
+  //       setUserData(data as any);
+  //     } else {
+  //       console.log("Document does not exist.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error getting document:", error);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-  useEffect(() => {
-    getData();
-    fetchData();
-  }, [getData, fetchData]);
+  // useEffect(() => {
+  //   getData();
+  //   fetchData();
+  // }, [getData, fetchData]);
   return (
     // <PDFViewer style={{ width: "100vw", height: "100vh" }}>
     <Document>
@@ -263,14 +261,10 @@ const PremiumPdf: React.FC<IPdfData> = ({ data }) => {
         <View style={styles.addressFlexWrapper}>
           <View style={{ width: "245px" }}>
             <Text style={styles.head}>Sold By :</Text>
-            <Text style={styles.text}>Appario Retail Private Ltd</Text>
-            <Text style={styles.text}>
-              * Kh No 18//21, 19//25, 34//5, 6, 7/1 min, 14/2/2 min, 15/1 min,
-              27, 35//1, 7, 8, 9/1, 9/2, 10/1, 10/2, 11 min, 12, 13, 14, Village
-              - Jamalpur
-            </Text>
-            <Text style={styles.text}>Gurgaon, Haryana, 122503</Text>
-            <Text style={styles.text}>IN</Text>
+            <Text style={styles.text}>Sprinkle Nadar Private Ltd</Text>
+            <Text style={styles.text}></Text>
+            <Text style={styles.text}>Kovilpatti 628502</Text>
+            <Text style={styles.text}>Tamilnadu</Text>
           </View>
           <View
             style={{
@@ -282,7 +276,10 @@ const PremiumPdf: React.FC<IPdfData> = ({ data }) => {
           >
             <Text style={styles.head}>Billing Address :</Text>
 
-            <Text style={styles.text}>{userData?.address}</Text>
+            <Text style={styles.text}>{userData?.name}</Text>
+            <Text style={styles.text}>{userData?.email}</Text>
+            <Text style={styles.text}>{userData?.phoneNo}</Text>
+
             {/* <Text style={styles.text}>
               No 6 A-block sterling little flower apartment,
             </Text>
@@ -306,42 +303,11 @@ const PremiumPdf: React.FC<IPdfData> = ({ data }) => {
           >
             <View style={styles.flexContent}>
               <Text style={styles.head}>PAN No:</Text>
-              <Text style={styles.text}> AALCA0171E</Text>
+              <Text style={styles.text}> JRRPS7087A</Text>
             </View>
             <View style={styles.flexContent}>
               <Text style={styles.head}>GST Registration No: </Text>
               <Text style={styles.text}> 06AALCA0171E1Z3</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
-              width: "245px",
-            }}
-          >
-            <Text style={styles.head}>Shipping Address :</Text>
-            <Text style={styles.text}>{userData?.name}</Text>
-
-            <Text style={styles.text}>{userData?.address}</Text>
-            {/* <Text style={styles.text}>
-              No 6 A-block sterling little flower apartment,
-            </Text>
-            <Text style={styles.text}>Guduvanchery</Text>
-            <Text style={styles.text}>
-              NANDIVARAM GUDUVANCHERY, TAMIL NADU,
-            </Text>
-            <Text style={styles.text}>603202</Text>
-            <Text style={styles.text}>IN</Text>
-            <Text style={styles.head}>State/UT Code: 33</Text>
-            <View style={styles.flexContent}>
-              <Text style={styles.head}>Place of supply: </Text>
-              <Text style={styles.text}> TAMIL NADU</Text>
-            </View> */}
-            <View style={styles.flexContent}>
-              <Text style={styles.head}>Place of delivery: </Text>
-              <Text style={styles.text}> TAMIL NADU</Text>
             </View>
             <View style={styles.flexContents}>
               <Text style={styles.head}>Invoice Number: </Text>
@@ -357,12 +323,49 @@ const PremiumPdf: React.FC<IPdfData> = ({ data }) => {
               <Text style={styles.text}> 24.08.2023</Text>
             </View>
           </View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              width: "245px",
+            }}
+          >
+            <Text style={styles.head}>Shipping Address :</Text>
+            {userData?.address.map((f, i) => (
+              <>
+                {f.isSelected === true && (
+                  <>
+                    <Text style={styles.text}>{f.name}</Text>
+                    <Text style={styles.text} key={i}>
+                      {f.addressOne}
+                    </Text>
+                    <Text style={styles.text}>{f.city}</Text>
+                    <Text style={styles.text}>{f.state}</Text>
+                    <Text style={styles.text}>{f.pinCode}</Text>
+                    <Text style={styles.text}>{f.country}</Text>
+                    <Text style={styles.text}>{f.phoneNo}</Text>
+                    <View style={styles.flexContent}>
+                      <Text style={styles.head}>Place of supply: </Text>
+                      <Text style={styles.text}> TAMIL NADU</Text>
+                    </View>
+                    <View style={styles.flexContent}>
+                      <Text style={styles.head}>Place of delivery: </Text>
+                      <Text style={styles.text}> {f.country}</Text>
+                    </View>
+                  </>
+                )}
+
+                {/* <Text style={styles.head}>State/UT Code: 33</Text> */}
+              </>
+            ))}
+          </View>
         </View>
         <View style={styles.table}>
           <View style={[styles.row, { backgroundColor: "#B4B4B3" }]}>
             <Text style={[styles.tableCell, styles.tableHead]}>SI.No</Text>
             <Text style={[styles.tableCell, styles.tableHead, { flex: 4 }]}>
-              Discription
+              Product Name
             </Text>
             <Text style={[styles.tableCell, styles.tableHead]}>Unit Price</Text>
             <Text style={[styles.tableCell, styles.tableHead]}>Discount</Text>
@@ -376,18 +379,28 @@ const PremiumPdf: React.FC<IPdfData> = ({ data }) => {
             </Text>
           </View>
           <View>
-            {datas.map((row, rowIndex) => (
-              <View key={rowIndex} style={styles.row}>
-                {/* {row.map((cell, cellIndex) => ( */}
-                <Text
-                  key={rowIndex}
-                  style={[styles.tableCell, { flex: rowIndex === 1 ? 4 : 1 }]}
-                >
-                  {row.description}
-                </Text>
-                {/* ))} */}
-              </View>
-            ))}
+            {/* {datas.map((row, rowIndex) => ( */}
+            <View style={styles.row}>
+              {/* {row.map((cell, cellIndex) => ( */}
+              <Text style={[styles.tableCell]}>1</Text>
+
+              <Text style={[styles.tableCell, { flex: 4 }]}>
+                {data.productName}
+              </Text>
+              <Text style={[styles.tableCell]}>{data.price}</Text>
+              <Text style={[styles.tableCell]}>
+                {data.offerPrice ? "-" : ""}
+              </Text>
+              <Text style={[styles.tableCell]}>1</Text>
+              <Text style={[styles.tableCell]}>0</Text>
+              <Text style={[styles.tableCell]}>0</Text>
+              <Text style={[styles.tableCell]}>0</Text>
+              <Text style={[styles.tableCell]}>0</Text>
+              <Text style={[styles.tableCell]}>{data.price}</Text>
+
+              {/* ))} */}
+            </View>
+            {/* ))} */}
           </View>
         </View>
         <View style={styles.totalContent}>
@@ -396,7 +409,9 @@ const PremiumPdf: React.FC<IPdfData> = ({ data }) => {
             
             ))} */}
           <View style={styles.totalHead}>
-            <Text style={[styles.tableHead, { fontSize: 11 }]}>304.93</Text>
+            <Text style={[styles.tableHead, { fontSize: 11 }]}>
+              {data.price}
+            </Text>
             <Text style={[styles.tableHead, { fontSize: 11 }]}>
               {/* {f.price} */}
             </Text>
@@ -404,9 +419,7 @@ const PremiumPdf: React.FC<IPdfData> = ({ data }) => {
         </View>
         <View style={styles.amountHead}>
           <Text style={styles.totalText}>Amount in Words: </Text>
-          <Text style={styles.totalText}>
-            One Thousand Nine Hundred Ninety-nine only
-          </Text>
+          <Text style={styles.totalText}>{data.price.toString()}</Text>
         </View>
         <View style={styles.amountHead}>
           <View
@@ -416,9 +429,7 @@ const PremiumPdf: React.FC<IPdfData> = ({ data }) => {
               alignItems: "flex-end",
             }}
           >
-            <Text style={styles.totalText}>
-              For Appario Retail Private Ltd:
-            </Text>
+            <Text style={styles.totalText}>Sprinkle Nadar Private Ltd:</Text>
             <Text style={styles.totalText}>Authorized Signatory</Text>
           </View>
         </View>
@@ -473,7 +484,7 @@ const PremiumPdf: React.FC<IPdfData> = ({ data }) => {
             }}
           >
             <Text style={styles.head}>Invoice Value: </Text>
-            <Text style={styles.text}>1,999.00</Text>
+            <Text style={styles.text}>{data.price}</Text>
           </View>
           <View style={{ width: 130 }}>
             <View

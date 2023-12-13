@@ -149,3 +149,32 @@ input[type="number"]::-webkit-outer-spin-button {
   margin-bottom: 12px;
   text-transform: capitalize;
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* Style your custom input */
+#customDateInput {
+  /* Your custom styles */
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 4px;
+  font-size: 18px;
+  font-family: "Arvo-bold";
+  font-weight: 600;
+  color: #aaa;
+  /* Optional: Add a background color or other visual enhancements */
+}
+#orderdate {
+  border: 1px solid #ccc;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 12px;
+  font-family: "Arvo-bold";
+  font-weight: 500;
+  color: var(--primary-);
+}

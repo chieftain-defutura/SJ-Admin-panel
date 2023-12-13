@@ -33,11 +33,13 @@ export const useGetDashboardData = () => {
       );
       const midData = await getDocs(midProducts);
       console.log("midData", midData.size);
+      let totalMidPrice = 0;
 
-      midData.forEach((i) => {
-        const midPostdata = i.data();
-
+      midData.forEach((doc) => {
+        const midPostdata = doc.data();
         console.log("midPostdata", midPostdata);
+        const { price } = midPostdata;
+        totalMidPrice += Number(price);
       });
 
       const Premium = collection(db, ORDERS_COLLECTION_NAME);
@@ -49,6 +51,14 @@ export const useGetDashboardData = () => {
         orderBy("createdAt", "asc")
       );
       const premiumData = await getDocs(premiumProducts);
+      console.log("premiumData", premiumData.size);
+      let totalPremiumPrice = 0;
+      premiumData.forEach((doc) => {
+        const prePostData = doc.data();
+        const { price } = prePostData;
+        totalPremiumPrice += Number(price);
+        console.log("totalPrice", totalPremiumPrice);
+      });
 
       const accessory = collection(db, ORDERS_COLLECTION_NAME);
       const accessoryProducts = query(
@@ -59,6 +69,14 @@ export const useGetDashboardData = () => {
         orderBy("createdAt", "asc")
       );
       const accessoryData = await getDocs(accessoryProducts);
+      let totalAccessoryPrice = 0;
+
+      accessoryData.forEach((doc) => {
+        const accessoryPostData = doc.data();
+        const { price } = accessoryPostData;
+        totalAccessoryPrice += Number(price);
+        console.log("totalPrice", totalAccessoryPrice);
+      });
 
       const post = collection(db, POST_COLLECTION_NAME);
       const postProducts = query(
@@ -68,17 +86,32 @@ export const useGetDashboardData = () => {
         orderBy("createdAt", "asc")
       );
       const postData = await getDocs(postProducts);
+      let totalPostPrice = 0;
+
+      postData.forEach((doc) => {
+        const PostData = doc.data();
+        const { price } = PostData;
+        totalPostPrice += Number(price);
+        console.log("totalPrice", totalPostPrice);
+      });
+
+      const totalRevenue =
+        totalAccessoryPrice +
+        totalMidPrice +
+        totalPostPrice +
+        totalPremiumPrice;
+      console.log("totalRevenue", totalRevenue);
 
       setData({
         midProducts: midData.size,
         postProducts: postData.size,
         premiumProducts: premiumData.size,
         accessoryProducts: accessoryData.size,
-        midLevelRevenue: 0,
-        postRevenue: 0,
-        premiumRevenue: 0,
-        accessoryRevenue: 0,
-        totalRevenue: 0,
+        midLevelRevenue: totalMidPrice,
+        postRevenue: totalPostPrice,
+        premiumRevenue: totalPremiumPrice,
+        accessoryRevenue: totalAccessoryPrice,
+        totalRevenue: totalRevenue,
       });
       setLoading(false);
     } catch (error) {

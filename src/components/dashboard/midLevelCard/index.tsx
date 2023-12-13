@@ -1,7 +1,7 @@
 import React from "react";
 import { ReactComponent as CartIcon } from "../../../assets/icons/cart.svg";
 import TShirtImg from "../../../assets/images/t-shirt-two.png";
-import "./SingleCard.scss";
+import "../SingleCard/SingleCard.scss";
 import { Link } from "react-router-dom";
 import { useGetDashboardData } from "../../../hooks/useGetDashboardData";
 import LoadingCard from "../../loadingCard";
@@ -18,7 +18,7 @@ interface SingleCardProps {
   };
 }
 
-const SingleCard: React.FC<SingleCardProps> = ({ data }) => {
+const MidCard: React.FC<SingleCardProps> = ({ data }) => {
   const { data: dashboardData } = useGetDashboardData();
 
   return (
@@ -27,12 +27,10 @@ const SingleCard: React.FC<SingleCardProps> = ({ data }) => {
         <div className="orders-first-part">
           <h4>{data.heading}</h4>
 
-          <h1>
-            {dashboardData ? dashboardData.premiumProducts : <LoadingCard />}
-          </h1>
+          <h1>{dashboardData ? dashboardData.midProducts : <LoadingCard />}</h1>
           <div className="flex-content">
             <p>{data.todayRevenue}</p>
-            <h3>{dashboardData?.premiumRevenue}</h3>
+            <h3>{dashboardData?.midLevelRevenue}</h3>
           </div>
         </div>
         <div className="orders-second-part">
@@ -52,4 +50,4 @@ const SingleCard: React.FC<SingleCardProps> = ({ data }) => {
   );
 };
 
-export default SingleCard;
+export default MidCard;

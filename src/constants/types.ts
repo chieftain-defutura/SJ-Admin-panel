@@ -36,7 +36,7 @@ export interface IAdminData {
   id: string;
   userName: string;
   password: string;
-  role: string;
+  role: string[];
   actions: string;
   email: string;
   action: string;
@@ -75,13 +75,36 @@ export interface IProductdata {
 }
 
 export interface IUserData {
-  address: null;
-  avatar: string;
-  email: string;
-  id: string;
-  name: string;
-  phoneNo: string;
   profile: string;
+  email: string;
+  confirmDetails: boolean;
+  avatar: {
+    gender: string;
+    skinTone: string;
+  };
+  name: string;
+  address: {
+    saveAddressAs: string;
+    addressOne: string;
+    floor: string;
+    addressTwo: string;
+    phoneNo: string;
+    country: string;
+    isSelected: boolean;
+    state: string;
+    city: string;
+    name: string;
+    pinCode: string;
+  }[];
+  currency: {
+    abrive: string;
+    symbol: string;
+    currency: string;
+  };
+  language: string;
+  termsAndConditions: boolean;
+  rate: number;
+  phoneNo: string;
 }
 
 export interface IPremiumData {
@@ -106,29 +129,29 @@ export interface IPremiumData {
   type: string;
   orderStatus: {
     delivery: {
-      status: boolean;
       createdAt: null;
       description: string;
+      status: boolean;
     };
     manufacturing: {
-      createdAt: null | string;
-      status: boolean;
+      createdAt: null;
       description: string;
+      status: boolean;
     };
     orderplaced: {
-      status: boolean;
-      createdAt: null | string;
       description: string;
+      status: boolean;
+      createdAt: null;
     };
     readyToShip: {
+      createdAt: null;
       status: boolean;
       description: string;
-      createdAt: null | string;
     };
     shipping: {
-      createdAt: null | string;
-      description: string;
+      createdAt: null;
       status: boolean;
+      description: string;
     };
   };
   userId: string;
@@ -238,6 +261,7 @@ export interface IMidLevelData {
     sizeVarient: {
       measurement: string;
       size: string;
+      quantity: string;
     };
   };
   style: string;
@@ -347,4 +371,12 @@ export enum IProductCategory {
   ACCESSORY = "ACCESSORY-PRODUCTS",
   DESIGN_IMAGE = "design-images",
   TEXT_IMAGE = "text-images",
+}
+
+export enum IOrdersCategory {
+  orderPlaced = "Placed orders",
+  manufacturing = "Manufacturing",
+  readyToShip = "Ready to ship",
+  shipping = "Shipping",
+  delivery = "Delivery",
 }

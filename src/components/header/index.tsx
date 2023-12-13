@@ -17,7 +17,7 @@ const Header: React.FC = () => {
   };
   const handleSignout = () => {
     signOut(auth).then((val) => {
-      navigate("/");
+      navigate("/login");
     });
   };
   return (

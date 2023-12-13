@@ -3,7 +3,7 @@ import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg"
 import DeliveryDetailsModal from "./deliveryDetails";
 import ProductDetailsModal from "./productDetails";
 import "../../../../styles/postModal.scss";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, where, query } from "firebase/firestore";
 import { ORDERS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import { IPremiumData } from "../../../../constants/types";
 import { db } from "../../../../utils/firebase";
@@ -15,10 +15,16 @@ interface IPremiumModal {
 
 const PremiumModal: React.FC<IPremiumModal> = ({ onClose, data }) => {
   const [activeSection, setActiveSection] = useState("product");
+  console.log(data);
 
   const getData = useCallback(async () => {
-    const productData = await getDocs(collection(db, ORDERS_COLLECTION_NAME));
-    const fetchProduct = productData.docs.map((doc) => ({
+    const Premium = collection(db, ORDERS_COLLECTION_NAME);
+    const premiumProducts = query(
+      Premium,
+      where("type", "==", "Premium-Level")
+    );
+    const premiumData = await getDocs(premiumProducts);
+    const fetchProduct = premiumData.docs.map((doc) => ({
       id: doc.id,
       ...(doc.data() as any),
     }));
@@ -27,6 +33,7 @@ const PremiumModal: React.FC<IPremiumModal> = ({ onClose, data }) => {
 
   useEffect(() => {
     getData();
+    // ordersFetchData();
   }, [getData]);
 
   // const FilteredData = data?.filter((f) => f.type === "Premium-Level");

@@ -31,7 +31,7 @@ const ConfirmOrder: React.FC<IPropdata> = ({
           </div>
 
           <div className="calender-content">
-            <Field name={creayedAt} type="date" />
+            <Field name={creayedAt} type="date" id="orderdate" />
           </div>
         </div>
         <div className="text-area-input">

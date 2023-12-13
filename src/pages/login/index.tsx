@@ -42,7 +42,7 @@ const Login: React.FC = () => {
         console.log(userCredential);
       });
 
-      navigate("/dashboard");
+      navigate("/");
       console.log(values);
       console.log("dataStore", dataStore);
     } catch (error) {

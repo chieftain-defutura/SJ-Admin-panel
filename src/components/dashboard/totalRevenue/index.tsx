@@ -1,5 +1,6 @@
 import React from "react";
 import "./totalRevenue.scss";
+import LoadingCard from "../../loadingCard";
 
 export interface IDashboard {
   data: {
@@ -17,7 +18,7 @@ const TotalRevenue: React.FC<IDashboard> = ({ data }) => {
     <div className="total-revenue-wrapper">
       <div className="heading">
         <h5>TOTAL REVENUE</h5>
-        <h1>{data?.totalRevenue}</h1>
+        <h1>{data?.totalRevenue ? data.totalRevenue : <LoadingCard />}</h1>
         <p>We have found a way to make your revenue more effective</p>
       </div>
     </div>

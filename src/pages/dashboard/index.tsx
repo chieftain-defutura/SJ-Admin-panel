@@ -13,6 +13,7 @@ import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { useGetDashboardData } from "../../hooks/useGetDashboardData";
 import TShirtImg from "../../assets/images/t-shirt-two.png";
+import LoadingCard from "../../components/loadingCard";
 
 const Continents = ["Europe"];
 
@@ -37,10 +38,7 @@ export interface IDashboard {
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<IDeliverData[]>([]);
   const [save, setSave] = useState(false);
-  // const [Active, setActive] = useState(false);
-  // const handleToggle = () => {
-  //   setActive(!Active);
-  // };
+
   console.log(data);
   const { data: dashboardData } = useGetDashboardData();
 
@@ -75,28 +73,12 @@ const Dashboard: React.FC = () => {
     getData();
   }, [getData]);
 
-  // const handleSubmit = async (values: typeof initialValues) => {
-  //   try {
-  //     if (data) {
-  //       const DeliveryData = await addDoc(collection(db, "DeliveryFees"), {
-  //         ...values,
-  //       });
-  //       console.log(DeliveryData);
-  //     } else {
-  //       // const updateData= doc(db,"DeliveryFees",)
-  //       // await updateDoc(updateData)
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   const OrdersData = [
     {
       heading: "Today post orders",
       orderNumber: dashboardData?.postProducts,
       todayRevenue: "Today Revenue",
-      today: "11,500",
+      today: dashboardData?.postRevenue,
       orders: "orders",
       image: TShirtImg,
       navigation: "/orders/post-orders",
@@ -105,7 +87,7 @@ const Dashboard: React.FC = () => {
       heading: "Today mID LEVEL orders",
       orderNumber: dashboardData?.midProducts,
       todayRevenue: "Today Revenue",
-      today: "11,500",
+      today: dashboardData?.midLevelRevenue,
       orders: "orders",
       image: TShirtImg,
       navigation: "/orders/midlevel-orders",
@@ -114,16 +96,16 @@ const Dashboard: React.FC = () => {
       heading: "Today pREMIUM orders",
       orderNumber: dashboardData?.premiumProducts,
       todayRevenue: "Today Revenue",
-      today: "11,500",
+      today: dashboardData?.premiumRevenue,
       orders: "orders",
       image: TShirtImg,
       navigation: "/orders/premium-orders",
     },
     {
       heading: "Today Other accessories orders",
-      orderNumber: 71,
+      orderNumber: dashboardData?.accessoryProducts,
       todayRevenue: "Today Revenue",
-      today: "11,500",
+      today: dashboardData?.accessoryRevenue,
       orders: "orders",
       image: TShirtImg,
       navigation: "/orders/accessories-orders",
@@ -136,7 +118,7 @@ const Dashboard: React.FC = () => {
         <div className="dashboard-wrapper">
           <div className="dashboard-head">
             <p>Welcome, Sprinkle</p>
-            <h5>Today sep28 2023</h5>
+            <input type="date" id="customDateInput" />
           </div>
           <div className="grid-item">
             <TotalRevenue data={dashboardData} />
@@ -177,45 +159,49 @@ const Dashboard: React.FC = () => {
               <div className="total-subscription-text flex-item">
                 <h5>User total post</h5>
               </div>
-              <h1>{dashboardData?.postRevenue}</h1>
+              <h1>
+                {dashboardData ? dashboardData?.postRevenue : <LoadingCard />}
+              </h1>
               <Link to="/user-post-list">
                 <h6>View more</h6>
               </Link>
             </div>
-            <Formik initialValues={initialValues} onSubmit={handleUpdateData}>
-              <Form>
-                <div className="dropdown">
-                  <h3>Delivery charge</h3>
-                  <div className="deliveryfee">
-                    <Field as="select" name="Continents">
-                      <option value="">Select continents</option>
+            {data.map((f, i) => (
+              <Formik key={i} initialValues={f} onSubmit={handleUpdateData}>
+                <Form>
+                  <div className="dropdown">
+                    <h3>Delivery charge</h3>
+                    <div className="deliveryfee">
+                      <Field as="select" name="Continents">
+                        <option value="">Select continents</option>
 
-                      {Continents.map((f, i) => (
-                        <option value={f} key={i}>
-                          {f}
-                        </option>
-                      ))}
-                    </Field>
-                    <div>
-                      <Input
-                        type="number"
-                        name="DeliveryFees"
-                        placeholder="0 $"
-                        disabled={save}
-                      />
+                        {Continents.map((f, i) => (
+                          <option value={f} key={i}>
+                            {f}
+                          </option>
+                        ))}
+                      </Field>
+                      <div>
+                        <Input
+                          type="number"
+                          name="DeliveryFees"
+                          placeholder="0 $"
+                          // disabled={save}
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  <Button
-                    varient="primary"
-                    type="submit"
-                    // onClick={() => handleUpdateData}
-                  >
-                    {save ? "saved" : "save"}
-                  </Button>
-                </div>
-              </Form>
-            </Formik>
+                    <Button
+                      varient="primary"
+                      type="submit"
+                      // onClick={() => handleUpdateData}
+                    >
+                      {save ? "saved" : "save"}
+                    </Button>
+                  </div>
+                </Form>
+              </Formik>
+            ))}
           </div>
         </div>
       </Layout>

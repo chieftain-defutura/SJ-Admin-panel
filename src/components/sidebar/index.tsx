@@ -10,7 +10,7 @@ const Sidebar: React.FC = () => {
   return (
     <div>
       <div className="sidebar">
-        <NavLink to="/dashboard">
+        <NavLink to="/">
           <p>Dashboard</p>
         </NavLink>
         <NavLink to="/post/all-post">
@@ -32,9 +32,12 @@ const Sidebar: React.FC = () => {
         {/* <NavLink to="/notification">
           <p>Notification</p>
         </NavLink> */}
-        <a href="/subscription">
+        {/* <a href="/subscription">
           <p>Subscription</p>
-        </a>
+        </a> */}
+        <NavLink to="/settings">
+          <p>Settings</p>
+        </NavLink>
         {/* <a href="/account">
           <p>Account</p>
         </a> */}

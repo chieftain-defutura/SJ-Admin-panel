@@ -7,14 +7,27 @@ import "../../../../styles/postOrder.scss";
 import Button from "../../../../components/button";
 import LayoutModule from "../../../../components/layoutModule";
 import PremiumModal from "../../ordersModals/premiumModal";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../../../../utils/firebase";
-import { IPremiumData, IUserData } from "../../../../constants/types";
+import {
+  IOrdersCategory,
+  IPremiumData,
+  IUserData,
+} from "../../../../constants/types";
 import Chart from "../../../../components/Chart";
 import SingleCard from "../../../../components/dashboard/SingleCard";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import PremiumPdf from "../../../../components/PdfFile/PremiumPdf";
-import { ORDERS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
+import User from "../../../../assets/icons/user.jpg";
+import Loading from "../../../../components/loading";
+import {
+  deliveryQuery,
+  manufacturingQuery,
+  orderPlacedQuery,
+  readyToShipQuery,
+  shippingQuery,
+} from "../../../../utils/query";
+import Loader from "../../../../components/Loader";
 
 const datas = {
   heading: "Today Premium orders",
@@ -29,136 +42,242 @@ const datas = {
 const PremiumOrder: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
   const [product, setProduct] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<IPremiumData[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [filteredData, setFilteredData] = useState<IPremiumData[]>([]);
+  const [filterOrder, setFilterOrder] = useState<IOrdersCategory>(
+    IOrdersCategory.orderPlaced
+  );
+  console.log("Data", data);
 
-  const [data, setData] = useState<IPremiumData[]>();
+  // const getData = useCallback(async () => {
+  //   const Premium = collection(db, ORDERS_COLLECTION_NAME);
+  //   const premiumProducts = query(
+  //     Premium,
+  //     where("type", "==", "Premium-Level")
+  //   );
 
-  const getData = useCallback(async () => {
-    const productData = await getDocs(collection(db, ORDERS_COLLECTION_NAME));
-    const fetchProduct = productData.docs.map((doc) => ({
-      id: doc.id,
-      ...(doc.data() as any),
-    }));
-    setData(fetchProduct);
-  }, []);
+  //   const premiumData = await getDocs(premiumProducts);
+  //   const fetchProduct = premiumData.docs.map((doc) => ({
+  //     id: doc.id,
+  //     ...(doc.data() as any),
+  //   }));
+  //   setData(fetchProduct);
+  // }, []);
+
+  const ordersFetchData = useCallback(async () => {
+    const allProducts = [];
+    console.log(filterOrder);
+    try {
+      setLoading(true);
+      let query: any;
+      if (filterOrder === IOrdersCategory.orderPlaced) {
+        query = orderPlacedQuery;
+      } else if (filterOrder === IOrdersCategory.manufacturing) {
+        query = manufacturingQuery;
+      } else if (filterOrder === IOrdersCategory.readyToShip) {
+        query = readyToShipQuery;
+      } else if (filterOrder === IOrdersCategory.shipping) {
+        query = shippingQuery;
+      } else if (filterOrder === IOrdersCategory.delivery) {
+        query = deliveryQuery;
+      }
+
+      const collectionData = await getDocs(query);
+      const docs = collectionData.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as any),
+      }));
+      allProducts.push(...docs);
+      console.log(allProducts);
+      setData(allProducts);
+    } catch (error) {
+      // Handle any potential errors here
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [filterOrder]);
 
   useEffect(() => {
-    getData();
-  }, [getData]);
+    // getData();
+    ordersFetchData();
+  }, [ordersFetchData]);
 
-  const FilteredData = data?.filter((f) => f.type === "Premium-Level");
+  useEffect(() => {
+    if (selectedProduct) {
+      const filtered = data.filter(
+        (item) => item.productName === selectedProduct
+      );
+      setFilteredData(filtered);
+      // setFilterOrder(orders);
+    } else {
+      setFilteredData(data);
+      // setFilterOrder(data);
+    }
+  }, [selectedProduct, data]);
 
   const handleToggle = () => {
     setIsActive(!isActive);
   };
+  const FilteredData = data?.filter((f) => f.type === "Premium-Level");
 
-  if (!FilteredData) return <p>no data</p>;
+  const handleProductSelect = (productName: any) => {
+    setSelectedProduct(productName);
+    setProduct(false); // Close dropdown after selection, if needed
+  };
+
+  if (!FilteredData) return <Loading />;
 
   return (
     <div className="mx">
       <Layout>
-        <div className="post-order-wrapper">
-          <div className="post-order-head">
-            <p>Orders</p>
-          </div>
+        {loading ? (
+          <Loading />
+        ) : (
+          <div className="post-order-wrapper">
+            <div className="post-order-head">
+              <p>Orders</p>
+            </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-            }}
-          >
-            <SingleCard data={datas} />
             <div
               style={{
-                borderRadius: "10px",
-                boxShadow: "0px 0px 12px 0px rgba(0, 0, 0, 0.16)",
-                padding: "16px",
-                marginTop: "26px",
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
               }}
             >
-              <Chart />
-            </div>
-          </div>
-          <div className="post-order-text">
-            <p>Premium orders</p>
-            <div className="filter-section">
-              <div className="drop-down-wrapper">
-                <div className="flex-item" onClick={() => setProduct(!product)}>
-                  <p>Products</p>
-                  <ChevronDown
-                    className={`drop-down-icon ${product ? "rotate" : ""}`}
-                    onClick={() => setProduct(!product)}
-                  />
-                </div>
-                {product && (
-                  <div
-                    className="select-drop-down"
-                    onClick={() => setProduct(false)}
-                  >
-                    {data?.map((f, i) => (
-                      <div key={i}>{f.styles}</div>
-                    ))}
-                  </div>
-                )}
-              </div>{" "}
-              <div className="drop-down-wrapper">
-                <div className="flex-item" onClick={handleToggle}>
-                  <p>Place orders</p>
-                  <ChevronDown
-                    className={`drop-down-icon ${isActive ? "rotate" : ""}`}
-                    onClick={handleToggle}
-                  />
-                </div>
-                {isActive && (
-                  <div
-                    className="select-drop-down"
-                    onClick={() => setIsActive(false)}
-                  >
-                    <p>Manufacture</p>
-                    <p>Ready to ship</p>
-                    <p>Shipping</p>
-                    <p>Delivered</p>
-                  </div>
-                )}
+              <SingleCard data={datas} />
+              <div
+                style={{
+                  borderRadius: "10px",
+                  boxShadow: "0px 0px 12px 0px rgba(0, 0, 0, 0.16)",
+                  padding: "16px",
+                  marginTop: "26px",
+                }}
+              >
+                <Chart />
               </div>
             </div>
-          </div>
-          <div className="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>
-                    <span>User name</span>
-                  </th>
-                  <th>
-                    <span>Product</span>
-                  </th>
-                  <th>
-                    <span>Quantity</span>
-                  </th>
-                  <th>
-                    <span>Price</span>
-                  </th>
-                  <th>
-                    <span>Size</span>
-                  </th>
-                  <th>
-                    <span>Address</span>
-                  </th>
-                  <th>
-                    <span>Details</span>
-                  </th>
-                </tr>
-              </thead>
+            <div className="post-order-text">
+              <p>Premium orders</p>
+              <div className="filter-section">
+                <div className="drop-down-wrapper">
+                  <div
+                    className="flex-item"
+                    onClick={() => setProduct(!product)}
+                  >
+                    <p>Products</p>
+                    <ChevronDown
+                      className={`drop-down-icon ${product ? "rotate" : ""}`}
+                      onClick={() => setProduct(!product)}
+                    />
+                  </div>
+                  {product && (
+                    <div
+                      className="select-drop-down"
+                      onClick={() => setProduct(false)}
+                    >
+                      {data?.map((f, i) => (
+                        <p
+                          key={i}
+                          onClick={() => handleProductSelect(f.productName)}
+                        >
+                          {f.productName}
+                        </p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div className="drop-down-wrapper">
+                  <div className="flex-item" onClick={handleToggle}>
+                    <p>Place orders</p>
+                    <ChevronDown
+                      className={`drop-down-icon ${isActive ? "rotate" : ""}`}
+                      onClick={handleToggle}
+                    />
+                  </div>
+                  {isActive && (
+                    <>
+                      <div className="select-drop-down" onClick={handleToggle}>
+                        <p
+                          onClick={() =>
+                            setFilterOrder(IOrdersCategory.orderPlaced)
+                          }
+                        >
+                          Placed orders
+                        </p>
+                        <p
+                          onClick={() =>
+                            setFilterOrder(IOrdersCategory.manufacturing)
+                          }
+                        >
+                          Manufacturing
+                        </p>
+                        <p
+                          onClick={() =>
+                            setFilterOrder(IOrdersCategory.readyToShip)
+                          }
+                        >
+                          Ready to ship
+                        </p>
+                        <p
+                          onClick={() =>
+                            setFilterOrder(IOrdersCategory.shipping)
+                          }
+                        >
+                          Shipping
+                        </p>
+                        <p
+                          onClick={() =>
+                            setFilterOrder(IOrdersCategory.delivery)
+                          }
+                        >
+                          Delivered
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>
+                      <span>User name</span>
+                    </th>
+                    <th>
+                      <span>Product</span>
+                    </th>
+                    <th>
+                      <span>Quantity</span>
+                    </th>
+                    <th>
+                      <span>Price</span>
+                    </th>
+                    <th>
+                      <span>Size</span>
+                    </th>
+                    <th>
+                      <span>Address</span>
+                    </th>
+                    <th>
+                      <span>Details</span>
+                    </th>
+                  </tr>
+                </thead>
 
-              <tbody>
-                {FilteredData.map((f, index) => (
-                  <CardComponent key={index} data={f} />
-                ))}
-              </tbody>
-            </table>
+                <tbody>
+                  {filteredData.map((f, index) => (
+                    <CardComponent key={index} data={f} />
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        )}
       </Layout>
     </div>
   );
@@ -174,8 +293,10 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
   const [active, setActive] = useState(false);
   const [userData, setUserData] = useState<IUserData>();
   const docRef = doc(db, "users", data.userId);
+  const [loading, setLoading] = useState(false);
+
   console.log(data);
-  console.log(userData);
+  console.log("userData", userData);
 
   const handleModalToggle = () => {
     setActive(true);
@@ -187,6 +308,7 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
 
   const fetchData = useCallback(async () => {
     try {
+      setLoading(true);
       const documentSnapshot = await getDoc(docRef);
 
       if (documentSnapshot.exists()) {
@@ -198,6 +320,8 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
       }
     } catch (error) {
       console.error("Error getting document:", error);
+    } finally {
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -207,63 +331,80 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
   }, [fetchData]);
 
   return (
-    <tr>
-      <td>
-        <div className="flex-item row-header">
-          <img src={userData?.profile} alt="" />
-          <p>{userData?.name}</p>
-        </div>
-      </td>
-      <td>{data.productName}</td>
-      <td>{data.sizes.sizeVarient.quantity}</td>
-      <td>{data.price} INR</td>
-      <td>
-        {data.sizes.sizeVarient.size} - {data.sizes.sizeVarient.measurement}
-      </td>
-      <td>Address</td>
-      <td>
-        <PDFDownloadLink document={<PremiumPdf data={data} />} fileName="FORM">
-          {({ loading }) =>
-            loading ? (
-              <Button varient="notifi" style={{ fontSize: "12px" }}>
-                Loading document...
-              </Button>
-            ) : (
-              <div
-                style={{
-                  background: "#8C73CB",
-                  width: "36px",
-                  height: "32px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderRadius: "5px",
-                }}
-              >
-                <DownloadIcon />
+    <>
+      <tr>
+        {loading ? (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Loader />
+          </div>
+        ) : (
+          <>
+            <td>
+              <div className="flex-item row-header">
+                {userData?.profile ? (
+                  <img src={userData?.profile} alt="" />
+                ) : (
+                  <img src={User} alt="" />
+                )}
+                <p>{userData?.name ? userData?.name : "--"}</p>
               </div>
-            )
-          }
-        </PDFDownloadLink>
-      </td>
-
-      <td>
-        <Button
-          varient="primary"
-          style={{ padding: "9px 38px", fontSize: "12px" }}
-          onClick={handleModalToggle}
-        >
-          View details
+            </td>
+            <td>{data.productName}</td>
+            <td>{data.sizes.sizeVarient.quantity}</td>
+            <td>{data.price} INR</td>
+            <td>
+              {data.sizes.sizeVarient.size} -{" "}
+              {data.sizes.sizeVarient.measurement}
+            </td>
+            <td>Address</td>
+            <td>
+              <PDFDownloadLink
+                document={<PremiumPdf data={data} userData={userData} />}
+                fileName="FORM"
+              >
+                {/* {({ loading }) =>
+      loading ? (
+        <Button varient="notifi" style={{ fontSize: "12px" }}>
+          Loading...
         </Button>
-      </td>
-      {active && (
-        <LayoutModule
-          handleToggle={handleModalToggle}
-          className="layout-module"
-        >
-          <PremiumModal onClose={handleModalCloseToggle} data={data} />
-        </LayoutModule>
-      )}
-    </tr>
+      ) : ( */}
+                <div
+                  style={{
+                    background: "#8C73CB",
+                    width: "36px",
+                    height: "32px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <DownloadIcon />
+                </div>
+                {/* )
+    } */}
+              </PDFDownloadLink>
+            </td>
+            <td>
+              <Button
+                varient="primary"
+                style={{ padding: "9px 38px", fontSize: "12px" }}
+                onClick={handleModalToggle}
+              >
+                View details
+              </Button>
+            </td>
+            {active && (
+              <LayoutModule
+                handleToggle={handleModalToggle}
+                className="layout-module"
+              >
+                <PremiumModal onClose={handleModalCloseToggle} data={data} />
+              </LayoutModule>
+            )}
+          </>
+        )}
+      </tr>
+    </>
   );
 };
