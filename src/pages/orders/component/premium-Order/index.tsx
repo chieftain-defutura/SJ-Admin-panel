@@ -29,6 +29,7 @@ import {
 } from "../../../../utils/query";
 import Loader from "../../../../components/Loader";
 import { usePremiumGetData } from "../../../../hooks/premiumData";
+import DeliveryDetailsModal from "../../ordersModals/premiumModal/deliveryDetails";
 
 const PremiumOrder: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
@@ -393,6 +394,7 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
                 varient="primary"
                 style={{ padding: "9px 8px", fontSize: "12px" }}
                 // onClick={handleModalToggle}
+                onClick={() => setIsActive(true)}
               >
                 Delivery status
               </Button>
@@ -407,6 +409,14 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
                   data={data}
                   user={userData}
                 />
+              </LayoutModule>
+            )}
+            {isActive && (
+              <LayoutModule
+                handleToggle={handleModalToggle}
+                className="layout-module"
+              >
+                <DeliveryDetailsModal setActive={setActive} data={data} />
               </LayoutModule>
             )}
           </>

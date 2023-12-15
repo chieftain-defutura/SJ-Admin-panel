@@ -11,7 +11,7 @@ import { IProductCategory, IProductdata } from "../../../constants/types";
 import { defaultSizes, Country } from "../../../data/midproductSize";
 import { storage, db } from "../../../utils/firebase";
 import { IFiles } from "../../products/mid-level/product/component/createMid-Product";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import MOdalPopUp from "../../../components/ModalPopupBox";
 import Bgimg from "../../../assets/images/bg-img.png";
 
@@ -528,6 +528,9 @@ const EditPremium: React.FC = () => {
                   </div>
                 </div>
                 <div className="btn-submit">
+                  <Link to="/products/premium">
+                    <Button varient="notifi">Cancel</Button>
+                  </Link>
                   <Button
                     varient="primary"
                     type="submit"
@@ -535,6 +538,7 @@ const EditPremium: React.FC = () => {
                   >
                     {isSubmitting ? "Uploading" : "submit"}
                   </Button>
+                            
                 </div>
                 {isSubmitting && <MOdalPopUp />}
               </div>

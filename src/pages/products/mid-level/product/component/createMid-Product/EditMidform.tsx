@@ -17,7 +17,7 @@ import {
   IProductCategory,
   IProductdata,
 } from "../../../../../../constants/types";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import MOdalPopUp from "../../../../../../components/ModalPopupBox";
 import { ColorData } from ".";
 import Bgimg from "../../../../../../assets/images/bg-img.png";
@@ -589,11 +589,28 @@ const EditMidform: React.FC = () => {
                   </div>
                 </div>
                 <div className="description">
-                  <Input
+                  {/* <Input
                     name="description"
                     type="text"
                     value={values.description}
                     label="Description"
+                  /> */}
+                  <h3 style={{ marginTop: 22 }}>Description</h3>
+                  <Field
+                    as="textarea"
+                    placeholder="description"
+                    name="description"
+                    rows="3"
+                    value={values.description}
+                    style={{
+                      // maxWidth: "500px",
+                      width: "100%",
+                      fontSize: "16px",
+                      padding: "16px 18px",
+                      outline: "none",
+                      border: "1px solid #e1e1e1",
+                      marginTop: "16px",
+                    }}
                   />
                 </div>
                 {/* <div className="detailes">
@@ -651,8 +668,10 @@ const EditMidform: React.FC = () => {
                   </FieldArray>
                 </div> */}
               </div>
-              <div className="btn-submit">
-                <Button varient="notifi">Cancel</Button>
+              <div className="btn-submit" style={{ marginTop: -20 }}>
+                <Link to="/products/mid-level/product/styles">
+                  <Button varient="notifi">Cancel</Button>
+                </Link>
                 <Button varient="primary" type="submit" disabled={isSubmitting}>
                   {isSubmitting ? "Uploading" : "submit"}
                 </Button>

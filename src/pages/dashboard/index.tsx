@@ -146,9 +146,9 @@ const Dashboard: React.FC = () => {
               style={{
                 display: "flex",
                 // alignItems: "center",
-                justifyContent: "space-between",
+                // justifyContent: "space-between",
                 gap: "32px",
-                flexWrap: "wrap",
+                // flexWrap: "wrap",
               }}
             >
               <div className="subscription-content flex-item">
@@ -179,34 +179,37 @@ const Dashboard: React.FC = () => {
                     <div className="dropdown">
                       <h3>Delivery charge</h3>
                       <div className="deliveryfee">
-                        <Field as="select" name="Continents">
-                          <option value="">Select continents</option>
+                        <div className="drop_down">
+                          <Field as="select" name="Continents">
+                            <option value="">Select continents</option>
 
-                          {Continents.map((f, i) => (
-                            <option value={f} key={i}>
-                              {f}
-                            </option>
-                          ))}
-                        </Field>
+                            {Continents.map((f, i) => (
+                              <option value={f} key={i}>
+                                {f}
+                              </option>
+                            ))}
+                          </Field>
+                        </div>
+                        <div className="deliveryfees-input">
+                          <Input
+                            type="number"
+                            name="DeliveryFees"
+                            placeholder="0 $"
+                            style={{ border: "1px solid #e1e1e1" }}
+                            // disabled={save}
+                          />
+                        </div>
                       </div>
-                      <div className="deliveryfees-input">
-                        <Input
-                          type="number"
-                          name="DeliveryFees"
-                          placeholder="0 $"
-                          style={{ border: "1px solid #e1e1e1" }}
-                          // disabled={save}
-                        />
+                      <div className="save-btn">
+                        <Button
+                          varient="primary"
+                          type="submit"
+                          // onClick={() => handleUpdateData}
+                        >
+                          {save ? "Saved" : "Save"}
+                        </Button>
+                                  
                       </div>
-                    </div>
-                    <div className="save-btn">
-                      <Button
-                        varient="primary"
-                        type="submit"
-                        // onClick={() => handleUpdateData}
-                      >
-                        {save ? "saved" : "save"}
-                      </Button>
                     </div>
                   </Form>
                 </Formik>
