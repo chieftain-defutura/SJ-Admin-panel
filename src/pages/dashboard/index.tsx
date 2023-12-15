@@ -141,7 +141,7 @@ const Dashboard: React.FC = () => {
             style={{
               display: "flex",
               // alignItems: "center",
-              justifyContent: "space-between",
+              // justifyContent: "space-between",
               gap: "32px",
               flexWrap: "wrap",
             }}
@@ -173,7 +173,7 @@ const Dashboard: React.FC = () => {
                 <Form>
                   <div className="dropdown">
                     <h3>Delivery charge</h3>
-                    <div className="deliveryfee">
+                    {/* <div className="deliveryfee">
                       <Field as="select" name="Continents">
                         <option value="">Select continents</option>
 
@@ -191,15 +191,38 @@ const Dashboard: React.FC = () => {
                           // disabled={save}
                         />
                       </div>
-                    </div>
+                    </div> */}
+                    <div className="deliveryfee">
+                      <div className="drop_down">
+                        <Field as="select" name="Continents">
+                          <option value="">Select continents</option>
 
-                    <Button
-                      varient="primary"
-                      type="submit"
-                      // onClick={() => handleUpdateData}
-                    >
-                      {save ? "saved" : "save"}
-                    </Button>
+                          {Continents.map((f, i) => (
+                            <option value={f} key={i}>
+                              {f}
+                            </option>
+                          ))}
+                        </Field>
+                      </div>
+                      <div className="deliveryfees-input">
+                        <Input
+                          type="number"
+                          name="DeliveryFees"
+                          placeholder="0 $"
+                          style={{ border: "1px solid #e1e1e1" }}
+                          // disabled={save}
+                        />
+                      </div>
+                    </div>
+                    <div className="save-btn">
+                      <Button
+                        varient="primary"
+                        type="submit"
+                        // onClick={() => handleUpdateData}
+                      >
+                        {save ? "Saved" : "Save"}
+                      </Button>
+                    </div>
                   </div>
                 </Form>
               </Formik>
