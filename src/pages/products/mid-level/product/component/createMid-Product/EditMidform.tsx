@@ -17,7 +17,7 @@ import {
   IProductCategory,
   IProductdata,
 } from "../../../../../../constants/types";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import MOdalPopUp from "../../../../../../components/ModalPopupBox";
 import { ColorData } from ".";
 import Bgimg from "../../../../../../assets/images/bg-img.png";
@@ -652,7 +652,9 @@ const EditMidform: React.FC = () => {
                 </div> */}
               </div>
               <div className="btn-submit">
-                <Button varient="notifi">Cancel</Button>
+                <Link to="/products/mid-level/product/styles">
+                  <Button varient="notifi">Cancel</Button>
+                </Link>
                 <Button varient="primary" type="submit" disabled={isSubmitting}>
                   {isSubmitting ? "Uploading" : "submit"}
                 </Button>

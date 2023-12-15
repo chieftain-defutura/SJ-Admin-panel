@@ -195,7 +195,7 @@ const EditPremium: React.FC = () => {
 
                 <div className="styles-wrap">
                   <div className="imageupload">
-                    <div className="drop_down">
+                    <div className="    ">
                       <Field as="select" name="styles">
                         <option value="">select styles</option>
                         <option value="Saree">Saree</option>
