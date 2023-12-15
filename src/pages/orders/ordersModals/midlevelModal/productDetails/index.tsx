@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import { ReactComponent as DownloadCloud } from "../../../../../assets/icons/downloadCloud.svg";
-import ShirtImg from "../../../../../assets/images/post-logo.png";
-import ShirtTwoImg from "../../../../../assets/images/t-shirt.png";
 import "./productDetailsModal.scss";
 import CustomerDetailsModal from "../customerDetails";
+import { IMidLevelData, IUserData } from "../../../../../constants/types";
+import BgImage from "../../../../../assets/images/bg-img.png";
 
-const ProductDetailsModal: React.FC = () => {
+interface IDetailsdata {
+  data: IMidLevelData;
+  onClose: () => void;
+  user: IUserData | undefined;
+}
+const ProductDetailsModal: React.FC<IDetailsdata> = ({
+  data,
+  onClose,
+  user,
+}) => {
   const [activeSection, setActiveSection] = useState("Image");
 
   return (
@@ -28,12 +37,24 @@ const ProductDetailsModal: React.FC = () => {
           </div>
           {activeSection === "Image" && (
             <div className="image">
-              <img src={ShirtImg} alt="" />
+              {data ? (
+                <img
+                  src={data.productImage}
+                  alt=""
+                  style={{ objectFit: "contain" }}
+                />
+              ) : (
+                <img src={BgImage} alt="" />
+              )}
             </div>
           )}
           {activeSection === "Design" && (
             <div className="image">
-              <img src={ShirtTwoImg} alt="" />
+              {data ? (
+                <img src={data.textAndImage.designs.originalImage} alt="" />
+              ) : (
+                <img src={BgImage} alt="" />
+              )}
             </div>
           )}
         </div>
@@ -41,54 +62,77 @@ const ProductDetailsModal: React.FC = () => {
           <div className="product-items flex-item">
             <div className="product-text">
               <p>Product</p>
-              <h5>Black blazer</h5>
+              <h5>{data.productName ? data.productName : "--"}</h5>
             </div>
             <div className="product-text">
               <p>Color</p>
-              <h5>White</h5>
+              <h5>{data.color ? data.color : "--"}</h5>
             </div>
             <div className="product-text">
               <p>Style</p>
-              <h5>Round neck</h5>
+              <h5>{data.style ? data.style : "--"}</h5>
             </div>
             <div className="product-text">
               <p>Size</p>
-              <h5>XXL</h5>
+              <h5>
+                {data.sizes.country}-{data.sizes.sizeVarient.size}
+              </h5>
             </div>
           </div>
           <div className="price-content flex-item">
             <div className="product-text">
               <p>Text ( Front side )</p>
               <h5>
-                THE T-SHIRT <br />
-                MOCK-UP
+                {data.textAndImage.position ? data.textAndImage.position : "--"}
               </h5>
             </div>
             <div className="product-text">
               <p>Price</p>
-              <h5>450 INR</h5>
+              <h5>{data.price}</h5>
+            </div>
+            <div>
+              <p>Offer Price</p>
+              <h5 style={{ marginTop: "8px", textAlign: "center" }}>
+                {data.offerPrice ? data.offerPrice : "--"}
+              </h5>
+            </div>
+            <div className="product-text">
+              <p>Design Image Price</p>
+              <h5>{data.textAndImage.rate ? data.textAndImage.rate : "--"}</h5>
             </div>
           </div>
           <div>
             <p>Detailed features</p>
             <div className="flex-item material-content">
-              <div>
-                <p style={{ marginTop: "14px" }}>Material</p>
-                <h5 style={{ marginTop: "8px" }}>cotton 70 % cool</h5>
-              </div>
-              <div>
-                <p>Discount</p>
-                <h5 style={{ marginTop: "8px" }}>30 %</h5>
-              </div>
+              <h5>{data.description ? data.description : "--"}</h5>
             </div>
-            <div style={{ marginTop: "32px", cursor: "pointer" }}>
-              <p>Details download</p>
-              <DownloadCloud style={{ marginTop: "8px" }} />
+          </div>
+          <div
+            className="flex-item"
+            style={{
+              marginTop: "32px",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <p>Gender</p>
+              <h5>{data.gender ? data.gender : "--"}</h5>
+            </div>
+            <div>
+              <p>Payment</p>
+              <h5>Status-{data.paymentStatus}</h5>
+            </div>
+            <div>
+              <p>Gift messages</p>
+              <h5 style={{ textAlign: "center" }}>
+                {data.giftMessage.from}--{data.giftMessage.giftMessage}
+              </h5>
             </div>
           </div>
         </div>
       </div>
-      <CustomerDetailsModal />
+      <CustomerDetailsModal user={user} onClose={onClose} />
     </div>
   );
 };

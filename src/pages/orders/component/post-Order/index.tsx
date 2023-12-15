@@ -3,7 +3,7 @@ import Layout from "../../../../layout";
 import { ReactComponent as ChevronDown } from "../../../../assets/icons/chevron-down.svg";
 import { ReactComponent as DownloadIcon } from "../../../../assets/icons/downloadIcon.svg";
 import TShirtImg from "../../../../assets/images/t-shirt-two.png";
-import SingleCard from "../../../../components/dashboard/SingleCard";
+// import SingleCard from "../../../../components/dashboard/SingleCard";
 import Button from "../../../../components/button";
 import LayoutModule from "../../../../components/layoutModule";
 import PostModal from "../../ordersModals/postModal";
@@ -65,7 +65,7 @@ const PostOrders: React.FC = () => {
               placeContent: "center",
             }}
           >
-            <SingleCard data={datas} />
+            {/* <SingleCard data={datas} /> */}
 
             <div
               style={{

@@ -38,9 +38,9 @@ export interface IDashboard {
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<IDeliverData[]>([]);
   const [save, setSave] = useState(false);
-
-  console.log(data);
-  const { data: dashboardData } = useGetDashboardData();
+  const [isdate, setDate] = useState<Date>(new Date());
+  console.log("date", isdate);
+  const { data: dashboardData } = useGetDashboardData({ date: isdate });
 
   const handleUpdateData = (value: typeof initialValues) => {
     try {
@@ -61,14 +61,16 @@ const Dashboard: React.FC = () => {
   const getData = useCallback(async () => {
     try {
       const DeliveryData = await getDocs(collection(db, "DeliveryFees"));
-
       const fetchProduct = DeliveryData.docs.map((doc) => ({
         id: doc.id,
         ...(doc.data() as any),
       }));
       setData(fetchProduct);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
+
   useEffect(() => {
     getData();
   }, [getData]);
@@ -139,8 +141,8 @@ const Dashboard: React.FC = () => {
             style={{
               display: "flex",
               // alignItems: "center",
-              // justifyContent: "space-between",
-              gap: "42px",
+              justifyContent: "space-between",
+              gap: "32px",
               flexWrap: "wrap",
             }}
           >
@@ -172,36 +174,32 @@ const Dashboard: React.FC = () => {
                   <div className="dropdown">
                     <h3>Delivery charge</h3>
                     <div className="deliveryfee">
-                      <div className="drop_down">
-                        <Field as="select" name="Continents">
-                          <option value="">Select continents</option>
+                      <Field as="select" name="Continents">
+                        <option value="">Select continents</option>
 
-                          {Continents.map((f, i) => (
-                            <option value={f} key={i}>
-                              {f}
-                            </option>
-                          ))}
-                        </Field>
-                      </div>
-                      <div className="deliveryfees-input">
+                        {Continents.map((f, i) => (
+                          <option value={f} key={i}>
+                            {f}
+                          </option>
+                        ))}
+                      </Field>
+                      <div>
                         <Input
                           type="number"
                           name="DeliveryFees"
                           placeholder="0 $"
-                          style={{ border: "1px solid #e1e1e1" }}
                           // disabled={save}
                         />
                       </div>
                     </div>
-                    <div className="save-btn">
-                      <Button
-                        varient="primary"
-                        type="submit"
-                        // onClick={() => handleUpdateData}
-                      >
-                        {save ? "Saved" : "Save"}
-                      </Button>
-                    </div>
+
+                    <Button
+                      varient="primary"
+                      type="submit"
+                      // onClick={() => handleUpdateData}
+                    >
+                      {save ? "saved" : "save"}
+                    </Button>
                   </div>
                 </Form>
               </Formik>

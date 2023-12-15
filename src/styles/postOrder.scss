@@ -1,5 +1,11 @@
 .post-order-wrapper {
   margin: 42px 42px 42px 140px;
+  .mid-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+  }
   .post-order-head {
     p {
       font-size: 14px;

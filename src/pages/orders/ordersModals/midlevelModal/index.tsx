@@ -2,15 +2,20 @@ import React, { useState } from "react";
 import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg";
 import ProductDetailsModal from "./productDetails";
 import "../../../../styles/postModal.scss";
-import { IMidLevelData } from "../../../../constants/types";
+import { IMidLevelData, IUserData } from "../../../../constants/types";
 import DeliveryDetailsModal from "./deliveryDetails";
 
 interface IMidlevelModal {
   onClose: () => void;
   data: IMidLevelData;
+  userData: IUserData | undefined;
 }
 
-const MidlevelModal: React.FC<IMidlevelModal> = ({ onClose, data }) => {
+const MidlevelModal: React.FC<IMidlevelModal> = ({
+  onClose,
+  data,
+  userData,
+}) => {
   const [activeSection, setActiveSection] = useState("product");
 
   const handleProductClick = () => {
@@ -46,7 +51,9 @@ const MidlevelModal: React.FC<IMidlevelModal> = ({ onClose, data }) => {
         </div>
 
         {activeSection === "delivery" && <DeliveryDetailsModal data={data} />}
-        {activeSection === "product" && <ProductDetailsModal />}
+        {activeSection === "product" && (
+          <ProductDetailsModal onClose={onClose} data={data} user={userData} />
+        )}
       </div>
     </div>
   );

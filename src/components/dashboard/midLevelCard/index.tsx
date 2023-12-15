@@ -5,6 +5,7 @@ import "../SingleCard/SingleCard.scss";
 import { Link } from "react-router-dom";
 import { useGetDashboardData } from "../../../hooks/useGetDashboardData";
 import LoadingCard from "../../loadingCard";
+import { MidGetData } from "../../../hooks/midData";
 
 interface SingleCardProps {
   data: {
@@ -16,10 +17,11 @@ interface SingleCardProps {
     image: string;
     navigation: string;
   };
+  isdate: Date | undefined;
 }
 
-const MidCard: React.FC<SingleCardProps> = ({ data }) => {
-  const { data: dashboardData } = useGetDashboardData();
+const MidCard: React.FC<SingleCardProps> = ({ data, isdate }) => {
+  const { data: dashboardData } = MidGetData({ date: isdate });
 
   return (
     <div className="orders-card-wrapper">
