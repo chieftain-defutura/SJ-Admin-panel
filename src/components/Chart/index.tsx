@@ -1,5 +1,6 @@
 import React from "react";
 import ReactApexChart from "react-apexcharts";
+import { IDashboard } from "../dashboard/totalRevenue";
 
 const Chart: React.FC = () => {
   const colors = [

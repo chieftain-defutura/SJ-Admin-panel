@@ -3,7 +3,7 @@ import TShirtImg from "../../../../assets/images/t-shirt-two.png";
 import Layout from "../../../../layout";
 import { ReactComponent as ChevronDown } from "../../../../assets/icons/chevron-down.svg";
 import { ReactComponent as DownloadIcon } from "../../../../assets/icons/downloadIcon.svg";
-import SingleCard from "../../../../components/dashboard/SingleCard";
+// import SingleCard from "../../../../components/dashboard/SingleCard";
 import Button from "../../../../components/button";
 import "../../../../styles/postOrder.scss";
 import "../../../../components/dashboard/table/table.scss";
@@ -65,7 +65,7 @@ const AccessoriesOrder: React.FC = () => {
               gridTemplateColumns: "1fr 1fr",
             }}
           >
-            <SingleCard data={datas} />
+            {/* <SingleCard data={datas} /> */}
             <div
               style={{
                 borderRadius: "10px",

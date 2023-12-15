@@ -1,4 +1,14 @@
 .settings {
   margin-left: 120px;
   padding: 32px 24px;
+  .general-setting {
+    display: grid;
+    grid-template-rows: 1fr 0.5fr;
+    justify-content: space-between;
+    align-items: start;
+    gap: 12px;
+  }
+  .btn {
+    padding-top: 12px;
+  }
 }

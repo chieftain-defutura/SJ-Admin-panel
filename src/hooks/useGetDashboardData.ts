@@ -2,13 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { endOfDay, startOfDay } from "date-fns";
 import { db } from "../utils/firebase";
-
 import {
   ORDERS_COLLECTION_NAME,
   POST_COLLECTION_NAME,
 } from "../constants/firebaseCollection";
 
-export const useGetDashboardData = () => {
+export const useGetDashboardData = ({ date }: { date?: Date }) => {
   const [data, setData] = useState<{
     midProducts: number;
     premiumProducts: number;
@@ -28,8 +27,13 @@ export const useGetDashboardData = () => {
       const midProducts = query(
         Mid,
         where("type", "==", "MidLevel"),
-        where("createdAt", ">=", startOfDay(new Date())),
-        where("createdAt", "<=", endOfDay(new Date()))
+        where(
+          "createdAt",
+          ">=",
+          startOfDay(date ? new Date(date) : new Date())
+        ),
+        where("createdAt", "<=", endOfDay(date ? new Date(date) : new Date())),
+        orderBy("createdAt", "asc")
       );
       const midData = await getDocs(midProducts);
       console.log("midData", midData.size);
@@ -46,8 +50,12 @@ export const useGetDashboardData = () => {
       const premiumProducts = query(
         Premium,
         where("type", "==", "Premium-Level"),
-        where("createdAt", ">=", startOfDay(new Date())),
-        where("createdAt", "<=", endOfDay(new Date())),
+        where(
+          "createdAt",
+          ">=",
+          startOfDay(date ? new Date(date) : new Date())
+        ),
+        where("createdAt", "<=", endOfDay(date ? new Date(date) : new Date())),
         orderBy("createdAt", "asc")
       );
       const premiumData = await getDocs(premiumProducts);
@@ -64,8 +72,12 @@ export const useGetDashboardData = () => {
       const accessoryProducts = query(
         accessory,
         where("type", "==", "Accessory-Level"),
-        where("createdAt", ">=", startOfDay(new Date())),
-        where("createdAt", "<=", endOfDay(new Date())),
+        where(
+          "createdAt",
+          ">=",
+          startOfDay(date ? new Date(date) : new Date())
+        ),
+        where("createdAt", "<=", endOfDay(date ? new Date(date) : new Date())),
         orderBy("createdAt", "asc")
       );
       const accessoryData = await getDocs(accessoryProducts);
@@ -81,8 +93,12 @@ export const useGetDashboardData = () => {
       const post = collection(db, POST_COLLECTION_NAME);
       const postProducts = query(
         post,
-        where("createdAt", ">=", startOfDay(new Date())),
-        where("createdAt", "<=", endOfDay(new Date())),
+        where(
+          "createdAt",
+          ">=",
+          startOfDay(date ? new Date(date) : new Date())
+        ),
+        where("createdAt", "<=", endOfDay(date ? new Date(date) : new Date())),
         orderBy("createdAt", "asc")
       );
       const postData = await getDocs(postProducts);
@@ -117,7 +133,7 @@ export const useGetDashboardData = () => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [date]);
 
   useEffect(() => {
     handleGetData();

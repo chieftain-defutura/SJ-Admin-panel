@@ -121,7 +121,7 @@ const MidlevelOrder: React.FC = () => {
                 gridTemplateColumns: "1fr 1fr",
               }}
             >
-              <MidCard data={datas} />
+              {/* <MidCard data={datas} /> */}
               <div
                 style={{
                   borderRadius: "10px",
@@ -337,7 +337,11 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
                 handleToggle={handleModalToggle}
                 className="layout-module"
               >
-                <MidlevelModal onClose={handleModalCloseToggle} data={data} />
+                <MidlevelModal
+                  onClose={handleModalCloseToggle}
+                  data={data}
+                  userData={userData}
+                />
               </LayoutModule>
             )}
           </>

@@ -28,16 +28,7 @@ import {
   shippingQuery,
 } from "../../../../utils/query";
 import Loader from "../../../../components/Loader";
-
-const datas = {
-  heading: "Today Premium orders",
-  orderNumber: 71,
-  todayRevenue: "Today Revenue",
-  today: "11,500",
-  orders: "orders",
-  image: TShirtImg,
-  navigation: "/orders/post-orders",
-};
+import { usePremiumGetData } from "../../../../hooks/premiumData";
 
 const PremiumOrder: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
@@ -50,21 +41,8 @@ const PremiumOrder: React.FC = () => {
     IOrdersCategory.orderPlaced
   );
   console.log("Data", data);
-
-  // const getData = useCallback(async () => {
-  //   const Premium = collection(db, ORDERS_COLLECTION_NAME);
-  //   const premiumProducts = query(
-  //     Premium,
-  //     where("type", "==", "Premium-Level")
-  //   );
-
-  //   const premiumData = await getDocs(premiumProducts);
-  //   const fetchProduct = premiumData.docs.map((doc) => ({
-  //     id: doc.id,
-  //     ...(doc.data() as any),
-  //   }));
-  //   setData(fetchProduct);
-  // }, []);
+  const [isdate, setDate] = useState<Date>(new Date());
+  const { data: dashboardData } = usePremiumGetData({ date: isdate });
 
   const ordersFetchData = useCallback(async () => {
     const allProducts = [];
@@ -101,7 +79,6 @@ const PremiumOrder: React.FC = () => {
   }, [filterOrder]);
 
   useEffect(() => {
-    // getData();
     ordersFetchData();
   }, [ordersFetchData]);
 
@@ -111,10 +88,8 @@ const PremiumOrder: React.FC = () => {
         (item) => item.productName === selectedProduct
       );
       setFilteredData(filtered);
-      // setFilterOrder(orders);
     } else {
       setFilteredData(data);
-      // setFilterOrder(data);
     }
   }, [selectedProduct, data]);
 
@@ -130,6 +105,18 @@ const PremiumOrder: React.FC = () => {
 
   if (!FilteredData) return <Loading />;
 
+  const OrdersData = [
+    {
+      heading: "Today pREMIUM orders",
+      orderNumber: dashboardData?.premiumProducts,
+      todayRevenue: "Today Revenue",
+      today: dashboardData?.premiumRevenue,
+      orders: "orders",
+      image: TShirtImg,
+      navigation: "/orders/premium-orders",
+    },
+  ];
+
   return (
     <div className="mx">
       <Layout>
@@ -137,8 +124,17 @@ const PremiumOrder: React.FC = () => {
           <Loading />
         ) : (
           <div className="post-order-wrapper">
-            <div className="post-order-head">
-              <p>Orders</p>
+            <div className="mid-head">
+              <div className="post-order-head">
+                <p>Orders</p>
+              </div>
+              <div className="input-date">
+                <input
+                  type="date"
+                  id="customDateInput"
+                  onChange={(e) => setDate(new Date(e.target.value))}
+                />
+              </div>
             </div>
 
             <div
@@ -147,7 +143,7 @@ const PremiumOrder: React.FC = () => {
                 gridTemplateColumns: "1fr 1fr",
               }}
             >
-              <SingleCard data={datas} />
+              <SingleCard dashboardData={dashboardData} data={OrdersData} />
               <div
                 style={{
                   borderRadius: "10px",

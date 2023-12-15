@@ -217,64 +217,83 @@ export interface IPost {
   type: string;
   userId: string;
 }
+export interface ISettingdata {
+  showAccessoryPage: boolean;
+  premiumComingSoonText: string;
+}
 
 export interface IMidLevelData {
-  approved: boolean;
+  id: string;
+  updatedAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
+  giftMessage: {
+    from: string;
+    giftMessage: string;
+  };
   color: string;
   description: string;
-  gender: string;
-  id: string;
-  offerPrice: string;
-  orderStatus: {
-    delivery: {
-      createdAt: null;
-      description: string;
-      status: boolean;
-    };
-    manufacturing: {
-      createdAt: null;
-      description: string;
-      status: boolean;
-    };
-    orderplaced: {
-      description: string;
-      status: boolean;
-      createdAt: null;
-    };
-    readyToShip: {
-      createdAt: null;
-      status: boolean;
-      description: string;
-    };
-    shipping: {
-      createdAt: null;
-      status: boolean;
-      description: string;
-    };
-  };
-  price: string;
-  productId: string;
-  productName: string;
-  quantity: string;
   sizes: {
     country: string;
     sizeVarient: {
-      measurement: string;
-      size: string;
+      measurement: number;
       quantity: string;
+      size: string;
     };
   };
-  style: string;
+  gender: string;
+  createdAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
+  paymentStatus: string;
+  orderStatus: {
+    orderPlaced: {
+      createdAt: string;
+      status: boolean;
+      description: string;
+    };
+    delivery: {
+      status: boolean;
+      description: string;
+      createdAt: string;
+    };
+    shipping: {
+      status: boolean;
+      description: string;
+      createdAt: string;
+    };
+    manufacturing: {
+      status: boolean;
+      createdAt: string;
+      description: string;
+    };
+    readyToShip: {
+      status: boolean;
+      createdAt: string;
+      description: string;
+    };
+  };
+  userId: string;
+  productName: string;
+  offerPrice: string;
+  productImage: string;
+  totalamount: string;
+  price: string;
+  productId: string;
   textAndImage: {
-    position: string;
     title: string;
+    rate: number;
+    position: string;
     designs: {
       hashtag: string;
       image: string;
+      originalImage: string;
     };
   };
   type: string;
-  userId: string;
+  style: string;
 }
 
 export interface IAccessoryLevel {
