@@ -55,12 +55,9 @@ const EditMidform: React.FC = () => {
   const [active, setActive] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [data, setData] = useState<typeof initialValue | null>(null);
-  console.log(toggle);
-
   const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
   const [country, setCountry] = useState("");
   const [colors, setColors] = useState<ColorData[]>([]);
-
   const [sizes, setSizes] = useState<
     {
       gender: string;
@@ -207,6 +204,7 @@ const EditMidform: React.FC = () => {
                       <h3
                         style={{
                           color: values.gender === "MALE" ? "" : "#777",
+                          cursor: "pointer",
                           borderBottom:
                             values.gender === "MALE" ? "2px solid #8C73CB" : "",
                         }}
@@ -221,6 +219,7 @@ const EditMidform: React.FC = () => {
                       <h3
                         style={{
                           color: values.gender === "FEMALE" ? "" : "#777",
+                          cursor: "pointer",
                           borderBottom:
                             values.gender === "FEMALE"
                               ? "2px solid #8C73CB"
@@ -235,11 +234,13 @@ const EditMidform: React.FC = () => {
 
                 <div className="styles-wrap">
                   <div className="imageupload">
-                    <Field as="select" name="styles">
-                      <option value="">select styles</option>
-                      <option value="Round Neck">Round Neck</option>
-                      <option value="V Neck">V Neck</option>
-                    </Field>
+                    <div className="drop_down">
+                      <Field as="select" name="styles">
+                        <option value="">select styles</option>
+                        <option value="Round Neck">Round Neck</option>
+                        <option value="V Neck">V Neck</option>
+                      </Field>
+                    </div>
                     <div className="video-image">
                       <div className="bg-video">
                         <h4>Image</h4>
@@ -342,46 +343,6 @@ const EditMidform: React.FC = () => {
 
               <div className="color-section">
                 <div>
-                  <h3>Select Colors</h3>
-                  <div className="color">
-                    <Button varient="primary" onClick={handleToggle}>
-                      Add
-                    </Button>
-
-                    {colors.map((color, index) => (
-                      <>
-                        <div className="color-wrap" key={index}>
-                          <div>
-                            <div
-                              style={{
-                                backgroundColor: color.color,
-                              }}
-                              className="color-circle"
-                              key={index}
-                            ></div>
-                            <p>{color.colorName}</p>
-                          </div>
-                          <Delete
-                            onClick={() => {
-                              const updatedColors = colors.filter(
-                                (f) => f.color !== color.color
-                              );
-                              setColors(updatedColors);
-                            }}
-                          />
-                        </div>
-                      </>
-                    ))}
-
-                    {active && (
-                      <ColorModule
-                        handleAddColor={handleAddColor}
-                        handleToggle={() => setActive(false)}
-                      />
-                    )}
-                  </div>
-                </div>
-                <div>
                   <h3>Select Size</h3>
                   <div className="size">
                     <div className="drop-down-section">
@@ -399,7 +360,7 @@ const EditMidform: React.FC = () => {
                           ))}
                         </select>
                       </div>
-                      <div className="gender">
+                      {/* <div className="gender">
                         <div className="male" onClick={() => setGender("MALE")}>
                           <h3
                             style={{
@@ -425,7 +386,7 @@ const EditMidform: React.FC = () => {
                             Female
                           </h3>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="sizes">
                       <div>
@@ -519,12 +480,53 @@ const EditMidform: React.FC = () => {
                     </div>
                   </div>
                 </div>
+                <div>
+                  <h3>Select Colors</h3>
+                  <div className="color">
+                    <Button varient="primary" onClick={handleToggle}>
+                      Add
+                    </Button>
+
+                    {colors.map((color, index) => (
+                      <>
+                        <div className="color-wrap" key={index}>
+                          <div>
+                            <div
+                              style={{
+                                backgroundColor: color.color,
+                              }}
+                              className="color-circle"
+                              key={index}
+                            ></div>
+                            <p>{color.colorName}</p>
+                          </div>
+                          <Delete
+                            onClick={() => {
+                              const updatedColors = colors.filter(
+                                (f) => f.color !== color.color
+                              );
+                              setColors(updatedColors);
+                            }}
+                          />
+                        </div>
+                      </>
+                    ))}
+
+                    {active && (
+                      <ColorModule
+                        handleAddColor={handleAddColor}
+                        handleToggle={() => setActive(false)}
+                      />
+                    )}
+                  </div>
+                </div>
               </div>
 
               <div className="detailed-futures">
+                <h2>Show image:</h2>
                 <div className="toggle-image">
                   <div className="active-img">
-                    <h3>Active image</h3>
+                    <h3>Design image</h3>
                     <ToggleSwitch
                       value={values.showDesign}
                       setValue={(value) =>
@@ -544,7 +546,7 @@ const EditMidform: React.FC = () => {
                 </div>
                 <div className="position-toggle">
                   <div>
-                    <h2>Image positions :</h2>
+                    <h2>Image positions:</h2>
 
                     <div className="toggle-positions">
                       <div className="toggles">
@@ -650,6 +652,7 @@ const EditMidform: React.FC = () => {
                 </div> */}
               </div>
               <div className="btn-submit">
+                <Button varient="notifi">Cancel</Button>
                 <Button varient="primary" type="submit" disabled={isSubmitting}>
                   {isSubmitting ? "Uploading" : "submit"}
                 </Button>
