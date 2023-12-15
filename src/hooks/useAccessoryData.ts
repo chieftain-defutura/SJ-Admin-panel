@@ -4,20 +4,20 @@ import { endOfDay, startOfDay } from "date-fns";
 import { db } from "../utils/firebase";
 import { ORDERS_COLLECTION_NAME } from "../constants/firebaseCollection";
 
-export const useMidGetData = ({ date }: { date?: Date }) => {
+export const useGetAccessoryData = ({ date }: { date?: Date }) => {
   const [data, setData] = useState<{
-    midProducts: number;
+    accessoryProducts: number;
 
-    midLevelRevenue: number;
+    accessoryRevenue: number;
   } | null>(null);
   const [loading, setLoading] = useState(true);
 
   const handleGetData = useCallback(async () => {
     try {
-      const Mid = collection(db, ORDERS_COLLECTION_NAME);
-      const midProducts = query(
-        Mid,
-        where("type", "==", "MidLevel"),
+      const accessory = collection(db, ORDERS_COLLECTION_NAME);
+      const accessoryProducts = query(
+        accessory,
+        where("type", "==", "Accessory-Level"),
         where(
           "createdAt",
           ">=",
@@ -26,26 +26,25 @@ export const useMidGetData = ({ date }: { date?: Date }) => {
         where("createdAt", "<=", endOfDay(date ? new Date(date) : new Date())),
         orderBy("createdAt", "asc")
       );
-      const midData = await getDocs(midProducts);
-      console.log("midData", midData.size);
-      let totalMidPrice = 0;
+      const accessoryData = await getDocs(accessoryProducts);
+      let totalAccessoryPrice = 0;
 
-      midData.forEach((doc) => {
-        const midPostdata = doc.data();
-        console.log("midPostdata", midPostdata);
-        const { price } = midPostdata;
-        totalMidPrice += Number(price);
+      accessoryData.forEach((doc) => {
+        const accessoryPostData = doc.data();
+        const { price } = accessoryPostData;
+        totalAccessoryPrice += Number(price);
+        console.log("totalPrice", totalAccessoryPrice);
       });
-
-      const totalRevenue = totalMidPrice;
+      const totalRevenue = totalAccessoryPrice;
 
       console.log("totalRevenue", totalRevenue);
 
       setData({
-        midProducts: midData.size,
+        accessoryProducts: accessoryData.size,
 
-        midLevelRevenue: totalMidPrice,
+        accessoryRevenue: totalAccessoryPrice,
       });
+
       setLoading(false);
     } catch (error) {
       console.log(error);

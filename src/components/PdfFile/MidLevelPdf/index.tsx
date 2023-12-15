@@ -145,61 +145,6 @@ const styles = StyleSheet.create({
   },
 });
 
-// const tableData = [
-//   [
-//     "1",
-//     "boAt Stone 620 Bluetooth Speaker with 12W RMS Stereo Sound, 10HRS Playtime, TWS Feature, IPX4, Muli-Compatibility Mode(Black) | B09GFRV7L5 (B09GFRV7L5)",
-//     "1,694.07",
-//     "0.00",
-//     "1",
-//     "1,694.07",
-//     "18%",
-//     "IGST",
-//     "304.93",
-//     "1,999,0",
-//   ],
-//   [
-//     "",
-//     "Shipping Charges",
-//     "1,127.12",
-//     "-1.27.12",
-//     "",
-//     "0.00",
-//     "18%",
-//     "IGST",
-//     "0.00",
-//     "0.00",
-//   ],
-// ];
-
-// const Data = [
-//   {
-//     name: "vicky",
-//     mobile: 9360200645,
-//     address: "iuwgdi3gfdy3fdu1fdu1udc1ugdc1kdjk1hdcj",
-//   },
-//   {
-//     name: "vicky",
-//     mobile: 9360200645,
-//     address: "iuwgdi3gfdy3fdu1fdu1udc1ugdc1kdjk1hdcj",
-//   },
-//   {
-//     name: "vicky",
-//     mobile: 9360200645,
-//     address: "iuwgdi3gfdy3fdu1fdu1udc1ugdc1kdjk1hdcj",
-//   },
-//   {
-//     name: "vicky",
-//     mobile: 9360200645,
-//     address: "iuwgdi3gfdy3fdu1fdu1udc1ugdc1kdjk1hdcj",
-//   },
-//   {
-//     name: "vicky",
-//     mobile: 9360200645,
-//     address: "iuwgdi3gfdy3fdu1fdu1udc1ugdc1kdjk1hdcj",
-//   },
-// ];
-
 interface IPdfData {
   userData: IUserData | undefined;
   data: IMidLevelData;

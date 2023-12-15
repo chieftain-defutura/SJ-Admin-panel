@@ -27,17 +27,8 @@ import {
 import Loading from "../../../../components/loading";
 import Loader from "../../../../components/Loader";
 import User from "../../../../assets/icons/user.jpg";
+import { useMidGetData } from "../../../../hooks/midData";
 import MidCard from "../../../../components/dashboard/midLevelCard";
-
-const datas = {
-  heading: "Today Mid-Level orders",
-  orderNumber: 71,
-  todayRevenue: "Today Revenue",
-  today: "11,500",
-  orders: "orders",
-  image: TShirtImg,
-  navigation: "/orders/post-orders",
-};
 
 const MidlevelOrder: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
@@ -47,6 +38,9 @@ const MidlevelOrder: React.FC = () => {
     IOrdersCategory.orderPlaced
   );
   console.log("Data", data);
+
+  const [isdate, setDate] = useState<Date>(new Date());
+  const { data: midHooksData } = useMidGetData({ date: isdate });
 
   // const getData = useCallback(async () => {
   //   const productData = collection(db, ORDERS_COLLECTION_NAME);
@@ -58,6 +52,17 @@ const MidlevelOrder: React.FC = () => {
   //   }));
   //   setData(fetchProduct);
   // }, []);
+  const ordersData = [
+    {
+      heading: "Today mID LEVEL orders",
+      orderNumber: midHooksData?.midProducts,
+      todayRevenue: "Today Revenue",
+      today: midHooksData?.midLevelRevenue,
+      orders: "orders",
+      image: TShirtImg,
+      navigation: "/orders/midlevel-orders",
+    },
+  ];
 
   const getData = useCallback(async () => {
     const allProducts = [];
@@ -103,7 +108,7 @@ const MidlevelOrder: React.FC = () => {
     setIsActive(!isActive);
   };
 
-  if (!FilteredData) return <p>no data</p>;
+  if (!FilteredData) return <Loading />;
 
   return (
     <div className="mx">
@@ -112,8 +117,17 @@ const MidlevelOrder: React.FC = () => {
       ) : (
         <Layout>
           <div className="post-order-wrapper">
-            <div className="post-order-head">
-              <p>Orders</p>
+            <div className="mid-head">
+              <div className="post-order-head">
+                <p>Orders</p>
+              </div>
+              <div className="input-date">
+                <input
+                  type="date"
+                  id="customDateInput"
+                  onChange={(e) => setDate(new Date(e.target.value))}
+                />
+              </div>
             </div>
             <div
               style={{
@@ -121,7 +135,7 @@ const MidlevelOrder: React.FC = () => {
                 gridTemplateColumns: "1fr 1fr",
               }}
             >
-              {/* <MidCard data={datas} /> */}
+              <MidCard midHookData={midHooksData} data={ordersData} />
               <div
                 style={{
                   borderRadius: "10px",

@@ -162,17 +162,30 @@ export interface IPremiumData {
 }
 
 export interface IPost {
-  color: string;
   description: string;
   gender: string;
-  giftVideo: string;
-  id: string;
   offerPrice: string;
+  giftMessage: {
+    from: string;
+    giftMessage: string;
+  };
+  productVideo: string;
+  price: string;
+  sizes: {
+    country: string;
+    sizeVarient: {
+      size: string;
+      quantity: number;
+      measurement: number;
+    };
+  };
+  status: string;
+  type: string;
   orderStatus: {
     delivery: {
-      status: boolean;
-      description: string;
       createdAt: null;
+      description: string;
+      status: boolean;
     };
     manufacturing: {
       createdAt: null;
@@ -180,42 +193,26 @@ export interface IPost {
       status: boolean;
     };
     orderplaced: {
-      createdAt: null;
       description: string;
       status: boolean;
+      createdAt: null;
     };
     readyToShip: {
-      description: string;
-      status: boolean;
       createdAt: null;
+      status: boolean;
+      description: string;
     };
     shipping: {
       createdAt: null;
-      description: string;
       status: boolean;
+      description: string;
     };
   };
-  price: string;
-  productCaption: string;
-  productName: string;
-  quantity: string;
-  sizes: {
-    country: string;
-    sizeVarient: {
-      measurement: number;
-      size: string;
-      quantity: number;
-    }[];
-  };
-  status: string;
-  style: string;
-  textAndImage: {
-    position: string;
-    title: string;
-    image: string;
-  };
-  type: string;
   userId: string;
+  id: string;
+  productImage: string;
+  productName: string;
+  styles: string;
 }
 export interface ISettingdata {
   showAccessoryPage: boolean;
@@ -295,43 +292,78 @@ export interface IMidLevelData {
   type: string;
   style: string;
 }
-
 export interface IAccessoryLevel {
-  description: string;
   id: string;
-  offerPrice: string;
+  updatedAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
+  giftMessage: {
+    from: string;
+    giftMessage: string;
+  };
+  color: string;
+  description: string;
+  sizes: {
+    country: string;
+    sizeVarient: {
+      measurement: number;
+      quantity: string;
+      size: string;
+    };
+  };
+  gender: string;
+  createdAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
+  paymentStatus: string;
   orderStatus: {
+    orderPlaced: {
+      createdAt: string;
+      status: boolean;
+      description: string;
+    };
     delivery: {
       status: boolean;
       description: string;
-      createdAt: null;
+      createdAt: string;
+    };
+    shipping: {
+      status: boolean;
+      description: string;
+      createdAt: string;
     };
     manufacturing: {
       status: boolean;
-      createdAt: null;
+      createdAt: string;
       description: string;
-    };
-    orderplaced: {
-      status: boolean;
-      description: string;
-      createdAt: null;
     };
     readyToShip: {
-      createdAt: null;
-      description: string;
       status: boolean;
-    };
-    shipping: {
+      createdAt: string;
       description: string;
-      createdAt: null;
-      status: boolean;
     };
   };
-  price: string;
-  productName: string;
-  status: string;
-  type: string;
   userId: string;
+  productName: string;
+  offerPrice: string;
+  productImage: string;
+  totalamount: string;
+  price: string;
+  productId: string;
+  textAndImage: {
+    title: string;
+    rate: number;
+    position: string;
+    designs: {
+      hashtag: string;
+      image: string;
+      originalImage: string;
+    };
+  };
+  type: string;
+  style: string;
 }
 
 export interface IFetchData extends IUserData {

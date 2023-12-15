@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./deliveryDetailsModal.scss";
 import Button from "../../../../../components/button";
 import { IPremiumData } from "../../../../../constants/types";
@@ -23,8 +23,9 @@ export const initialValues = {
 };
 interface IDetailsdata {
   data: IPremiumData;
+  setActive: (value: React.SetStateAction<boolean>) => void;
 }
-const DeliveryDetailsModal: React.FC<IDetailsdata> = ({ data }) => {
+const DeliveryDetailsModal: React.FC<IDetailsdata> = ({ data, setActive }) => {
   console.log("DeliveryDetailsModal", data);
 
   const handleSubmit = async (value: typeof initialValues) => {
@@ -42,64 +43,67 @@ const DeliveryDetailsModal: React.FC<IDetailsdata> = ({ data }) => {
       });
       console.log(updateRef);
       console.log(value);
+      setActive(false);
     } catch (error) {
       console.log("updateError", error);
     }
   };
 
   return (
-    <div className="delivery-details-modal-wrapper">
-      <Formik onSubmit={handleSubmit} initialValues={initialValues}>
-        {({ values, setValues }) => (
-          <Form>
-            <>
-              <div className="order-conformed-content">
-                <ConfirmOrder
-                  title="Order placed"
-                  status={"orderStatus.orderPlaced.status"}
-                  creayedAt={"orderStatus.orderPlaced.createdAt"}
-                  descriptionName={"orderStatus.orderPlaced.description"}
-                />
-                <ConfirmOrder
-                  title="manifacturing"
-                  status={"orderStatus.manufacturing.status"}
-                  creayedAt={"orderStatus.manufacturing.createdAt"}
-                  descriptionName={"orderStatus.manufacturing.description"}
-                />
-              </div>
-              <div className="order-conformed-content">
-                <ConfirmOrder
-                  title="Ready to ship"
-                  status={"orderStatus.readyToShip.status"}
-                  creayedAt={"orderStatus.readyToShip.createdAt"}
-                  descriptionName={"orderStatus.readyToShip.description"}
-                />
-                <ConfirmOrder
-                  title="Shipping"
-                  status={"orderStatus.shipping.status"}
-                  creayedAt={"orderStatus.shipping.createdAt"}
-                  descriptionName={"orderStatus.shipping.description"}
-                />
-              </div>
-              <div className="order-conformed-content">
-                <ConfirmOrder
-                  title="Deliverd"
-                  status={"orderStatus.delivery.status"}
-                  creayedAt={"orderStatus.delivery.createdAt"}
-                  descriptionName={"orderStatus.delivery.description"}
-                />
-              </div>
-            </>
+    <>
+      <div className="delivery-details-modal-wrapper">
+        <Formik onSubmit={handleSubmit} initialValues={initialValues}>
+          {({ values, setValues }) => (
+            <Form>
+              <>
+                <div className="order-conformed-content">
+                  <ConfirmOrder
+                    title="Order placed"
+                    status={"orderStatus.orderPlaced.status"}
+                    creayedAt={"orderStatus.orderPlaced.createdAt"}
+                    descriptionName={"orderStatus.orderPlaced.description"}
+                  />
+                  <ConfirmOrder
+                    title="manifacturing"
+                    status={"orderStatus.manufacturing.status"}
+                    creayedAt={"orderStatus.manufacturing.createdAt"}
+                    descriptionName={"orderStatus.manufacturing.description"}
+                  />
+                </div>
+                <div className="order-conformed-content">
+                  <ConfirmOrder
+                    title="Ready to ship"
+                    status={"orderStatus.readyToShip.status"}
+                    creayedAt={"orderStatus.readyToShip.createdAt"}
+                    descriptionName={"orderStatus.readyToShip.description"}
+                  />
+                  <ConfirmOrder
+                    title="Shipping"
+                    status={"orderStatus.shipping.status"}
+                    creayedAt={"orderStatus.shipping.createdAt"}
+                    descriptionName={"orderStatus.shipping.description"}
+                  />
+                </div>
+                <div className="order-conformed-content">
+                  <ConfirmOrder
+                    title="Deliverd"
+                    status={"orderStatus.delivery.status"}
+                    creayedAt={"orderStatus.delivery.createdAt"}
+                    descriptionName={"orderStatus.delivery.description"}
+                  />
+                </div>
+              </>
 
-            <div className="done-btn">
-              <Button varient="primary" type="submit">
-                Done
-              </Button>
-            </div>
-          </Form>
-        )}
-      </Formik>
-    </div>
+              <div className="done-btn">
+                <Button varient="primary" type="submit">
+                  Done
+                </Button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </>
   );
 };
 

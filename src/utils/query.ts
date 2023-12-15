@@ -69,3 +69,69 @@ export const deliveryQueryMid = query(
   where("type", "==", "MidLevel"),
   where("orderStatus.delivery.status", "==", true)
 );
+
+export const orderPlacedQueryPost = query(
+  Premium,
+  where("type", "==", "PostLevel"),
+  where("orderStatus.orderPlaced.status", "==", true),
+  where("orderStatus.manufacturing.status", "==", false)
+);
+
+export const manufacturingQueryPost = query(
+  Premium,
+  where("type", "==", "PostLevel"),
+  where("orderStatus.manufacturing.status", "==", true),
+  where("orderStatus.readyToShip.status", "==", false)
+);
+
+export const readyToShipQueryPost = query(
+  Premium,
+  where("type", "==", "PostLevel"),
+  where("orderStatus.readyToShip.status", "==", true),
+  where("orderStatus.shipping.status", "==", false)
+);
+
+export const shippingQueryPost = query(
+  Premium,
+  where("type", "==", "PostLevel"),
+  where("orderStatus.shipping.status", "==", true),
+  where("orderStatus.delivery.status", "==", false)
+);
+export const deliveryQueryPost = query(
+  Premium,
+  where("type", "==", "PostLevel"),
+  where("orderStatus.delivery.status", "==", true)
+);
+
+export const orderPlacedQueryAccessory = query(
+  Premium,
+  where("type", "==", "Accessory-Level"),
+  where("orderStatus.orderPlaced.status", "==", true),
+  where("orderStatus.manufacturing.status", "==", false)
+);
+
+export const manufacturingQueryAccessory = query(
+  Premium,
+  where("type", "==", "Accessory-Level"),
+  where("orderStatus.manufacturing.status", "==", true),
+  where("orderStatus.readyToShip.status", "==", false)
+);
+
+export const readyToShipQueryAccessory = query(
+  Premium,
+  where("type", "==", "Accessory-Level"),
+  where("orderStatus.readyToShip.status", "==", true),
+  where("orderStatus.shipping.status", "==", false)
+);
+
+export const shippingQueryAccessory = query(
+  Premium,
+  where("type", "==", "Accessory-Level"),
+  where("orderStatus.shipping.status", "==", true),
+  where("orderStatus.delivery.status", "==", false)
+);
+export const deliveryQueryAccessory = query(
+  Premium,
+  where("type", "==", "Accessory-Level"),
+  where("orderStatus.delivery.status", "==", true)
+);

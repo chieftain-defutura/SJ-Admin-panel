@@ -90,9 +90,11 @@ export const useGetDashboardData = ({ date }: { date?: Date }) => {
         console.log("totalPrice", totalAccessoryPrice);
       });
 
-      const post = collection(db, POST_COLLECTION_NAME);
+      const post = collection(db, ORDERS_COLLECTION_NAME);
       const postProducts = query(
         post,
+        where("type", "==", "PostLevel"),
+
         where(
           "createdAt",
           ">=",

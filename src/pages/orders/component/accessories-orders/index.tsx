@@ -9,36 +9,74 @@ import "../../../../styles/postOrder.scss";
 import "../../../../components/dashboard/table/table.scss";
 import LayoutModule from "../../../../components/layoutModule";
 import Chart from "../../../../components/Chart";
-import { IAccessoryLevel, IUserData } from "../../../../constants/types";
+import {
+  IAccessoryLevel,
+  IOrdersCategory,
+  IUserData,
+} from "../../../../constants/types";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../../../../utils/firebase";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import AccessoryPdf from "../../../../components/PdfFile/AccessoryPdf";
 import AccessoriesModal from "../../ordersModals/accessoriesModal";
 import { ORDERS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
-
-const datas = {
-  heading: "Today Accessories orders",
-  orderNumber: 71,
-  todayRevenue: "Today Revenue",
-  today: "11,500",
-  orders: "orders",
-  image: TShirtImg,
-  navigation: "/orders/post-orders",
-};
+import Loading from "../../../../components/loading";
+import { useGetAccessoryData } from "../../../../hooks/useAccessoryData";
+import {
+  orderPlacedQueryAccessory,
+  manufacturingQueryAccessory,
+  readyToShipQueryAccessory,
+  shippingQueryAccessory,
+  deliveryQueryAccessory,
+} from "../../../../utils/query";
+import AccessoryCard from "../../../../components/dashboard/accessoryCard";
+import Loader from "../../../../components/Loader";
+import User from "../../../../assets/icons/user.jpg";
 
 const AccessoriesOrder: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
   const [data, setData] = useState<IAccessoryLevel[]>();
 
+  const [loading, setLoading] = useState(false);
+  const [filterOrder, setFilterOrder] = useState<IOrdersCategory>(
+    IOrdersCategory.orderPlaced
+  );
+  const [isdate, setDate] = useState<Date>(new Date());
+  const { data: AccessoryHooksData } = useGetAccessoryData({ date: isdate });
+
   const getData = useCallback(async () => {
-    const productData = await getDocs(collection(db, ORDERS_COLLECTION_NAME));
-    const fetchProduct = productData.docs.map((doc) => ({
-      id: doc.id,
-      ...(doc.data() as any),
-    }));
-    setData(fetchProduct);
-  }, []);
+    const allProducts = [];
+    console.log(filterOrder);
+    try {
+      setLoading(true);
+      let query: any;
+      if (filterOrder === IOrdersCategory.orderPlaced) {
+        query = orderPlacedQueryAccessory;
+      } else if (filterOrder === IOrdersCategory.manufacturing) {
+        query = manufacturingQueryAccessory;
+      } else if (filterOrder === IOrdersCategory.readyToShip) {
+        query = readyToShipQueryAccessory;
+      } else if (filterOrder === IOrdersCategory.shipping) {
+        query = shippingQueryAccessory;
+      } else if (filterOrder === IOrdersCategory.delivery) {
+        query = deliveryQueryAccessory;
+      }
+
+      const collectionData = await getDocs(query);
+      const docs = collectionData.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as any),
+      }));
+      allProducts.push(...docs);
+      console.log(allProducts);
+      setData(allProducts);
+    } catch (error) {
+      // Handle any potential errors here
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [filterOrder]);
 
   useEffect(() => {
     getData();
@@ -50,14 +88,34 @@ const AccessoriesOrder: React.FC = () => {
     setIsActive(!isActive);
   };
 
-  if (!FilteredData) return <p>no data</p>;
+  const ordersData = [
+    {
+      heading: "Today Other accessories orders",
+      orderNumber: AccessoryHooksData?.accessoryProducts,
+      todayRevenue: "Today Revenue",
+      today: AccessoryHooksData?.accessoryRevenue,
+      orders: "orders",
+      image: TShirtImg,
+      navigation: "/orders/accessories-orders",
+    },
+  ];
+  if (!FilteredData) return <Loading />;
 
   return (
     <div className="mx">
       <Layout>
         <div className="post-order-wrapper">
-          <div className="post-order-head">
-            <p>Orders</p>
+          <div className="mid-head">
+            <div className="post-order-head">
+              <p>Orders</p>
+            </div>
+            <div className="input-date">
+              <input
+                type="date"
+                id="customDateInput"
+                onChange={(e) => setDate(new Date(e.target.value))}
+              />
+            </div>
           </div>
           <div
             style={{
@@ -65,7 +123,10 @@ const AccessoriesOrder: React.FC = () => {
               gridTemplateColumns: "1fr 1fr",
             }}
           >
-            {/* <SingleCard data={datas} /> */}
+            <AccessoryCard
+              data={ordersData}
+              AccessoryHooksData={AccessoryHooksData}
+            />
             <div
               style={{
                 borderRadius: "10px",
@@ -88,12 +149,37 @@ const AccessoriesOrder: React.FC = () => {
                 />
               </div>
               {isActive && (
-                <div className="select-drop-down">
-                  <p>Manufacture</p>
-                  <p>Ready to ship</p>
-                  <p>Shipping</p>
-                  <p>Delivered</p>
-                </div>
+                <>
+                  <div className="select-drop-down" onClick={handleToggle}>
+                    <p
+                      onClick={() =>
+                        setFilterOrder(IOrdersCategory.orderPlaced)
+                      }
+                    >
+                      Placed orders
+                    </p>
+                    <p
+                      onClick={() =>
+                        setFilterOrder(IOrdersCategory.manufacturing)
+                      }
+                    >
+                      Manufacturing
+                    </p>
+                    <p
+                      onClick={() =>
+                        setFilterOrder(IOrdersCategory.readyToShip)
+                      }
+                    >
+                      Ready to ship
+                    </p>
+                    <p onClick={() => setFilterOrder(IOrdersCategory.shipping)}>
+                      Shipping
+                    </p>
+                    <p onClick={() => setFilterOrder(IOrdersCategory.delivery)}>
+                      Delivered
+                    </p>
+                  </div>
+                </>
               )}
             </div>
           </div>
@@ -148,6 +234,8 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
   const [userData, setUserData] = useState<IUserData>();
   const docRef = doc(db, "users", data.userId);
 
+  const [loading, setLoading] = useState(false);
+
   const handleModalToggle = () => {
     setActive(true);
   };
@@ -158,17 +246,20 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
 
   const fetchData = useCallback(async () => {
     try {
+      setLoading(true);
       const documentSnapshot = await getDoc(docRef);
 
       if (documentSnapshot.exists()) {
         const data = documentSnapshot.data();
-
+        console.log("Document dataa:", data);
         setUserData(data as any);
       } else {
         console.log("Document does not exist.");
       }
     } catch (error) {
       console.error("Error getting document:", error);
+    } finally {
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -179,28 +270,36 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
 
   return (
     <tr>
-      <td>
-        <div className="flex-item row-header">
-          <img src={userData?.profile} alt="" />
-          <p>{userData?.name}</p>
+      {loading ? (
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Loader />
         </div>
-      </td>
-      <td>{data.productName}</td>
-      <td></td>
-      {/* <td>{data.sizes.sizeVarient.quantity}</td> */}
-      <td>{data.price} INR</td>
-      <td>
-        {/* {data.sizes.sizeVarient.size} - {data.sizes.sizeVarient.measurement} */}
-      </td>
-      <td>Address</td>
-      <td>
-        <PDFDownloadLink document={<AccessoryPdf />} fileName="FORM">
-          {({ loading }) =>
-            loading ? (
-              <Button varient="notifi" style={{ fontSize: "12px" }}>
-                Loading document...
-              </Button>
-            ) : (
+      ) : (
+        <>
+          <td>
+            <div className="flex-item row-header">
+              {userData?.profile ? (
+                <img src={userData?.profile} alt={User} />
+              ) : (
+                <img src={User} alt="" />
+              )}
+              <p>{userData?.name ? userData?.name : "--"}</p>
+            </div>
+          </td>
+          <td>{data.productName}</td>
+          <td>1</td>
+          <td>{data.price} INR</td>
+          <td>
+            {/* {data.sizes.sizeVarient.size} - {data.sizes.sizeVarient.measurement} */}
+          </td>
+          {userData?.address.map(
+            (f) => f.isSelected === true && <td>{f.country}</td>
+          )}
+          <td>
+            <PDFDownloadLink
+              document={<AccessoryPdf data={data} userData={userData} />}
+              fileName="FORM"
+            >
               <div
                 style={{
                   background: "#8C73CB",
@@ -214,30 +313,32 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
               >
                 <DownloadIcon />
               </div>
-            )
-          }
-        </PDFDownloadLink>
-      </td>
-
-      <td>
-        <Button
-          varient="primary"
-          style={{ padding: "9px 38px", fontSize: "12px" }}
-          onClick={handleModalToggle}
-        >
-          View details
-        </Button>
-      </td>
-
-      {/* {active && <DeliveryDetailsModal data={data} />} */}
-
-      {active && (
-        <LayoutModule
-          handleToggle={handleModalToggle}
-          className="layout-module"
-        >
-          <AccessoriesModal onClose={handleModalCloseToggle} data={data} />
-        </LayoutModule>
+              {/* )
+} */}
+            </PDFDownloadLink>
+          </td>
+          <td>
+            <Button
+              varient="primary"
+              style={{ padding: "9px 38px", fontSize: "12px" }}
+              onClick={handleModalToggle}
+            >
+              View details
+            </Button>
+          </td>
+          {active && (
+            <LayoutModule
+              handleToggle={handleModalToggle}
+              className="layout-module"
+            >
+              <AccessoriesModal
+                onClose={handleModalCloseToggle}
+                data={data}
+                user={userData}
+              />
+            </LayoutModule>
+          )}
+        </>
       )}
     </tr>
   );

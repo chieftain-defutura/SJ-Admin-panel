@@ -50,11 +50,11 @@ const ProductDetailsModal: React.FC<IDetailsdata> = ({ data, onClose }) => {
             </div>
             <div className="product-text">
               <p>Color</p>
-              <h5>{data.color}</h5>
+              {/* <h5>{data.}</h5> */}
             </div>
             <div className="product-text">
               <p>Style</p>
-              <h5>{data.style}</h5>
+              {/* <h5>{data.style.}</h5> */}
             </div>
             <div className="product-text">
               <p>Size</p>

@@ -15,13 +15,13 @@ interface SingleCardProps {
     image: string;
     navigation: string;
   }[];
-  midHookData: {
-    midProducts: number;
-    midLevelRevenue: number;
+  postHooksData: {
+    postProducts: number;
+    postRevenue: number;
   } | null;
 }
 
-const MidCard: React.FC<SingleCardProps> = ({ data, midHookData }) => {
+const PostCard: React.FC<SingleCardProps> = ({ data, postHooksData }) => {
   return (
     <div className="orders-card-wrapper">
       {data.map((f, i) => (
@@ -29,10 +29,12 @@ const MidCard: React.FC<SingleCardProps> = ({ data, midHookData }) => {
           <div className="orders-first-part">
             <h4>{f.heading}</h4>
 
-            <h1>{midHookData ? midHookData.midProducts : <LoadingCard />}</h1>
+            <h1>
+              {postHooksData ? postHooksData.postProducts : <LoadingCard />}
+            </h1>
             <div className="flex-content">
               <p>{f.todayRevenue}</p>
-              <h3>{midHookData?.midLevelRevenue}</h3>
+              <h3>{postHooksData?.postRevenue}</h3>
             </div>
           </div>
           <div className="orders-second-part">
@@ -53,4 +55,4 @@ const MidCard: React.FC<SingleCardProps> = ({ data, midHookData }) => {
   );
 };
 
-export default MidCard;
+export default PostCard;

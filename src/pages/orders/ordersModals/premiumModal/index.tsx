@@ -5,16 +5,19 @@ import ProductDetailsModal from "./productDetails";
 import "../../../../styles/postModal.scss";
 import { getDocs, collection, where, query } from "firebase/firestore";
 import { ORDERS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
-import { IPremiumData } from "../../../../constants/types";
+import { IPremiumData, IUserData } from "../../../../constants/types";
 import { db } from "../../../../utils/firebase";
 
 interface IPremiumModal {
   onClose: () => void;
   data: IPremiumData;
+  user: IUserData | undefined;
 }
 
-const PremiumModal: React.FC<IPremiumModal> = ({ onClose, data }) => {
+const PremiumModal: React.FC<IPremiumModal> = ({ onClose, data, user }) => {
   const [activeSection, setActiveSection] = useState("product");
+  const [active, setActive] = useState(true);
+
   console.log(data);
 
   const getData = useCallback(async () => {
@@ -75,9 +78,16 @@ const PremiumModal: React.FC<IPremiumModal> = ({ onClose, data }) => {
               <DeliveryDetailsModal {...f} key={i} />
             )
         )} */}
-        {activeSection === "product" && <ProductDetailsModal data={data} />}
 
-        {activeSection === "delivery" && <DeliveryDetailsModal data={data} />}
+        <>
+          {activeSection === "product" && (
+            <ProductDetailsModal data={data} user={user} onClose={onClose} />
+          )}
+
+          {activeSection === "delivery" && (
+            <DeliveryDetailsModal setActive={setActive} data={data} />
+          )}
+        </>
       </div>
     </div>
   );

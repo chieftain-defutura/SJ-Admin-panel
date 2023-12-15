@@ -42,7 +42,7 @@ const PremiumOrder: React.FC = () => {
   );
   console.log("Data", data);
   const [isdate, setDate] = useState<Date>(new Date());
-  const { data: dashboardData } = usePremiumGetData({ date: isdate });
+  const { data: premiumHooksData } = usePremiumGetData({ date: isdate });
 
   const ordersFetchData = useCallback(async () => {
     const allProducts = [];
@@ -108,9 +108,9 @@ const PremiumOrder: React.FC = () => {
   const OrdersData = [
     {
       heading: "Today pREMIUM orders",
-      orderNumber: dashboardData?.premiumProducts,
+      orderNumber: premiumHooksData?.premiumProducts,
       todayRevenue: "Today Revenue",
-      today: dashboardData?.premiumRevenue,
+      today: premiumHooksData?.premiumRevenue,
       orders: "orders",
       image: TShirtImg,
       navigation: "/orders/premium-orders",
@@ -143,7 +143,7 @@ const PremiumOrder: React.FC = () => {
                 gridTemplateColumns: "1fr 1fr",
               }}
             >
-              <SingleCard dashboardData={dashboardData} data={OrdersData} />
+              <SingleCard dashboardData={premiumHooksData} data={OrdersData} />
               <div
                 style={{
                   borderRadius: "10px",
@@ -256,9 +256,7 @@ const PremiumOrder: React.FC = () => {
                     <th>
                       <span>Size</span>
                     </th>
-                    <th>
-                      <span>Address</span>
-                    </th>
+
                     <th>
                       <span>Details</span>
                     </th>
@@ -290,6 +288,7 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
   const [userData, setUserData] = useState<IUserData>();
   const docRef = doc(db, "users", data.userId);
   const [loading, setLoading] = useState(false);
+  const [isActive, setIsActive] = useState(false);
 
   console.log(data);
   console.log("userData", userData);
@@ -352,7 +351,6 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
               {data.sizes.sizeVarient.size} -{" "}
               {data.sizes.sizeVarient.measurement}
             </td>
-            <td>Address</td>
             <td>
               <PDFDownloadLink
                 document={<PremiumPdf data={data} userData={userData} />}
@@ -384,10 +382,19 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
             <td>
               <Button
                 varient="primary"
-                style={{ padding: "9px 38px", fontSize: "12px" }}
+                style={{ padding: "9px 8px", fontSize: "12px" }}
                 onClick={handleModalToggle}
               >
                 View details
+              </Button>
+            </td>
+            <td>
+              <Button
+                varient="primary"
+                style={{ padding: "9px 8px", fontSize: "12px" }}
+                // onClick={handleModalToggle}
+              >
+                Delivery status
               </Button>
             </td>
             {active && (
@@ -395,7 +402,11 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
                 handleToggle={handleModalToggle}
                 className="layout-module"
               >
-                <PremiumModal onClose={handleModalCloseToggle} data={data} />
+                <PremiumModal
+                  onClose={handleModalCloseToggle}
+                  data={data}
+                  user={userData}
+                />
               </LayoutModule>
             )}
           </>
