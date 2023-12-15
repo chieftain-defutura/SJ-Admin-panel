@@ -195,13 +195,15 @@ const EditPremium: React.FC = () => {
 
                 <div className="styles-wrap">
                   <div className="imageupload">
-                    <Field as="select" name="styles">
-                      <option value="">select styles</option>
-                      <option value="Saree">Saree</option>
-                      <option value="Blazers">Blazers</option>
-                      <option value="Shirt">Shirt</option>
-                      <option value="Jacket">Jacket</option>
-                    </Field>
+                    <div className="drop_down">
+                      <Field as="select" name="styles">
+                        <option value="">select styles</option>
+                        <option value="Saree">Saree</option>
+                        <option value="Blazers">Blazers</option>
+                        <option value="Shirt">Shirt</option>
+                        <option value="Jacket">Jacket</option>
+                      </Field>
+                    </div>
                     <div className="video-image">
                       <div className="bg-video">
                         <h4> Product image</h4>
@@ -378,7 +380,7 @@ const EditPremium: React.FC = () => {
                             ))}
                           </select>
                         </div>
-                        <div className="gender">
+                        {/* <div className="gender">
                           <div
                             className="male"
                             onClick={() => setGender("MALE")}
@@ -409,7 +411,7 @@ const EditPremium: React.FC = () => {
                               Female
                             </h3>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="sizes">
                         <div>
@@ -502,11 +504,27 @@ const EditPremium: React.FC = () => {
                   </div>
                   <div className="description">
                     <h3>Description</h3>
-                    <Input
+                    <Field
+                      as="textarea"
+                      placeholder="description"
                       name="description"
-                      type="text"
+                      rows="3"
                       value={values.description}
+                      style={{
+                        maxWidth: "500px",
+                        width: "100%",
+                        fontSize: "16px",
+                        padding: "16px 18px",
+                        outline: "none",
+                        border: "1px solid #e1e1e1",
+                        marginTop: "16px",
+                      }}
                     />
+                    {/* <Input
+                      name="description"
+                     type="text"
+                      value={values.description}
+                   /> */}
                   </div>
                 </div>
                 <div className="btn-submit">

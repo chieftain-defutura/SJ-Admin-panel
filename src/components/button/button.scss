@@ -1,7 +1,6 @@
 .btn {
   border: none;
   outline: none;
-  white-space: nowrap;
   cursor: pointer;
 }
 .btn-primary {
@@ -15,8 +14,6 @@
   background: #ebebeb;
   color: var(--gray);
   border-radius: 5px;
-  max-width: 106px;
-  width: 100%;
 }
 .btn-notifi {
   border-radius: 5px;

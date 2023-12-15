@@ -117,101 +117,95 @@ const Dashboard: React.FC = () => {
   return (
     <div className="mx">
       <Layout>
-        {isdate && (
-          <div className="dashboard-wrapper">
-            <div className="dashboard-head">
-              <p>Welcome, Sprinkle</p>
-              <input
-                type="date"
-                id="customDateInput"
-                onChange={(e) => setDate(new Date(e.target.value))}
-              />
-            </div>
-            <div className="grid-item">
-              <TotalRevenue data={dashboardData} />
-              <div
-                style={{
-                  borderRadius: "10px",
-                  boxShadow: "0px 0px 12px 0px rgba(0, 0, 0, 0.16)",
-                  padding: "16px",
-                }}
-              >
-                <Chart />
-              </div>
-            </div>
-            <div style={{ margin: "32px 0" }}>
-              <OrdersCard data={OrdersData} />
-            </div>
+        <div className="dashboard-wrapper">
+          <div className="dashboard-head">
+            <p>Welcome, Sprinkle</p>
+            <input type="date" id="customDateInput" />
+          </div>
+          <div className="grid-item">
+            <TotalRevenue data={dashboardData} />
             <div
               style={{
-                display: "flex",
-                // alignItems: "center",
-                justifyContent: "space-between",
-                gap: "32px",
-                flexWrap: "wrap",
+                borderRadius: "10px",
+                boxShadow: "0px 0px 12px 0px rgba(0, 0, 0, 0.16)",
+                padding: "16px",
               }}
             >
-              <div className="subscription-content flex-item">
-                <div className="total-subscription-text flex-item">
-                  <SubscribedIcon />
-                  <h5>Total subscription</h5>
-                </div>
-                <h1>120k</h1>
-                <h2>premium</h2>
-                <Link to="/user-subscription">
-                  <h6>View more</h6>
-                </Link>
-              </div>
-              <div className="subscription-content flex-item">
-                <div className="total-subscription-text flex-item">
-                  <h5>User total post</h5>
-                </div>
-                <h1>
-                  {dashboardData ? dashboardData?.postRevenue : <LoadingCard />}
-                </h1>
-                <Link to="/user-post-list">
-                  <h6>View more</h6>
-                </Link>
-              </div>
-              {data.map((f, i) => (
-                <Formik key={i} initialValues={f} onSubmit={handleUpdateData}>
-                  <Form>
-                    <div className="dropdown">
-                      <h3>Delivery charge</h3>
-                      <div className="deliveryfee">
-                        <Field as="select" name="Continents">
-                          <option value="">Select continents</option>
-
-                          {Continents.map((f, i) => (
-                            <option value={f} key={i}>
-                              {f}
-                            </option>
-                          ))}
-                        </Field>
-                        <div>
-                          <Input
-                            type="number"
-                            name="DeliveryFees"
-                            placeholder="0 $"
-                            // disabled={save}
-                          />
-                        </div>
-                      </div>
-
-                      <Button
-                        varient="primary"
-                        type="submit"
-                        // onClick={() => handleUpdateData}
-                      >
-                        {save ? "saved" : "save"}
-                      </Button>
-                    </div>
-                  </Form>
-                </Formik>
-              ))}
+              <Chart />
             </div>
           </div>
-        )}
+          <div style={{ margin: "32px 0" }}>
+            <OrdersCard data={OrdersData} />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              // alignItems: "center",
+              justifyContent: "space-between",
+              gap: "32px",
+              flexWrap: "wrap",
+            }}
+          >
+            <div className="subscription-content flex-item">
+              <div className="total-subscription-text flex-item">
+                <SubscribedIcon />
+                <h5>Total subscription</h5>
+              </div>
+              <h1>120k</h1>
+              <h2>premium</h2>
+              <Link to="/user-subscription">
+                <h6>View more</h6>
+              </Link>
+            </div>
+            <div className="subscription-content flex-item">
+              <div className="total-subscription-text flex-item">
+                <h5>User total post</h5>
+              </div>
+              <h1>
+                {dashboardData ? dashboardData?.postRevenue : <LoadingCard />}
+              </h1>
+              <Link to="/user-post-list">
+                <h6>View more</h6>
+              </Link>
+            </div>
+            {data.map((f, i) => (
+              <Formik key={i} initialValues={f} onSubmit={handleUpdateData}>
+                <Form>
+                  <div className="dropdown">
+                    <h3>Delivery charge</h3>
+                    <div className="deliveryfee">
+                      <Field as="select" name="Continents">
+                        <option value="">Select continents</option>
+
+                        {Continents.map((f, i) => (
+                          <option value={f} key={i}>
+                            {f}
+                          </option>
+                        ))}
+                      </Field>
+                      <div>
+                        <Input
+                          type="number"
+                          name="DeliveryFees"
+                          placeholder="0 $"
+                          // disabled={save}
+                        />
+                      </div>
+                    </div>
+
+                    <Button
+                      varient="primary"
+                      type="submit"
+                      // onClick={() => handleUpdateData}
+                    >
+                      {save ? "saved" : "save"}
+                    </Button>
+                  </div>
+                </Form>
+              </Formik>
+            ))}
+          </div>
+        </div>
       </Layout>
     </div>
   );

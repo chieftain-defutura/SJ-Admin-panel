@@ -82,30 +82,43 @@
       font-size: 16px;
       font-weight: 700;
       text-transform: uppercase;
-      padding-bottom: 12px;
+      padding-bottom: 18px;
     }
-    select {
-      width: 345px;
-      max-width: 100%;
-      padding: 12px 24px;
+    .drop_down {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
       border-radius: 5px;
-      border: 1px solid #d9d9d9;
+      border: 1px solid #eee;
       background: #fff;
-      option {
-        // width: 440px;
-        max-width: 100%;
-        padding: 12px 24px;
-        border-radius: 5px;
-        border-bottom: 1px solid #d9d9d9;
-        background: #fff;
-        margin-top: 20px;
+      padding: 14px 16px;
+      cursor: pointer;
+      margin-bottom: 18px;
+
+      select {
+        border: none;
+        outline: none;
+        width: 450px;
+        cursor: pointer;
+        color: var(--primary-);
       }
     }
-    input {
-      border-radius: 5px;
-      border: 1px solid #d9d9d9;
-      background: #fff;
-      margin-top: 24px;
+    .deliveryfees-input {
+      input {
+        border-radius: 5px;
+        background: transparent;
+        padding: 14px 16px;
+      }
+    }
+    .save-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      button {
+        padding: 10px 40px;
+      }
     }
   }
 }
