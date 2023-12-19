@@ -18,10 +18,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import MOdalPopUp from "../../../../components/ModalPopupBox";
 import Bgimg from "../../../../assets/images/bg-img.png";
+import { validationSchema } from "../../../../constants/validations";
 
 const initialValue = {
   styles: "",
   productName: "",
+  netWeight: "",
   normalPrice: "",
   offerPrice: "",
   description: "",
@@ -114,8 +116,12 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
   console.log("getSizesLists", getSizesLists);
   return (
     <PremiumLayout>
-      <Formik initialValues={initialValue} onSubmit={handleSubmit}>
-        {({ values, setValues, isSubmitting, setFieldValue }) => (
+      <Formik
+        initialValues={initialValue}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}
+      >
+        {({ values, isSubmitting, setFieldValue }) => (
           <Form>
             <div className="create-product">
               <div className="style-section">
@@ -283,7 +289,12 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                             {video ? (
                               <video src={video} width={120} height={120} />
                             ) : (
-                              <img src={Bgimg} width={70} height={70} />
+                              <img
+                                src={Bgimg}
+                                width={70}
+                                height={70}
+                                alt="bg"
+                              />
                             )}
                           </div>
                         </label>
@@ -316,6 +327,15 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                         placeholder="Enter offer price"
                         label="Offer Price"
                         value={values.offerPrice}
+                      />
+                    </div>
+                    <div>
+                      <Input
+                        name="netWeight"
+                        type="text"
+                        placeholder="Enter product weight"
+                        label="Net weight"
+                        value={values.netWeight}
                       />
                     </div>
                   </div>

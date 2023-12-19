@@ -26,6 +26,7 @@ const Notification: React.FC = () => {
       setNotification(newNotification);
     })
     .catch((err) => console.log("failed: ", err));
+
   return (
     <Layout>
       <div className="header-notifi">

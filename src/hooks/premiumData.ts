@@ -18,12 +18,12 @@ export const usePremiumGetData = ({ date }: { date?: Date }) => {
       const premiumProducts = query(
         Premium,
         where("type", "==", "Premium-Level"),
-        where(
-          "createdAt",
-          ">=",
-          startOfDay(date ? new Date(date) : new Date())
-        ),
-        where("createdAt", "<=", endOfDay(date ? new Date(date) : new Date())),
+        // where(
+        //   "createdAt",
+        //   ">=",
+        //   startOfDay(date ? new Date(date) : new Date())
+        // ),
+        // where("createdAt", "<=", endOfDay(date ? new Date(date) : new Date())),
         orderBy("createdAt", "asc")
       );
       const premiumData = await getDocs(premiumProducts);

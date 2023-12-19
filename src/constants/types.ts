@@ -47,6 +47,7 @@ export interface IProductdata {
   frontSide: boolean;
   description: string;
   offerPrice: string;
+  netWeight: string;
   sizes: {
     sizeVarients: {
       quantity: number;

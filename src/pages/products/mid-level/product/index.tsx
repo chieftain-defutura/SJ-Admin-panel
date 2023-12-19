@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import MidprodcutLayout from "../../../../layout/midproduct-layout";
 import "../../../../styles/productLayout.scss";
 import { NavLink } from "react-router-dom";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { PRODUCTS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import { db } from "../../../../utils/firebase";
 import { IProductCategory, IProductdata } from "../../../../constants/types";
@@ -20,13 +20,14 @@ const MidProducts: React.FC = () => {
         collection(db, PRODUCTS_COLLECTION_NAME),
         where("type", "==", IProductCategory.MID)
       );
-      const data = await getDocs(productData);
-      const fetchedData = data.docs.map((d) => ({
-        id: d.id,
-        ...(d.data() as any),
-      }));
-      console.log(fetchedData);
-      setData(fetchedData);
+      onSnapshot(productData, (q) => {
+        const fetchedData = q.docs.map((d) => ({
+          id: d.id,
+          ...(d.data() as any),
+        }));
+        console.log(fetchedData);
+        setData(fetchedData);
+      });
     } catch (error) {
       console.log(error);
     } finally {

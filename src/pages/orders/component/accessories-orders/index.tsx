@@ -90,9 +90,9 @@ const AccessoriesOrder: React.FC = () => {
 
   const ordersData = [
     {
-      heading: "Today Other accessories orders",
+      heading: "Total Other accessories orders",
       orderNumber: AccessoryHooksData?.accessoryProducts,
-      todayRevenue: "Today Revenue",
+      todayRevenue: "Total Revenue",
       today: AccessoryHooksData?.accessoryRevenue,
       orders: "orders",
       image: TShirtImg,
@@ -113,6 +113,7 @@ const AccessoriesOrder: React.FC = () => {
               <input
                 type="date"
                 id="customDateInput"
+                value={isdate.toISOString().split("T")[0]}
                 onChange={(e) => setDate(new Date(e.target.value))}
               />
             </div>
@@ -135,7 +136,7 @@ const AccessoriesOrder: React.FC = () => {
                 marginTop: "26px",
               }}
             >
-              <Chart />
+              {/* <Chart /> */}
             </div>
           </div>
           <div className="post-order-text">

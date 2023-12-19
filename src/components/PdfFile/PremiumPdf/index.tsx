@@ -206,42 +206,7 @@ interface IPdfData {
 }
 
 const PremiumPdf: React.FC<IPdfData> = ({ data, userData }) => {
-  // const [userData, setUserData] = useState<IUserData>();
-  // console.log(userData);
-
-  // const [datas, setData] = useState<IPremiumData[]>([]);
-  // const docRef = doc(db, "users", data.userId);
-
-  // const getData = useCallback(async () => {
-  //   const productData = await getDocs(collection(db, ORDERS_COLLECTION_NAME));
-  //   const fetchProduct = productData.docs.map((doc) => ({
-  //     id: doc.id,
-  //     ...(doc.data() as any),
-  //   }));
-  //   setData(fetchProduct);
-  // }, []);
-
-  // const fetchData = useCallback(async () => {
-  //   try {
-  //     const documentSnapshot = await getDoc(docRef);
-
-  //     if (documentSnapshot.exists()) {
-  //       const data = documentSnapshot.data();
-  //       console.log("Document dataa:", data);
-  //       setUserData(data as any);
-  //     } else {
-  //       console.log("Document does not exist.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error getting document:", error);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // useEffect(() => {
-  //   getData();
-  //   fetchData();
-  // }, [getData, fetchData]);
+  var converter = require("number-to-words");
   return (
     // <PDFViewer style={{ width: "100vw", height: "100vh" }}>
     <Document>
@@ -419,7 +384,7 @@ const PremiumPdf: React.FC<IPdfData> = ({ data, userData }) => {
         </View>
         <View style={styles.amountHead}>
           <Text style={styles.totalText}>Amount in Words: </Text>
-          <Text style={styles.totalText}>{data.price.toString()}</Text>
+          <Text style={styles.totalText}>{converter.toWords(data.price)}</Text>
         </View>
         <View style={styles.amountHead}>
           <View
@@ -506,14 +471,14 @@ const PremiumPdf: React.FC<IPdfData> = ({ data, userData }) => {
             </View>
           </View>
         </View>
-        <View style={styles.para}>
+        {/* <View style={styles.para}>
           <Text style={[styles.text, { color: "#9E9FA5" }]}>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit illo
             corrupti minus ipsam et, rerum consequatur consequuntur ad delectus.
             Libero error commodi eum voluptas laborum molestiae ut velit fuga
             odio.
           </Text>
-        </View>
+        </View> */}
       </Page>
     </Document>
     // </PDFViewer>

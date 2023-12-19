@@ -16,7 +16,7 @@ const AdminList: React.FC<IAdminData> = ({
     const DeleteRef = doc(db, ADMIN_COLLECTION_NAME, id);
     try {
       await deleteDoc(DeleteRef);
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.log(error);
     }

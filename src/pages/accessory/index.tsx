@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "../../styles/premium.scss";
 import PremiumLayout from "../../layout/premium-layout";
-import { query, collection, getDocs, where } from "firebase/firestore";
+import { query, collection, where, onSnapshot } from "firebase/firestore";
 import { NavLink } from "react-router-dom";
 import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
 import { IProductCategory, IProductdata } from "../../constants/types";
@@ -20,13 +20,14 @@ const AccessoryHome = () => {
         collection(db, PRODUCTS_COLLECTION_NAME),
         where("type", "==", IProductCategory.ACCESSORY)
       );
-      const data = await getDocs(productData);
-      const fetchedData = data.docs.map((d) => ({
-        id: d.id,
-        ...(d.data() as any),
-      }));
-      console.log(fetchedData);
-      setData(fetchedData);
+      onSnapshot(productData, (q) => {
+        const fetchedData = q.docs.map((d) => ({
+          id: d.id,
+          ...(d.data() as any),
+        }));
+        console.log(fetchedData);
+        setData(fetchedData);
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -51,7 +52,7 @@ const AccessoryHome = () => {
         ) : (
           <div className="product-card-layout">
             {data.map((f, i) => (
-              <AccessoryCardModule {...f} key={i} />
+              <AccessoryCardModule productType="accessory" {...f} key={i} />
             ))}
           </div>
         )}

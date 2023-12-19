@@ -17,6 +17,7 @@ import { IProductCategory } from "../../../../../../constants/types";
 import { useNavigate } from "react-router-dom";
 import MOdalPopUp from "../../../../../../components/ModalPopupBox";
 import Bgimg from "../../../../../../assets/images/bg-img.png";
+import { validationSchema } from "../../../../../../constants/validations";
 
 const initialValue = {
   gender: "MALE",
@@ -24,7 +25,7 @@ const initialValue = {
   productName: "",
   normalPrice: "",
   offerPrice: "",
-  // detailedFutures: [{ materials: "", cloth: "" }],
+  netWeight: "",
   showDesign: false,
   showTextDesign: false,
   frontSide: false,
@@ -151,7 +152,11 @@ const CreateMidProduct: React.FC<Material> = () => {
   console.log(sizes);
   return (
     <CreateProductLayout>
-      <Formik initialValues={initialValue} onSubmit={handleSubmit}>
+      <Formik
+        initialValues={initialValue}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}
+      >
         {({ values, setValues, isSubmitting, setFieldValue }) => (
           <Form>
             <div className="create-product">
@@ -268,6 +273,15 @@ const CreateMidProduct: React.FC<Material> = () => {
                         placeholder="Enter offer price"
                         label="Offer Price"
                         value={values.offerPrice}
+                      />
+                    </div>
+                    <div>
+                      <Input
+                        name="netWeight"
+                        type="text"
+                        placeholder="Enter product weight"
+                        label="Net weight"
+                        value={values.netWeight}
                       />
                     </div>
                   </div>

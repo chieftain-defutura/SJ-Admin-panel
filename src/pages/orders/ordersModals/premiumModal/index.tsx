@@ -16,7 +16,6 @@ interface IPremiumModal {
 
 const PremiumModal: React.FC<IPremiumModal> = ({ onClose, data, user }) => {
   const [activeSection, setActiveSection] = useState("product");
-  const [active, setActive] = useState(true);
 
   console.log(data);
 
@@ -53,21 +52,18 @@ const PremiumModal: React.FC<IPremiumModal> = ({ onClose, data, user }) => {
     <div className="mx">
       <div className="post-modal-wrapper">
         <div className="post-modal-container flex-item">
-          <div
-            className={activeSection === "product" ? "active" : ""}
-            onClick={handleProductClick}
-          >
+          <div className={activeSection === "product" ? "active" : ""}>
             <p>Product details</p>
             <div className="border-bottom"></div>
           </div>
 
-          <div
+          {/* <div
             className={activeSection === "delivery" ? "active" : ""}
             onClick={handleDeliveryClick}
           >
             <p>Delivery status</p>
             <div className="border-bottom"></div>
-          </div>
+          </div> */}
         </div>
         <div className="close-icon" onClick={onClose}>
           <CloseIcon />
@@ -84,9 +80,9 @@ const PremiumModal: React.FC<IPremiumModal> = ({ onClose, data, user }) => {
             <ProductDetailsModal data={data} user={user} onClose={onClose} />
           )}
 
-          {activeSection === "delivery" && (
+          {/* {activeSection === "delivery" && (
             <DeliveryDetailsModal setActive={setActive} data={data} />
-          )}
+          )} */}
         </>
       </div>
     </div>

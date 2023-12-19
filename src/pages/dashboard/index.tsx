@@ -11,9 +11,13 @@ import Input from "../../components/input";
 import Button from "../../components/button";
 import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
-import { useGetDashboardData } from "../../hooks/useGetDashboardData";
+import {
+  useGetDashboardChartData,
+  useGetDashboardData,
+} from "../../hooks/useGetDashboardData";
 import TShirtImg from "../../assets/images/t-shirt-two.png";
 import LoadingCard from "../../components/loadingCard";
+import { useAdminStore } from "../../store/adminUser";
 
 const Continents = ["Europe"];
 
@@ -41,6 +45,8 @@ const Dashboard: React.FC = () => {
   const [isdate, setDate] = useState<Date>(new Date());
   console.log("date", isdate);
   const { data: dashboardData } = useGetDashboardData({ date: isdate });
+  const { data: chartData } = useGetDashboardChartData({ date: isdate });
+  const adminDetails = useAdminStore((user) => user.adminDetails);
 
   const handleUpdateData = (value: typeof initialValues) => {
     try {
@@ -120,10 +126,16 @@ const Dashboard: React.FC = () => {
         {isdate && (
           <div className="dashboard-wrapper">
             <div className="dashboard-head">
-              <p>Welcome, Sprinkle</p>
+              <p>
+                WELCOME,
+                {adminDetails?.displayName
+                  ? adminDetails.displayName
+                  : adminDetails?.email}
+              </p>
               <input
                 type="date"
                 id="customDateInput"
+                value={isdate.toISOString().split("T")[0]}
                 onChange={(e) => setDate(new Date(e.target.value))}
               />
             </div>
@@ -136,7 +148,7 @@ const Dashboard: React.FC = () => {
                   padding: "16px",
                 }}
               >
-                <Chart />
+                <Chart isDate={chartData} />
               </div>
             </div>
             <div style={{ margin: "32px 0" }}>

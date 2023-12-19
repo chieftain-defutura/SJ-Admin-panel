@@ -21,13 +21,14 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import MOdalPopUp from "../../../../../../components/ModalPopupBox";
 import { ColorData } from ".";
 import Bgimg from "../../../../../../assets/images/bg-img.png";
+import { validationSchema } from "../../../../../../constants/validations";
 
 const initialValue = {
   styles: "",
   productName: "",
   normalPrice: "",
   offerPrice: "",
-  // detailedFutures: [{ materials: "", cloth: "" }],
+  netWeight: "",
   showDesign: false,
   showTextDesign: false,
   frontSide: false,
@@ -100,6 +101,7 @@ const EditMidform: React.FC = () => {
           showDesign: tempData.showDesign,
           showTextDesign: tempData.showTextDesign,
           styles: tempData.styles,
+          netWeight: tempData.netWeight,
         });
         setImage(tempData.productImage);
         setSizes(tempData.sizes);
@@ -188,6 +190,7 @@ const EditMidform: React.FC = () => {
         initialValues={data || initialValue}
         onSubmit={handleSubmit}
         enableReinitialize
+        validationSchema={validationSchema}
       >
         {({ values, setValues, isSubmitting, setFieldValue }) => (
           <Form>
@@ -335,6 +338,15 @@ const EditMidform: React.FC = () => {
                         placeholder="Enter offer price"
                         label="Offer Price"
                         value={values.offerPrice}
+                      />
+                    </div>
+                    <div>
+                      <Input
+                        name="netWeight"
+                        type="text"
+                        placeholder="Enter product weight"
+                        label="Net weight"
+                        value={values.netWeight}
                       />
                     </div>
                   </div>

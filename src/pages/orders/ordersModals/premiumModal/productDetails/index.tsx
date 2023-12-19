@@ -1,12 +1,7 @@
 import React, { useState } from "react";
-import { ReactComponent as DownloadCloud } from "../../../../../assets/icons/downloadCloud.svg";
 import "./productDetailsModal.scss";
 import CustomerDetailsModal from "../customerDetails";
-import {
-  IMidLevelData,
-  IPremiumData,
-  IUserData,
-} from "../../../../../constants/types";
+import { IPremiumData, IUserData } from "../../../../../constants/types";
 import BgImage from "../../../../../assets/images/bg-img.png";
 
 interface IDetailsdata {

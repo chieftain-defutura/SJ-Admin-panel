@@ -12,7 +12,7 @@ import { AuthErrorCodes, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../utils/firebase";
 import { FirebaseError } from "firebase/app";
 import { ADMIN_COLLECTION_NAME } from "../../constants/firebaseCollection";
-import { addDoc, collection, getDocs, query } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, query } from "firebase/firestore";
 import { IAdminData } from "../../constants/types";
 import AdminList from "./adminLists";
 
@@ -27,6 +27,8 @@ const initialValues = {
 const AdminManagement: React.FC = () => {
   const [active, setActive] = useState(false);
   const [data, setData] = useState<IAdminData[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  console.log("Error", error);
 
   const validationSchema = Yup.object().shape({
     userName: Yup.string()
@@ -55,34 +57,42 @@ const AdminManagement: React.FC = () => {
       console.log(dataRef);
       console.log("dataStore", dataStore);
       setActive(false);
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.log(error);
-      alert("Email already used");
+
       if (error instanceof FirebaseError) {
-        if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
-          // setErrorMessage("Invalid password");
+        if (error.code === AuthErrorCodes.EMAIL_EXISTS) {
+          setError("Invalid Email");
         } else if (error.code === AuthErrorCodes.USER_DELETED) {
-          // setErrorMessage("User not found");
+          setError("User not found");
         }
+        // setActive(false);
       }
     }
   };
 
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
   const handleGetData = useCallback(async () => {
     try {
-      const adminData = query(collection(db, ADMIN_COLLECTION_NAME));
-      const documentSnapshots = await getDocs(adminData);
-      const lastVisible =
-        documentSnapshots.docs[documentSnapshots.docs.length - 1];
-      console.log(lastVisible);
-      const data = await getDocs(adminData);
-      const fetchedData = data.docs.map((d) => ({
-        id: d.id,
-        ...(d.data() as any),
-      }));
-      console.log(fetchedData);
-      setData(fetchedData);
+      const q = query(collection(db, ADMIN_COLLECTION_NAME));
+      onSnapshot(q, (querySnapshot) => {
+        const fetchedData = querySnapshot.docs.map((d) => ({
+          id: d.id,
+          ...(d.data() as any),
+        }));
+        console.log(fetchedData);
+        setData(fetchedData);
+      });
     } catch (error) {
       console.log(error);
     }
@@ -96,6 +106,7 @@ const AdminManagement: React.FC = () => {
       <div className="admin-control">
         <div className="admin-management">
           <h3>Management users</h3>
+
           <div className="total-users">
             <h3>Total users</h3>
             <Users />
@@ -121,6 +132,12 @@ const AdminManagement: React.FC = () => {
                     <h3>Account management</h3>
                     <Input name="userName" type="text" placeholder="Name" />
                     <Input name="email" type="email" placeholder="Email" />
+                    {error && (
+                      <div className="error-window">
+                        <p>{error}</p>
+                      </div>
+                    )}
+
                     <Input
                       name="password"
                       type="password"

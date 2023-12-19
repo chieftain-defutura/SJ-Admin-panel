@@ -9,7 +9,7 @@ import { db } from "../../utils/firebase";
 import { Link } from "react-router-dom";
 
 interface ICardModuleData extends IProductdata {
-  productType: "medium" | "premium";
+  productType: "medium" | "premium" | "accessory";
 }
 
 const CardModule: React.FC<ICardModuleData> = ({
@@ -38,7 +38,6 @@ const CardModule: React.FC<ICardModuleData> = ({
 
     try {
       await deleteDoc(DeleteRef);
-      window.location.reload();
     } catch (error) {
       console.log(error);
     }

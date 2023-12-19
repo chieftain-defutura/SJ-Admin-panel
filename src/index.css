@@ -147,7 +147,7 @@ input[type="number"]::-webkit-outer-spin-button {
   font-size: 12px;
   margin-top: -10px;
   margin-bottom: 12px;
-  text-transform: capitalize;
+  text-transform: lowercase;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {

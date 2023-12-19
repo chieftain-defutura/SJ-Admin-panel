@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../../styles/premium.scss";
 import PremiumLayout from "../../layout/premium-layout";
-import { query, collection, getDocs, where } from "firebase/firestore";
+import { query, collection, where, onSnapshot } from "firebase/firestore";
 import { NavLink } from "react-router-dom";
 import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
 import { IProductCategory, IProductdata } from "../../constants/types";
@@ -26,18 +26,14 @@ const Premium: React.FC<{}> = () => {
         where("type", "==", IProductCategory.PREMIUM)
         // limit(3)
       );
-      const documentSnapshots = await getDocs(productData);
-      const lastVisible =
-        documentSnapshots.docs[documentSnapshots.docs.length - 1];
-      console.log(lastVisible);
-
-      const data = await getDocs(productData);
-      const fetchedData = data.docs.map((d) => ({
-        id: d.id,
-        ...(d.data() as any),
-      }));
-      console.log(fetchedData);
-      setData(fetchedData);
+      onSnapshot(productData, (q) => {
+        const fetchedData = q.docs.map((d) => ({
+          id: d.id,
+          ...(d.data() as any),
+        }));
+        console.log(fetchedData);
+        setData(fetchedData);
+      });
     } catch (error) {
       console.log(error);
     } finally {

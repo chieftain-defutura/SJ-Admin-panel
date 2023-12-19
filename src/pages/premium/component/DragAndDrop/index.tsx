@@ -24,7 +24,7 @@ const DragAndDrop: React.FC<IData> = ({
 
   handleSort,
 }) => {
-  const [hidde, setHidde] = useState(true);
+  const [hidde, setHidde] = useState(false);
 
   const handleToggleUpdate = async () => {
     try {
@@ -33,6 +33,8 @@ const DragAndDrop: React.FC<IData> = ({
       const docRef = doc(db, PRODUCTS_COLLECTION_NAME, id);
       await updateDoc(docRef, {
         activePost: hidde,
+        index: dragPerson,
+        indexEnd: draggedOverPerson,
       });
 
       //   setHidde(false);
@@ -51,6 +53,7 @@ const DragAndDrop: React.FC<IData> = ({
       console.log("Delete docs", error);
     }
   };
+
   return (
     <div>
       <div

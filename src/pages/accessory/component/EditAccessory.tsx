@@ -1,22 +1,19 @@
-import React, { useState } from "react";
-import PremiumLayout from "../../../../layout/premium-layout";
-import { addDoc, collection } from "firebase/firestore";
+import React, { useCallback, useEffect, useState } from "react";
+import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { Formik, Field, Form } from "formik";
 import { v4 } from "uuid";
-import Button from "../../../../components/button";
-import Input from "../../../../components/input";
-import { PRODUCTS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
-import { IProductCategory } from "../../../../constants/types";
-import { storage, db } from "../../../../utils/firebase";
-import {
-  IFiles,
-  Material,
-} from "../../../products/mid-level/product/component/createMid-Product";
-
-import { useNavigate } from "react-router-dom";
-import MOdalPopUp from "../../../../components/ModalPopupBox";
-import { validationSchema } from "../../../../constants/validations";
+import { useNavigate, useParams } from "react-router-dom";
+import MOdalPopUp from "../../../components/ModalPopupBox";
+import Button from "../../../components/button";
+import Input from "../../../components/input";
+import { PRODUCTS_COLLECTION_NAME } from "../../../constants/firebaseCollection";
+import { IProductCategory, IProductdata } from "../../../constants/types";
+import { validationSchema } from "../../../constants/validations";
+import PremiumLayout from "../../../layout/premium-layout";
+import { storage, db } from "../../../utils/firebase";
+import { IFiles } from "../../products/mid-level/product/component/createMid-Product";
+import BG from "../../../assets/images/bg-img.png";
 
 const initialValue = {
   styles: "",
@@ -27,12 +24,12 @@ const initialValue = {
   netWeight: "",
 };
 
-const CreateAccessory: React.FC<Material> = ({ index }) => {
+const EditAccessory: React.FC = () => {
   const [image, setImage] = useState("");
-  // const [video, setVideo] = useState("");
+  const [data, setData] = useState<typeof initialValue | null>(null);
   const [files, setFiles] = useState<IFiles[]>([]);
-
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const handleSubmit = async (value: typeof initialValue) => {
     try {
@@ -71,11 +68,43 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
     console.log("value", value);
   };
 
+  const handleGetData = useCallback(async () => {
+    try {
+      if (!id) return;
+      //   setIsLoading(true);
+      const docref = doc(db, PRODUCTS_COLLECTION_NAME, id);
+      const data = await getDoc(docref);
+
+      if (data.exists()) {
+        const tempData = data.data() as IProductdata;
+        console.log(data.data());
+        setData({
+          description: tempData.description,
+          normalPrice: tempData.normalPrice,
+          offerPrice: tempData.offerPrice,
+          productName: tempData.productName,
+          styles: tempData.styles,
+          netWeight: tempData.netWeight,
+        });
+        setImage(tempData.productImage);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      //   setIsLoading(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    handleGetData();
+  }, [handleGetData]);
+
   return (
     <PremiumLayout>
       <Formik
-        initialValues={initialValue}
+        initialValues={data || initialValue}
         onSubmit={handleSubmit}
+        enableReinitialize
         validationSchema={validationSchema}
       >
         {({ values, setValues, isSubmitting }) => (
@@ -120,13 +149,23 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
                             accept="image/jpg,image/png"
                           />
                           <div className="bg-image">
-                            <img
-                              src={image}
-                              alt=""
-                              width={200}
-                              height={200}
-                              style={{ objectFit: "contain" }}
-                            />
+                            {image ? (
+                              <img
+                                src={image}
+                                alt=""
+                                width={150}
+                                height={150}
+                                style={{ objectFit: "contain" }}
+                              />
+                            ) : (
+                              <img
+                                src={BG}
+                                alt=""
+                                width={120}
+                                height={120}
+                                style={{ objectFit: "contain" }}
+                              />
+                            )}
                           </div>
                         </label>
                       </div>
@@ -220,4 +259,4 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
   );
 };
 
-export default CreateAccessory;
+export default EditAccessory;

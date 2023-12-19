@@ -18,12 +18,12 @@ export const useGetAccessoryData = ({ date }: { date?: Date }) => {
       const accessoryProducts = query(
         accessory,
         where("type", "==", "Accessory-Level"),
-        where(
-          "createdAt",
-          ">=",
-          startOfDay(date ? new Date(date) : new Date())
-        ),
-        where("createdAt", "<=", endOfDay(date ? new Date(date) : new Date())),
+        // where(
+        //   "createdAt",
+        //   ">=",
+        //   startOfDay(date ? new Date(date) : new Date())
+        // ),
+        // where("createdAt", "<=", endOfDay(date ? new Date(date) : new Date())),
         orderBy("createdAt", "asc")
       );
       const accessoryData = await getDocs(accessoryProducts);

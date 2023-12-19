@@ -29,9 +29,9 @@ const Sidebar: React.FC = () => {
         {/* <NavLink to="/delivery/midlevel-delivery/product">
           <p>Delivery</p>
         </NavLink> */}
-        {/* <NavLink to="/notification">
+        <NavLink to="/notification">
           <p>Notification</p>
-        </NavLink> */}
+        </NavLink>
         {/* <a href="/subscription">
           <p>Subscription</p>
         </a> */}

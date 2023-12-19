@@ -11,12 +11,7 @@ import {
 import Logo from "../../../assets/logo/logo.png";
 import GilroyBold from "../../../assets/fonts/Gilroy-Bold.ttf";
 import GilroyMedium from "../../../assets/fonts/Gilroy-Medium.ttf";
-import {
-  IAccessoryLevel,
-  IMidLevelData,
-  IPost,
-  IUserData,
-} from "../../../constants/types";
+import { IAccessoryLevel, IUserData } from "../../../constants/types";
 
 Font.register({
   family: "GilroyBold",
@@ -156,42 +151,8 @@ interface IPdfData {
 }
 
 const AccessoryPdf: React.FC<IPdfData> = ({ data, userData }) => {
-  // const [userData, setUserData] = useState<IUserData>();
-  // console.log(userData);
+  var converter = require("number-to-words");
 
-  // const [datas, setData] = useState<IPremiumData[]>([]);
-  // const docRef = doc(db, "users", data.userId);
-
-  // const getData = useCallback(async () => {
-  //   const productData = await getDocs(collection(db, ORDERS_COLLECTION_NAME));
-  //   const fetchProduct = productData.docs.map((doc) => ({
-  //     id: doc.id,
-  //     ...(doc.data() as any),
-  //   }));
-  //   setData(fetchProduct);
-  // }, []);
-
-  // const fetchData = useCallback(async () => {
-  //   try {
-  //     const documentSnapshot = await getDoc(docRef);
-
-  //     if (documentSnapshot.exists()) {
-  //       const data = documentSnapshot.data();
-  //       console.log("Document dataa:", data);
-  //       setUserData(data as any);
-  //     } else {
-  //       console.log("Document does not exist.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error getting document:", error);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // useEffect(() => {
-  //   getData();
-  //   fetchData();
-  // }, [getData, fetchData]);
   return (
     // <PDFViewer style={{ width: "100vw", height: "100vh" }}>
     <Document>
@@ -369,7 +330,7 @@ const AccessoryPdf: React.FC<IPdfData> = ({ data, userData }) => {
         </View>
         <View style={styles.amountHead}>
           <Text style={styles.totalText}>Amount in Words: </Text>
-          <Text style={styles.totalText}>{data.price.toString()}</Text>
+          <Text style={styles.totalText}>{converter.toWords(data.price)}</Text>
         </View>
         <View style={styles.amountHead}>
           <View

@@ -6,8 +6,11 @@ import LayoutModule from "../layoutModule";
 import { db } from "../../utils/firebase";
 import { deleteDoc, doc } from "firebase/firestore";
 import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
+import { Link } from "react-router-dom";
 
-interface ICardModuleData extends IProductdata {}
+interface ICardModuleData extends IProductdata {
+  productType: "medium" | "premium" | "accessory";
+}
 
 const AccessoryCardModule: React.FC<ICardModuleData> = ({
   productImage,
@@ -17,6 +20,7 @@ const AccessoryCardModule: React.FC<ICardModuleData> = ({
   offerPrice,
   id,
   description,
+  productType,
 }) => {
   const [active, setActive] = useState(false);
   const [isactive, setIsActive] = useState(false);
@@ -100,7 +104,9 @@ const AccessoryCardModule: React.FC<ICardModuleData> = ({
                     >
                       Delete
                     </Button>
-                    <Button varient="primary">Edit</Button>
+                    <Link to={`/products/mid-level/${productType}/edit/${id}`}>
+                      <Button varient="primary">Edit</Button>
+                    </Link>
                   </div>
                   {isactive && (
                     <LayoutModule

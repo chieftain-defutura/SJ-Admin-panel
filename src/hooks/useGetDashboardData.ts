@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-import { endOfDay, startOfDay } from "date-fns";
+import { endOfDay, getWeek, startOfDay } from "date-fns";
 import { db } from "../utils/firebase";
-import {
-  ORDERS_COLLECTION_NAME,
-  POST_COLLECTION_NAME,
-} from "../constants/firebaseCollection";
+import { ORDERS_COLLECTION_NAME } from "../constants/firebaseCollection";
 
 export const useGetDashboardData = ({ date }: { date?: Date }) => {
   const [data, setData] = useState<{
@@ -144,4 +141,55 @@ export const useGetDashboardData = ({ date }: { date?: Date }) => {
   console.log(data);
 
   return { loading, data: data };
+};
+
+export const useGetDashboardChartData = ({ date }: { date?: Date }) => {
+  const [isDate, setIsDate] = useState<number[]>([]);
+
+  const handleGetData = useCallback(async () => {
+    try {
+      const startOfLastWeek = startOfDay(date ? new Date(date) : new Date());
+      startOfLastWeek.setDate(startOfLastWeek.getDate() - 6);
+      const endOfToday = endOfDay(date ? new Date(date) : new Date());
+      const Mid = collection(db, ORDERS_COLLECTION_NAME);
+      const midProducts = query(
+        Mid,
+        // where("type", "==", "MidLevel"),
+        where("createdAt", ">=", startOfLastWeek),
+        where("createdAt", "<=", endOfToday),
+        orderBy("createdAt", "asc")
+      );
+      const midData = await getDocs(midProducts);
+      console.log("midData", midData.size);
+      const daysData: number[][] = [[], [], [], [], [], [], []]; // Sun to Sat
+
+      midData.forEach((doc) => {
+        const midPostdata = doc.data();
+        const createdAt = midPostdata.createdAt.toDate(); // Assuming createdAt is a Date field
+        const dayOfWeek = createdAt.getDay(); // 0 (Sun) to 6 (Sat)
+        console.log("dayOfWeek", dayOfWeek);
+
+        if (createdAt >= startOfLastWeek && createdAt <= endOfToday) {
+          const { price } = midPostdata;
+          daysData[dayOfWeek].push(Number(price)); // Store the price for the day
+        }
+      });
+
+      // Calculate the total for each day and set the weeklyData state
+      const totalPerDay = daysData.map((dayData) =>
+        dayData.reduce((acc, curr) => acc + curr, 0)
+      );
+      console.log("totalPerDay", totalPerDay);
+
+      setIsDate(totalPerDay);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [date]);
+
+  useEffect(() => {
+    handleGetData();
+  }, [handleGetData]);
+
+  return { data: isDate };
 };

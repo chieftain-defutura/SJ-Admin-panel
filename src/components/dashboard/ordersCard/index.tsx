@@ -28,7 +28,7 @@ const OrdersCard: React.FC<OrdersCardProps> = ({ data }) => {
               <h1>{f ? f?.orderNumber || 0 : <LoadingCard />}</h1>
               <div className="flex-content">
                 <p>Today Revenue</p>
-                <h3>{f.today}</h3>
+                <h3>{f ? f?.today || 0 : <LoadingCard />}</h3>
               </div>
             </div>
             <div className="orders-second-part">

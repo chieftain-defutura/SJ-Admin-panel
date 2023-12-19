@@ -5,6 +5,7 @@ import { Form, Formik } from "formik";
 import Input from "../../../../components/input";
 import { ReactComponent as Uploadicon } from "../../../../assets/icons/upload-icon.svg";
 import Button from "../../../../components/button";
+import axios from "axios";
 
 interface INote {
   handleToggle: () => void;
@@ -38,8 +39,22 @@ const NotifiyModule: React.FC<INote> = ({ handleToggle }) => {
     fileReader.readAsDataURL(file);
   };
 
-  const handleSubmit = (values: typeof initialValuees) => {
-    console.log("values", values);
+  const handleSubmit = async (values: typeof initialValuees) => {
+    try {
+      console.log("values", values);
+
+      const { data } = await axios.post(
+        "https://sj-clothing-backend.cyclic.app/pushToken",
+        {
+          title: values.Title,
+          body: values.Discription,
+          // time: values.Time,
+        }
+      );
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="mx">
@@ -130,7 +145,11 @@ const NotifiyModule: React.FC<INote> = ({ handleToggle }) => {
                   <Button varient="secondary" onClick={handleToggle}>
                     Remove
                   </Button>
-                  <Button varient="primary" type="submit">
+                  <Button
+                    varient="primary"
+                    type="submit"
+                    // onClick={handleToggle}
+                  >
                     Send
                   </Button>
                 </div>

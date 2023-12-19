@@ -54,9 +54,9 @@ const MidlevelOrder: React.FC = () => {
   // }, []);
   const ordersData = [
     {
-      heading: "Today mID LEVEL orders",
+      heading: "Total mID LEVEL orders",
       orderNumber: midHooksData?.midProducts,
-      todayRevenue: "Today Revenue",
+      todayRevenue: "Total Revenue",
       today: midHooksData?.midLevelRevenue,
       orders: "orders",
       image: TShirtImg,
@@ -125,6 +125,7 @@ const MidlevelOrder: React.FC = () => {
                 <input
                   type="date"
                   id="customDateInput"
+                  value={isdate.toISOString().split("T")[0]}
                   onChange={(e) => setDate(new Date(e.target.value))}
                 />
               </div>
@@ -144,7 +145,7 @@ const MidlevelOrder: React.FC = () => {
                   marginTop: "26px",
                 }}
               >
-                <Chart />
+                {/* <Chart /> */}
               </div>
             </div>
             <div className="post-order-text">

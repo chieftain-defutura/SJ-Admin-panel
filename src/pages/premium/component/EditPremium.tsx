@@ -14,12 +14,14 @@ import { IFiles } from "../../products/mid-level/product/component/createMid-Pro
 import { Link, useNavigate, useParams } from "react-router-dom";
 import MOdalPopUp from "../../../components/ModalPopupBox";
 import Bgimg from "../../../assets/images/bg-img.png";
+import { validationSchema } from "../../../constants/validations";
 
 const initialValue = {
   styles: "",
   productName: "",
   normalPrice: "",
   offerPrice: "",
+  netWeight: "",
   description: "",
   gender: "MALE",
 };
@@ -66,6 +68,7 @@ const EditPremium: React.FC = () => {
           offerPrice: tempData.offerPrice,
           productName: tempData.productName,
           styles: tempData.styles,
+          netWeight: tempData.netWeight,
         });
         setImage(tempData.productImage);
         setSizes(tempData.sizes);
@@ -151,6 +154,7 @@ const EditPremium: React.FC = () => {
         initialValues={data || initialValue}
         enableReinitialize
         onSubmit={handleSubmit}
+        validationSchema={validationSchema}
       >
         {({ values, setValues, isSubmitting, setFieldValue }) => (
           <Form>
@@ -322,7 +326,12 @@ const EditPremium: React.FC = () => {
                             {video ? (
                               <video src={video} width={120} height={120} />
                             ) : (
-                              <img src={Bgimg} width={70} height={70} />
+                              <img
+                                src={Bgimg}
+                                width={70}
+                                height={70}
+                                alt="bg"
+                              />
                             )}
                           </div>
                         </label>
@@ -355,6 +364,15 @@ const EditPremium: React.FC = () => {
                         placeholder="Enter offer price"
                         label="Offer Price"
                         value={values.offerPrice}
+                      />
+                    </div>
+                    <div>
+                      <Input
+                        name="netWeight"
+                        type="text"
+                        placeholder="Enter product weight"
+                        label="Net weight"
+                        value={values.netWeight}
                       />
                     </div>
                   </div>

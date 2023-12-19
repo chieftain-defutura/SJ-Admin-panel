@@ -9,7 +9,7 @@ import LayoutModule from "../../../../components/layoutModule";
 import PostModal from "../../ordersModals/postModal";
 import "../../../../styles/postOrder.scss";
 import Chart from "../../../../components/Chart";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../../../../utils/firebase";
 import { IOrdersCategory, IPost, IUserData } from "../../../../constants/types";
 import { PDFDownloadLink } from "@react-pdf/renderer";
@@ -77,9 +77,9 @@ const PostOrders: React.FC = () => {
 
   const ordersData = [
     {
-      heading: "Today post orders",
+      heading: "Total post orders",
       orderNumber: PostHooksData?.postProducts,
-      todayRevenue: "Today Revenue",
+      todayRevenue: "Total Revenue",
       today: PostHooksData?.postRevenue,
       orders: "orders",
       image: TShirtImg,
@@ -110,6 +110,7 @@ const PostOrders: React.FC = () => {
                 <input
                   type="date"
                   id="customDateInput"
+                  value={isdate.toISOString().split("T")[0]}
                   onChange={(e) => setDate(new Date(e.target.value))}
                 />
               </div>
@@ -131,7 +132,7 @@ const PostOrders: React.FC = () => {
                   marginTop: "26px",
                 }}
               >
-                <Chart />
+                {/* <Chart /> */}
               </div>
             </div>
             <div className="post-order-text">
@@ -212,7 +213,11 @@ const PostOrders: React.FC = () => {
                 </thead>
                 <tbody>
                   {FilteredData.map((f, index) => (
-                    <CardComponent key={index} data={f} />
+                    <CardComponent
+                      key={index}
+                      data={f}
+                      filterOrder={filterOrder}
+                    />
                   ))}
                 </tbody>
               </table>
@@ -228,9 +233,10 @@ export default PostOrders;
 
 interface ICardComponent {
   data: IPost;
+  filterOrder: IOrdersCategory;
 }
 
-const CardComponent: React.FC<ICardComponent> = ({ data }) => {
+const CardComponent: React.FC<ICardComponent> = ({ data, filterOrder }) => {
   const [active, setActive] = useState(false);
   const [userData, setUserData] = useState<IUserData>();
   const docRef = doc(db, "users", data.userId);
@@ -246,6 +252,7 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
 
   const fetchData = useCallback(async () => {
     try {
+      setLoading(true);
       const documentSnapshot = await getDoc(docRef);
 
       if (documentSnapshot.exists()) {
@@ -257,6 +264,8 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
       }
     } catch (error) {
       console.error("Error getting document:", error);
+    } finally {
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -266,77 +275,84 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
   }, [fetchData]);
 
   return (
-    <tr>
-      {loading ? (
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Loader />
-        </div>
-      ) : (
-        <>
-          <td>
-            <div className="flex-item row-header">
-              {userData?.profile ? (
-                <img src={userData?.profile} alt="" />
-              ) : (
-                <img src={User} alt="" />
-              )}
-              <p>{userData?.name ? userData?.name : "--"}</p>
+    <>
+      {filterOrder ? (
+        <tr>
+          {loading ? (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Loader />
             </div>
-          </td>
-          <td>{data.productName}</td>
-          <td>{data.sizes.sizeVarient.quantity}</td>
-          <td>{data.price} INR</td>
-          <td>
-            {data.sizes.sizeVarient.size} - {data.sizes.sizeVarient.measurement}
-          </td>
-          <td>Address</td>
-          <td>
-            <PDFDownloadLink
-              document={<PostPdf data={data} userData={userData} />}
-              fileName="FORM"
-            >
-              {/* {({ loading }) =>
+          ) : (
+            <>
+              <td>
+                <div className="flex-item row-header">
+                  {userData?.profile ? (
+                    <img src={userData?.profile} alt="" />
+                  ) : (
+                    <img src={User} alt="" />
+                  )}
+                  <p>{userData?.name ? userData?.name : "--"}</p>
+                </div>
+              </td>
+              <td>{data.productName}</td>
+              <td>{data.sizes.sizeVarient.quantity}</td>
+              <td>{data.price} INR</td>
+              <td>
+                {data.sizes.sizeVarient.size} -{" "}
+                {data.sizes.sizeVarient.measurement}
+              </td>
+              <td>Address</td>
+              <td>
+                <PDFDownloadLink
+                  document={<PostPdf data={data} userData={userData} />}
+                  fileName="FORM"
+                >
+                  {/* {({ loading }) =>
   loading ? (
     <Button varient="notifi" style={{ fontSize: "12px" }}>
       Loading...
     </Button>
   ) : ( */}
-              <div
-                style={{
-                  background: "#8C73CB",
-                  width: "36px",
-                  height: "32px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderRadius: "5px",
-                }}
-              >
-                <DownloadIcon />
-              </div>
-              {/* )
+                  <div
+                    style={{
+                      background: "#8C73CB",
+                      width: "36px",
+                      height: "32px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <DownloadIcon />
+                  </div>
+                  {/* )
 } */}
-            </PDFDownloadLink>
-          </td>
-          <td>
-            <Button
-              varient="primary"
-              style={{ padding: "9px 38px", fontSize: "12px" }}
-              onClick={handleModalToggle}
-            >
-              View details
-            </Button>
-          </td>
-          {active && (
-            <LayoutModule
-              handleToggle={handleModalToggle}
-              className="layout-module"
-            >
-              <PostModal onClose={handleModalCloseToggle} data={data} />
-            </LayoutModule>
+                </PDFDownloadLink>
+              </td>
+              <td>
+                <Button
+                  varient="primary"
+                  style={{ padding: "9px 38px", fontSize: "12px" }}
+                  onClick={handleModalToggle}
+                >
+                  View details
+                </Button>
+              </td>
+              {active && (
+                <LayoutModule
+                  handleToggle={handleModalToggle}
+                  className="layout-module"
+                >
+                  <PostModal onClose={handleModalCloseToggle} data={data} />
+                </LayoutModule>
+              )}
+            </>
           )}
-        </>
+        </tr>
+      ) : (
+        <p>No orders</p>
       )}
-    </tr>
+    </>
   );
 };

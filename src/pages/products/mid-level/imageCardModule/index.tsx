@@ -31,7 +31,6 @@ const ImageCardModule: React.FC<IData> = ({ Images, id, OriginalImages }) => {
 
     try {
       await deleteDoc(DeleteRef);
-      window.location.reload();
     } catch (error) {
       console.log(error);
     }

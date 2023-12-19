@@ -6,7 +6,14 @@ import { ReactComponent as Plus } from "../../../../../../assets/icons/plus.svg"
 import BGimage from "../../../../../../assets/icons/bg-image.svg";
 import Button from "../../../../../../components/button";
 import LayoutModule from "../../../../../../components/layoutModule";
-import { Timestamp, addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import {
+  Timestamp,
+  addDoc,
+  collection,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import {
   DESIGN_TEXT_IMAGE,
   PRODUCTS_COLLECTION_NAME,
@@ -45,7 +52,9 @@ const TextImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [colors, setColors] = useState<string[]>([]);
   const [colorsFile, setColorsFile] = useState<(File | null)[]>([]);
-  const [colorsPreviewImage, setColorsPreviewImage] = useState<(string | null)[]>([]);
+  const [colorsPreviewImage, setColorsPreviewImage] = useState<
+    (string | null)[]
+  >([]);
   const [loading, setLoading] = useState(false);
 
   const handleGetColors = useCallback(async () => {
@@ -54,19 +63,22 @@ const TextImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
         collection(db, PRODUCTS_COLLECTION_NAME),
         where("type", "==", IProductCategory.MID)
       );
-      const data = await getDocs(productData);
-      const fetchedData = data.docs.map((d) => ({
-        id: d.id,
-        ...(d.data() as any),
-      }));
-      const tempColors: string[] = [];
-      console.log(fetchedData);
-      fetchedData.forEach((m: any) => m.colors.forEach((c: string) => tempColors.push(c)));
-      console.log(tempColors);
-      const uniqColors = _.uniq(tempColors);
-      setColors(uniqColors);
-      setColorsFile([...uniqColors.map((m) => null)]);
-      setColorsPreviewImage([...uniqColors.map((m) => null)]);
+      onSnapshot(productData, (q) => {
+        const fetchedData = q.docs.map((d) => ({
+          id: d.id,
+          ...(d.data() as any),
+        }));
+        const tempColors: string[] = [];
+        console.log(fetchedData);
+        fetchedData.forEach((m: any) =>
+          m.colors.forEach((c: string) => tempColors.push(c))
+        );
+        console.log(tempColors);
+        const uniqColors = _.uniq(tempColors);
+        setColors(uniqColors);
+        setColorsFile([...uniqColors.map((m) => null)]);
+        setColorsPreviewImage([...uniqColors.map((m) => null)]);
+      });
     } catch (error) {
       console.log(error);
     }
@@ -100,7 +112,8 @@ const TextImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
   };
 
   const handleSubmit = async () => {
-    if (colorsFile.some((s) => s === null)) return alert("Upload original images to proceed");
+    if (colorsFile.some((s) => s === null))
+      return alert("Upload original images to proceed");
 
     try {
       setLoading(true);
@@ -152,7 +165,6 @@ const TextImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
       });
       setIsActive(!active);
       setLoading(false);
-      window.location.reload();
       console.log(dataRef);
     } catch (error) {
       console.log(error);
@@ -170,13 +182,14 @@ const TextImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
         collection(db, DESIGN_TEXT_IMAGE),
         where("type", "==", IProductCategory.TEXT_IMAGE)
       );
-      const data = await getDocs(productData);
-      const fetchedData = data.docs.map((d) => ({
-        id: d.id,
-        ...(d.data() as any),
-      }));
-      console.log(fetchedData);
-      setData(fetchedData);
+      onSnapshot(productData, (q) => {
+        const fetchedData = q.docs.map((d) => ({
+          id: d.id,
+          ...(d.data() as any),
+        }));
+        console.log(fetchedData);
+        setData(fetchedData);
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -227,7 +240,10 @@ const TextImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
               </div>
             </div>
             {active && (
-              <LayoutModule handleToggle={() => setIsActive(!active)} className="layout-module">
+              <LayoutModule
+                handleToggle={() => setIsActive(!active)}
+                className="layout-module"
+              >
                 <h2>Add image</h2>
                 <div className="layout-wrap">
                   <div className="upload-area">
@@ -270,7 +286,12 @@ const TextImage: React.FC<IToggleDate> = ({ isActiveImage }) => {
                 </div>
                 <div className="btn-upload">
                   <label htmlFor="icon-image" className="custom-file-upload">
-                    <input type="file" id="icon-image" name="icon" onChange={handleFilechange} />
+                    <input
+                      type="file"
+                      id="icon-image"
+                      name="icon"
+                      onChange={handleFilechange}
+                    />
                     Change preview image
                   </label>
                   {/* <label htmlFor="original-image" className="custom-file-upload">

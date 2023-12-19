@@ -5,7 +5,7 @@ import { IpostData } from "../../../../constants/types";
 import {
   collection,
   doc,
-  getDocs,
+  onSnapshot,
   query,
   updateDoc,
   where,
@@ -43,13 +43,14 @@ const Allpost: React.FC = () => {
         collection(db, POST_COLLECTION_NAME),
         where("status", "==", "pending")
       );
-      const data = await getDocs(productData);
-      const fetchedData = data.docs.map((d) => ({
-        id: d.id,
-        ...(d.data() as any),
-      }));
-      console.log(fetchedData);
-      setData(fetchedData);
+      onSnapshot(productData, (q) => {
+        const fetchedData = q.docs.map((d) => ({
+          id: d.id,
+          ...(d.data() as any),
+        }));
+        console.log(fetchedData);
+        setData(fetchedData);
+      });
     } catch (error) {
       console.log(error);
     } finally {

@@ -29,9 +29,17 @@ import Settings from "./pages/settings";
 import { useAdminStore } from "./store/adminUser";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./utils/firebase";
-import { query, collection, getDocs, where } from "firebase/firestore";
+import {
+  query,
+  collection,
+  where,
+  onSnapshot,
+  setLogLevel,
+} from "firebase/firestore";
 import { ADMIN_COLLECTION_NAME } from "./constants/firebaseCollection";
 import Loading from "./components/loading";
+import EditAccessory from "./pages/accessory/component/EditAccessory";
+import Notification from "./pages/notification";
 
 const App: React.FC = () => {
   const [loading, setIsLoading] = useState(false);
@@ -49,10 +57,11 @@ const App: React.FC = () => {
         collection(db, ADMIN_COLLECTION_NAME),
         where("email", "==", adminDetails.email)
       );
-      const data = await getDocs(q);
-      console.log(data.docs.length);
-      data.docs.forEach((d) => {
-        setAdmin(d.data() as any);
+      onSnapshot(q, (querySnap) => {
+        console.log(querySnap.docs.length);
+        querySnap.docs.forEach((d) => {
+          setAdmin(d.data() as any);
+        });
       });
     } catch (error) {
       console.log(error);
@@ -67,92 +76,85 @@ const App: React.FC = () => {
 
   useEffect(() => {
     return onAuthStateChanged(auth, (datas) => {
+      setIsLoading(true);
       if (datas) {
         setAdminDetails(datas);
+        setIsLoading(false);
       }
     });
   }, [setAdminDetails]);
 
   return (
     <div>
-      {loading ? (
-        <Loading />
-      ) : (
-        <Routes>
-          {admin ? (
-            <Route>
-              <Route path="/login" element={<Navigate to="/" />} />
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/post" element={<Post children={undefined} />} />
-              <Route path="/post/all-post" element={<Allpost />} />
-              <Route path="/post/approved" element={<ApprovedPost />} />
-              <Route path="/post/pending" element={<PendingPost />} />
-              <Route path="/admin-management" element={<AdminManagement />} />
-              <Route
-                path="/orders/premium-orders"
-                element={<PremiumOrders />}
-              />
-              <Route path="/orders/post-orders" element={<PostOrders />} />
-              <Route
-                path="/orders/midlevel-orders"
-                element={<MidlevelOrder />}
-              />
+      <Routes>
+        {loading && !admin ? (
+          <Route>
+            <Route path="/login" element={<Login />} />
+            <Route path="*" element={<Navigate to={"/login"} />} />
+          </Route>
+        ) : (
+          <Route>
+            <Route path="/login" element={<Navigate to="/" />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/post" element={<Post children={undefined} />} />
+            <Route path="/post/all-post" element={<Allpost />} />
+            <Route path="/post/approved" element={<ApprovedPost />} />
+            <Route path="/post/pending" element={<PendingPost />} />
+            <Route path="/admin-management" element={<AdminManagement />} />
+            <Route path="/orders/premium-orders" element={<PremiumOrders />} />
+            <Route path="/orders/post-orders" element={<PostOrders />} />
+            <Route path="/orders/midlevel-orders" element={<MidlevelOrder />} />
+            <Route path="/notification" element={<Notification />} />
+            <Route
+              path="/orders/accessories-orders"
+              element={<AccessoriesOrder />}
+            />
+            <Route path="/user-post-list" element={<UserPostList />} />
+            <Route path="/user-subscription" element={<UserSubscription />} />
+            <Route
+              path="/products/mid-level/product/styles"
+              element={<MidProducts />}
+            />
+            <Route
+              path="/products/mid-level/product/create"
+              element={<CreateMidProduct index={0} />}
+            />
+            <Route path="/products/medium/edit/:id" element={<EditMidform />} />
 
-              <Route
-                path="/orders/accessories-orders"
-                element={<AccessoriesOrder />}
-              />
-              <Route path="/user-post-list" element={<UserPostList />} />
-              <Route path="/user-subscription" element={<UserSubscription />} />
-              <Route
-                path="/products/mid-level/product/styles"
-                element={<MidProducts />}
-              />
-              <Route
-                path="/products/mid-level/product/create"
-                element={<CreateMidProduct index={0} />}
-              />
-              <Route
-                path="/products/medium/edit/:id"
-                element={<EditMidform />}
-              />
-
-              <Route
-                path="/products/mid-level/product/image"
-                element={<UploadmidProductImage isActiveImage={true} />}
-              />
-              <Route
-                path="/products/mid-level/product/text-image"
-                element={<Textimage isActiveImage={true} />}
-              />
-              <Route
-                path="/products/mid-level/accessory"
-                element={<AccessoryHome />}
-              />
-              <Route
-                path="/products/mid-level/accessory/create"
-                element={<CreateAccessory index={0} />}
-              />
-              <Route path="/products/premium" element={<Premium />} />
-              <Route
-                path="/products/premium/create"
-                element={<CreatePremium index={0} />}
-              />
-              <Route
-                path="/products/premium/edit/:id"
-                element={<EditPremium />}
-              />
-              <Route path="/subscription" element={<Subscription />} />
-              <Route path="/settings" element={<Settings />} />
-            </Route>
-          ) : (
-            <Route>
-              <Route path="/login" element={<Login />} />
-              <Route path="*" element={<Navigate to={"/login"} />} />
-            </Route>
-          )}
-        </Routes>
-      )}
+            <Route
+              path="/products/mid-level/product/image"
+              element={<UploadmidProductImage isActiveImage={true} />}
+            />
+            <Route
+              path="/products/mid-level/product/text-image"
+              element={<Textimage isActiveImage={true} />}
+            />
+            <Route
+              path="/products/mid-level/accessory"
+              element={<AccessoryHome />}
+            />
+            <Route
+              path="/products/mid-level/accessory/edit/:id"
+              element={<EditAccessory />}
+            />
+            <Route
+              path="/products/mid-level/accessory/create"
+              element={<CreateAccessory index={0} />}
+            />
+            <Route path="/products/premium" element={<Premium />} />
+            <Route
+              path="/products/premium/create"
+              element={<CreatePremium index={0} />}
+            />
+            <Route
+              path="/products/premium/edit/:id"
+              element={<EditPremium />}
+            />
+            <Route path="/subscription" element={<Subscription />} />
+            <Route path="/settings" element={<Settings />} />
+          </Route>
+        )}
+      </Routes>
     </div>
   );
 };

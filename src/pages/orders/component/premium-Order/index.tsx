@@ -7,7 +7,7 @@ import "../../../../styles/postOrder.scss";
 import Button from "../../../../components/button";
 import LayoutModule from "../../../../components/layoutModule";
 import PremiumModal from "../../ordersModals/premiumModal";
-import { doc, getDoc, getDocs } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../../../utils/firebase";
 import {
   IOrdersCategory,
@@ -46,7 +46,6 @@ const PremiumOrder: React.FC = () => {
   const { data: premiumHooksData } = usePremiumGetData({ date: isdate });
 
   const ordersFetchData = useCallback(async () => {
-    const allProducts = [];
     console.log(filterOrder);
     try {
       setLoading(true);
@@ -63,14 +62,17 @@ const PremiumOrder: React.FC = () => {
         query = deliveryQuery;
       }
 
-      const collectionData = await getDocs(query);
-      const docs = collectionData.docs.map((doc) => ({
-        id: doc.id,
-        ...(doc.data() as any),
-      }));
-      allProducts.push(...docs);
-      console.log(allProducts);
-      setData(allProducts);
+      onSnapshot(query, (q: any) => {
+        const allProducts = [];
+
+        const docs = q.docs.map((doc: any) => ({
+          id: doc.id,
+          ...(doc.data() as any),
+        }));
+        allProducts.push(...docs);
+        console.log(allProducts);
+        setData(allProducts);
+      });
     } catch (error) {
       // Handle any potential errors here
       console.error("Error fetching data:", error);
@@ -108,9 +110,9 @@ const PremiumOrder: React.FC = () => {
 
   const OrdersData = [
     {
-      heading: "Today pREMIUM orders",
+      heading: "Total pREMIUM orders",
       orderNumber: premiumHooksData?.premiumProducts,
-      todayRevenue: "Today Revenue",
+      todayRevenue: "Total Revenue",
       today: premiumHooksData?.premiumRevenue,
       orders: "orders",
       image: TShirtImg,
@@ -133,6 +135,7 @@ const PremiumOrder: React.FC = () => {
                 <input
                   type="date"
                   id="customDateInput"
+                  value={isdate.toISOString().split("T")[0]}
                   onChange={(e) => setDate(new Date(e.target.value))}
                 />
               </div>
@@ -153,7 +156,7 @@ const PremiumOrder: React.FC = () => {
                   marginTop: "26px",
                 }}
               >
-                <Chart />
+                {/* <Chart /> */}
               </div>
             </div>
             <div className="post-order-text">
@@ -257,16 +260,26 @@ const PremiumOrder: React.FC = () => {
                     <th>
                       <span>Size</span>
                     </th>
-
+                    <th>
+                      <span>Invoice</span>
+                    </th>
                     <th>
                       <span>Details</span>
+                    </th>
+
+                    <th>
+                      <span>Delivery status</span>
                     </th>
                   </tr>
                 </thead>
 
                 <tbody>
                   {filteredData.map((f, index) => (
-                    <CardComponent key={index} data={f} />
+                    <CardComponent
+                      key={index}
+                      data={f}
+                      filterOrder={filterOrder}
+                    />
                   ))}
                 </tbody>
               </table>
@@ -282,9 +295,10 @@ export default PremiumOrder;
 
 interface ICardComponent {
   data: IPremiumData;
+  filterOrder: IOrdersCategory;
 }
 
-const CardComponent: React.FC<ICardComponent> = ({ data }) => {
+const CardComponent: React.FC<ICardComponent> = ({ data, filterOrder }) => {
   const [active, setActive] = useState(false);
   const [userData, setUserData] = useState<IUserData>();
   const docRef = doc(db, "users", data.userId);
@@ -293,6 +307,10 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
 
   console.log(data);
   console.log("userData", userData);
+
+  const handleToggle = () => {
+    setIsActive(true);
+  };
 
   const handleModalToggle = () => {
     setActive(true);
@@ -328,100 +346,98 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
 
   return (
     <>
-      <tr>
-        {loading ? (
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Loader />
-          </div>
-        ) : (
-          <>
-            <td>
-              <div className="flex-item row-header">
-                {userData?.profile ? (
-                  <img src={userData?.profile} alt="" />
-                ) : (
-                  <img src={User} alt="" />
-                )}
-                <p>{userData?.name ? userData?.name : "--"}</p>
-              </div>
-            </td>
-            <td>{data.productName}</td>
-            <td>{data.sizes.sizeVarient.quantity}</td>
-            <td>{data.price} INR</td>
-            <td>
-              {data.sizes.sizeVarient.size} -{" "}
-              {data.sizes.sizeVarient.measurement}
-            </td>
-            <td>
-              <PDFDownloadLink
-                document={<PremiumPdf data={data} userData={userData} />}
-                fileName="FORM"
-              >
-                {/* {({ loading }) =>
-      loading ? (
-        <Button varient="notifi" style={{ fontSize: "12px" }}>
-          Loading...
-        </Button>
-      ) : ( */}
-                <div
-                  style={{
-                    background: "#8C73CB",
-                    width: "36px",
-                    height: "32px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: "5px",
-                  }}
-                >
-                  <DownloadIcon />
+      {filterOrder ? (
+        <tr>
+          {loading ? (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Loader />
+            </div>
+          ) : (
+            <>
+              <td>
+                <div className="flex-item row-header">
+                  {userData?.profile ? (
+                    <img src={userData?.profile} alt="" />
+                  ) : (
+                    <img src={User} alt="" />
+                  )}
+                  <p>{userData?.name ? userData?.name : "--"}</p>
                 </div>
-                {/* )
+              </td>
+              <td>{data.productName}</td>
+              <td>{data.sizes.sizeVarient.quantity}</td>
+              <td>{data.price} INR</td>
+              <td>
+                {data.sizes.sizeVarient.size} -{" "}
+                {data.sizes.sizeVarient.measurement}
+              </td>
+              <td>
+                <PDFDownloadLink
+                  document={<PremiumPdf data={data} userData={userData} />}
+                  fileName="FORM"
+                >
+                  <div
+                    style={{
+                      background: "#8C73CB",
+                      width: "36px",
+                      height: "32px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <DownloadIcon />
+                  </div>
+                  {/* )
     } */}
-              </PDFDownloadLink>
-            </td>
-            <td>
-              <Button
-                varient="primary"
-                style={{ padding: "9px 8px", fontSize: "12px" }}
-                onClick={handleModalToggle}
-              >
-                View details
-              </Button>
-            </td>
-            <td>
-              <Button
-                varient="primary"
-                style={{ padding: "9px 8px", fontSize: "12px" }}
-                // onClick={handleModalToggle}
-                onClick={() => setIsActive(true)}
-              >
-                Delivery status
-              </Button>
-            </td>
-            {active && (
-              <LayoutModule
-                handleToggle={handleModalToggle}
-                className="layout-module"
-              >
-                <PremiumModal
-                  onClose={handleModalCloseToggle}
-                  data={data}
-                  user={userData}
-                />
-              </LayoutModule>
-            )}
-            {isActive && (
-              <LayoutModule
-                handleToggle={handleModalToggle}
-                className="layout-module"
-              >
-                <DeliveryDetailsModal setActive={setActive} data={data} />
-              </LayoutModule>
-            )}
-          </>
-        )}
-      </tr>
+                </PDFDownloadLink>
+              </td>
+              <td>
+                <Button
+                  varient="primary"
+                  style={{ padding: "9px 8px", fontSize: "12px" }}
+                  onClick={handleModalToggle}
+                >
+                  View details
+                </Button>
+              </td>
+              <td>
+                <Button
+                  varient="primary"
+                  style={{ padding: "9px 8px", fontSize: "12px" }}
+                  // onClick={handleModalToggle}
+                  onClick={() => setIsActive(true)}
+                >
+                  Delivery status
+                </Button>
+              </td>
+              {active && (
+                <LayoutModule
+                  handleToggle={handleModalToggle}
+                  className="layout-module"
+                >
+                  <PremiumModal
+                    onClose={handleModalCloseToggle}
+                    data={data}
+                    user={userData}
+                  />
+                </LayoutModule>
+              )}
+              {isActive && (
+                <LayoutModule
+                  handleToggle={handleToggle}
+                  className="layout-module"
+                >
+                  <DeliveryDetailsModal setIsActive={setIsActive} data={data} />
+                </LayoutModule>
+              )}
+            </>
+          )}
+        </tr>
+      ) : (
+        <p>No orders</p>
+      )}
     </>
   );
 };

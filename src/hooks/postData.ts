@@ -19,12 +19,12 @@ export const useGetPostData = ({ date }: { date?: Date }) => {
         post,
         where("type", "==", "PostLevel"),
 
-        where(
-          "createdAt",
-          ">=",
-          startOfDay(date ? new Date(date) : new Date())
-        ),
-        where("createdAt", "<=", endOfDay(date ? new Date(date) : new Date())),
+        // where(
+        //   "createdAt",
+        //   ">=",
+        //   startOfDay(date ? new Date(date) : new Date())
+        // ),
+        // where("createdAt", "<=", endOfDay(date ? new Date(date) : new Date())),
         orderBy("createdAt", "asc")
       );
       const postData = await getDocs(postProducts);

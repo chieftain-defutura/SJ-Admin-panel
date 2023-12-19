@@ -1,8 +1,10 @@
 import React from "react";
 import ReactApexChart from "react-apexcharts";
-import { IDashboard } from "../dashboard/totalRevenue";
 
-const Chart: React.FC = () => {
+interface Idata {
+  isDate: number[];
+}
+const Chart: React.FC<Idata> = ({ isDate }) => {
   const colors = [
     "#8C73CB",
     "#8C73CB",
@@ -16,7 +18,7 @@ const Chart: React.FC = () => {
   const chartData = {
     series: [
       {
-        data: [1000, 22, 10, 208, 16, 20, 3000],
+        data: [...isDate],
       },
     ],
     options: {
@@ -61,7 +63,7 @@ const Chart: React.FC = () => {
     <div id="chart">
       <ReactApexChart
         options={chartData.options as any}
-        series={chartData.series}
+        series={chartData.series as any}
         type="bar"
         height={chartData.options.chart.height}
       />
