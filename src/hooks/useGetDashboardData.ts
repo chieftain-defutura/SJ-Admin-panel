@@ -144,42 +144,55 @@ export const useGetDashboardData = ({ date }: { date?: Date }) => {
 };
 
 export const useGetDashboardChartData = ({ date }: { date?: Date }) => {
-  const [isDate, setIsDate] = useState<number[]>([]);
+  const [isDate, setIsDate] = useState<{ day: string; value: number }[]>([]);
+  console.log("isDate", isDate);
 
   const handleGetData = useCallback(async () => {
     try {
-      const startOfLastWeek = startOfDay(date ? new Date(date) : new Date());
+      const today = date ? new Date(date) : new Date();
+      const startOfLastWeek = startOfDay(today);
       startOfLastWeek.setDate(startOfLastWeek.getDate() - 6);
-      const endOfToday = endOfDay(date ? new Date(date) : new Date());
+
+      const daysData: { [key: string]: number[] } = {};
+
+      for (let i = 0; i < 7; i++) {
+        const currentDate = new Date(startOfLastWeek);
+        currentDate.setDate(currentDate.getDate() + i);
+        const dayOfWeek = currentDate.toLocaleDateString("en-US", {
+          weekday: "long",
+        });
+
+        daysData[dayOfWeek] = [];
+      }
+
+      const endOfToday = endOfDay(today);
       const Mid = collection(db, ORDERS_COLLECTION_NAME);
       const midProducts = query(
         Mid,
-        // where("type", "==", "MidLevel"),
+        // where("type", "==", "Premium-Level"),
         where("createdAt", ">=", startOfLastWeek),
         where("createdAt", "<=", endOfToday),
         orderBy("createdAt", "asc")
       );
       const midData = await getDocs(midProducts);
-      console.log("midData", midData.size);
-      const daysData: number[][] = [[], [], [], [], [], [], []]; // Sun to Sat
 
       midData.forEach((doc) => {
         const midPostdata = doc.data();
-        const createdAt = midPostdata.createdAt.toDate(); // Assuming createdAt is a Date field
-        const dayOfWeek = createdAt.getDay(); // 0 (Sun) to 6 (Sat)
-        console.log("dayOfWeek", dayOfWeek);
+        const createdAt = midPostdata.createdAt.toDate();
+        const dayOfWeek = createdAt.toLocaleDateString("en-US", {
+          weekday: "long",
+        });
 
         if (createdAt >= startOfLastWeek && createdAt <= endOfToday) {
           const { price } = midPostdata;
-          daysData[dayOfWeek].push(Number(price)); // Store the price for the day
+          daysData[dayOfWeek].push(Number(price));
         }
       });
 
-      // Calculate the total for each day and set the weeklyData state
-      const totalPerDay = daysData.map((dayData) =>
-        dayData.reduce((acc, curr) => acc + curr, 0)
-      );
-      console.log("totalPerDay", totalPerDay);
+      const totalPerDay = Object.entries(daysData).map(([day, dayData]) => ({
+        day,
+        value: dayData.reduce((acc, curr) => acc + curr, 0),
+      }));
 
       setIsDate(totalPerDay);
     } catch (error) {
@@ -189,7 +202,7 @@ export const useGetDashboardChartData = ({ date }: { date?: Date }) => {
 
   useEffect(() => {
     handleGetData();
-  }, [handleGetData]);
+  }, [handleGetData, date]);
 
   return { data: isDate };
 };

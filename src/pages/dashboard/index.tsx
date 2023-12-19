@@ -148,7 +148,7 @@ const Dashboard: React.FC = () => {
                   padding: "16px",
                 }}
               >
-                <Chart isDate={chartData} />
+                <Chart data={chartData} />
               </div>
             </div>
             <div style={{ margin: "32px 0" }}>

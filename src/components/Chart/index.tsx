@@ -2,9 +2,12 @@ import React from "react";
 import ReactApexChart from "react-apexcharts";
 
 interface Idata {
-  isDate: number[];
+  data: {
+    day: string;
+    value: number;
+  }[];
 }
-const Chart: React.FC<Idata> = ({ isDate }) => {
+const Chart: React.FC<Idata> = ({ data }) => {
   const colors = [
     "#8C73CB",
     "#8C73CB",
@@ -14,11 +17,14 @@ const Chart: React.FC<Idata> = ({ isDate }) => {
     "#8C73CB",
     "#8C73CB",
   ];
+  const seriesData = data.map((f) => f.value);
+
+  const categoriesData = data.map((f) => f.day);
 
   const chartData = {
-    series: [
+    price: [
       {
-        data: [...isDate],
+        data: seriesData,
       },
     ],
     options: {
@@ -40,15 +46,7 @@ const Chart: React.FC<Idata> = ({ isDate }) => {
         show: false,
       },
       xaxis: {
-        categories: [
-          ["Sun"],
-          ["Mon"],
-          ["Tue"],
-          ["Wed"],
-          ["Thu"],
-          ["Fri"],
-          ["Sat"],
-        ],
+        categories: categoriesData,
         labels: {
           style: {
             colors: colors,
@@ -63,7 +61,7 @@ const Chart: React.FC<Idata> = ({ isDate }) => {
     <div id="chart">
       <ReactApexChart
         options={chartData.options as any}
-        series={chartData.series as any}
+        series={chartData.price}
         type="bar"
         height={chartData.options.chart.height}
       />
