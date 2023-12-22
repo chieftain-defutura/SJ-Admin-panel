@@ -27,8 +27,8 @@ const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
         </Button>
       </td>
       <td>
-        {returnData && returnData.creadtedAt
-          ? returnData.creadtedAt.toDate().toISOString().split("T")[0]
+        {returnData && returnData.createdAt
+          ? returnData.createdAt.toDate().toISOString().split("T")[0]
           : "No date"}
       </td>
       <td>
@@ -57,8 +57,8 @@ const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
             </div>
             <div className="details">
               <div className="return-img">
-                {returnData?.images ? (
-                  <img src={returnData?.images} alt="" />
+                {returnData?.Image ? (
+                  <img src={returnData?.Image} alt="" />
                 ) : (
                   <img src={BG} alt="" />
                 )}
@@ -84,7 +84,7 @@ const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
                 </div>
                 <div className="discriprition">
                   <h5>Discription</h5>
-                  <p>{returnData?.discription}</p>
+                  <p>{returnData?.description}</p>
                 </div>
               </div>
             </div>

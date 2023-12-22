@@ -21,7 +21,10 @@ import AccessoryPdf from "../../../../components/PdfFile/AccessoryPdf";
 import AccessoriesModal from "../../ordersModals/accessoriesModal";
 import { ORDERS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import Loading from "../../../../components/loading";
-import { useGetAccessoryData } from "../../../../hooks/useAccessoryData";
+import {
+  useGetAccessoryChart,
+  useGetAccessoryData,
+} from "../../../../hooks/useAccessoryData";
 import {
   orderPlacedQueryAccessory,
   manufacturingQueryAccessory,
@@ -43,6 +46,7 @@ const AccessoriesOrder: React.FC = () => {
   );
   const [isdate, setDate] = useState<Date>(new Date());
   const { data: AccessoryHooksData } = useGetAccessoryData({ date: isdate });
+  const { data: chartData } = useGetAccessoryChart({ date: isdate });
 
   const getData = useCallback(async () => {
     const allProducts = [];
@@ -136,7 +140,7 @@ const AccessoriesOrder: React.FC = () => {
                 marginTop: "26px",
               }}
             >
-              {/* <Chart /> */}
+              <Chart data={chartData} />
             </div>
           </div>
           <div className="post-order-text">

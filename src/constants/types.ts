@@ -421,15 +421,15 @@ export interface IFetchData extends IUserData {
 }
 
 export interface IReturnOrdersData {
-  creadtedAt: Timestamp;
+  createdAt: Timestamp;
   issues: string;
-  images: string;
+  Image: string;
   RefundStatus: {
     status: boolean;
     createdAt: string;
     discription: string;
   }[];
-  discription: string;
+  description: string;
   status: string;
   updatedAt: Timestamp;
   userId: string;
