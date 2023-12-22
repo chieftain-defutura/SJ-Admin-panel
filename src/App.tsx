@@ -40,6 +40,7 @@ import { ADMIN_COLLECTION_NAME } from "./constants/firebaseCollection";
 import Loading from "./components/loading";
 import EditAccessory from "./pages/accessory/component/EditAccessory";
 import Notification from "./pages/notification";
+import Return from "./pages/returnOrders";
 
 const App: React.FC = () => {
   const [loading, setIsLoading] = useState(false);
@@ -152,6 +153,7 @@ const App: React.FC = () => {
             />
             <Route path="/subscription" element={<Subscription />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/returns" element={<Return />} />
           </Route>
         )}
       </Routes>

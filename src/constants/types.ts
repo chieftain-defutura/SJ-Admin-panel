@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface IpostData {
   id: string;
   productCaption: string;
@@ -416,6 +418,22 @@ export interface IFetchData extends IUserData {
 
   styles: string;
   type: string;
+}
+
+export interface IReturnOrdersData {
+  creadtedAt: Timestamp;
+  issues: string;
+  images: string;
+  RefundStatus: {
+    status: boolean;
+    createdAt: string;
+    discription: string;
+  }[];
+  discription: string;
+  status: string;
+  updatedAt: Timestamp;
+  userId: string;
+  id: string;
 }
 export enum IProductCategory {
   MID = "MIDLEVEL-PRODUCTS",

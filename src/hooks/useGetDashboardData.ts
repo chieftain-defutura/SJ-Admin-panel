@@ -24,6 +24,8 @@ export const useGetDashboardData = ({ date }: { date?: Date }) => {
       const midProducts = query(
         Mid,
         where("type", "==", "MidLevel"),
+        // where("paymentStatus", "==", "SUCCESS"),
+
         where(
           "createdAt",
           ">=",
@@ -47,6 +49,7 @@ export const useGetDashboardData = ({ date }: { date?: Date }) => {
       const premiumProducts = query(
         Premium,
         where("type", "==", "Premium-Level"),
+        // where("paymentStatus", "==", "SUCCESS"),
         where(
           "createdAt",
           ">=",
@@ -69,6 +72,8 @@ export const useGetDashboardData = ({ date }: { date?: Date }) => {
       const accessoryProducts = query(
         accessory,
         where("type", "==", "Accessory-Level"),
+        // where("paymentStatus", "==", "SUCCESS"),
+
         where(
           "createdAt",
           ">=",
@@ -91,6 +96,7 @@ export const useGetDashboardData = ({ date }: { date?: Date }) => {
       const postProducts = query(
         post,
         where("type", "==", "PostLevel"),
+        // where("paymentStatus", "==", "SUCCESS"),
 
         where(
           "createdAt",
@@ -170,6 +176,8 @@ export const useGetDashboardChartData = ({ date }: { date?: Date }) => {
       const midProducts = query(
         Mid,
         // where("type", "==", "Premium-Level"),
+        // where("paymentStatus", "==", "SUCCESS"),
+
         where("createdAt", ">=", startOfLastWeek),
         where("createdAt", "<=", endOfToday),
         orderBy("createdAt", "asc")

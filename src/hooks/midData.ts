@@ -18,13 +18,15 @@ export const useMidGetData = ({ date }: { date?: Date }) => {
       const midProducts = query(
         Mid,
         where("type", "==", "MidLevel"),
+        where("paymentStatus", "==", "SUCCESS")
+
         // where(
         //   "createdAt",
         //   ">=",
         //   startOfDay(date ? new Date(date) : new Date())
         // ),
         // where("createdAt", "<=", endOfDay(date ? new Date(date) : new Date())),
-        orderBy("createdAt", "asc")
+        // orderBy("createdAt", "asc")
       );
       const midData = await getDocs(midProducts);
       console.log("midData", midData.size);

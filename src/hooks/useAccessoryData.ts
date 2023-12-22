@@ -18,13 +18,15 @@ export const useGetAccessoryData = ({ date }: { date?: Date }) => {
       const accessoryProducts = query(
         accessory,
         where("type", "==", "Accessory-Level"),
+        where("paymentStatus", "==", "SUCCESS")
+
         // where(
         //   "createdAt",
         //   ">=",
         //   startOfDay(date ? new Date(date) : new Date())
         // ),
         // where("createdAt", "<=", endOfDay(date ? new Date(date) : new Date())),
-        orderBy("createdAt", "asc")
+        // orderBy("createdAt", "asc")
       );
       const accessoryData = await getDocs(accessoryProducts);
       let totalAccessoryPrice = 0;

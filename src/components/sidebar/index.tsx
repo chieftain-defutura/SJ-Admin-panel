@@ -41,6 +41,9 @@ const Sidebar: React.FC = () => {
         {/* <a href="/account">
           <p>Account</p>
         </a> */}
+        <NavLink to="/returns">
+          <p>Return orders</p>
+        </NavLink>
       </div>
     </div>
   );

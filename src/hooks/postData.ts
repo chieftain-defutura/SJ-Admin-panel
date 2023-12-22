@@ -18,6 +18,7 @@ export const useGetPostData = ({ date }: { date?: Date }) => {
       const postProducts = query(
         post,
         where("type", "==", "PostLevel"),
+        where("paymentStatus", "==", "SUCCESS")
 
         // where(
         //   "createdAt",
@@ -25,7 +26,7 @@ export const useGetPostData = ({ date }: { date?: Date }) => {
         //   startOfDay(date ? new Date(date) : new Date())
         // ),
         // where("createdAt", "<=", endOfDay(date ? new Date(date) : new Date())),
-        orderBy("createdAt", "asc")
+        // orderBy("createdAt", "asc")
       );
       const postData = await getDocs(postProducts);
       let totalPostPrice = 0;

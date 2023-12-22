@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-import { endOfDay, startOfDay } from "date-fns";
 import { db } from "../utils/firebase";
 import { ORDERS_COLLECTION_NAME } from "../constants/firebaseCollection";
 
@@ -18,13 +17,15 @@ export const usePremiumGetData = ({ date }: { date?: Date }) => {
       const premiumProducts = query(
         Premium,
         where("type", "==", "Premium-Level"),
+        where("paymentStatus", "==", "SUCCESS")
+
         // where(
         //   "createdAt",
         //   ">=",
         //   startOfDay(date ? new Date(date) : new Date())
         // ),
         // where("createdAt", "<=", endOfDay(date ? new Date(date) : new Date())),
-        orderBy("createdAt", "asc")
+        // orderBy("createdAt", "asc")
       );
       const premiumData = await getDocs(premiumProducts);
       console.log("premiumData", premiumData.size);
