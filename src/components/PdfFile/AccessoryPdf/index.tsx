@@ -307,7 +307,7 @@ const AccessoryPdf: React.FC<IPdfData> = ({ data, userData }) => {
               <Text style={[styles.tableCell]}>0</Text>
               <Text style={[styles.tableCell]}>0</Text>
               <Text style={[styles.tableCell]}>0</Text>
-              <Text style={[styles.tableCell]}>{data.price}</Text>
+              <Text style={[styles.tableCell]}>RS:{data.price}</Text>
 
               {/* ))} */}
             </View>
@@ -336,84 +336,78 @@ const AccessoryPdf: React.FC<IPdfData> = ({ data, userData }) => {
           <View
             style={{
               display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            <Text style={styles.totalText}>Sprinkle Nadar Private Ltd:</Text>
-            <Text style={styles.totalText}>Authorized Signatory</Text>
+            <View
+              style={{
+                padding: 6,
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                // borderBottom: "0.5px solid #000",
+                // borderRight: "0.5px solid #000",
+              }}
+            >
+              <Text style={styles.head}>Transaction Id: </Text>
+              <Text style={styles.text}> {data.id}</Text>
+            </View>
+            <View>
+              <Text style={styles.totalText}>Sprinkle Nadar Private Ltd:</Text>
+              <Text style={styles.totalText}>Authorized Signatory</Text>
+            </View>
           </View>
         </View>
         <Text style={[styles.text, { marginTop: 2 }]}>
           Whether tax is payable under reverse charge - No
         </Text>
-        <View style={styles.border}>
-          <View style={{ width: 150 }}>
-            <View
-              style={{
-                padding: 6,
-                borderBottom: "0.5px solid #000",
-                borderRight: "0.5px solid #000",
-              }}
-            >
-              <Text style={styles.head}>Payment Transaction ID: </Text>
-              <Text style={styles.text}> 11106AALCA0171E1Z3</Text>
-            </View>
-            <View style={{ padding: 6, borderRight: "0.5px solid #000" }}>
-              <Text style={styles.head}>Payment Transaction ID: </Text>
-              <Text style={styles.text}> BS106AALCA0171E1Z3</Text>
-            </View>
-          </View>
-          <View style={{ width: 150 }}>
-            <View
-              style={{
-                padding: 6,
-                borderBottom: "0.5px solid #000",
-                borderRight: "0.5px solid #000",
-              }}
-            >
-              <View style={styles.flexContent}>
-                <Text style={styles.head}>Date & Time:</Text>
-                <Text style={styles.text}> 24/08/2023</Text>
-              </View>
-              <Text style={styles.text}> 00:39:27 hrs</Text>
-            </View>
-            <View style={{ padding: 6, borderRight: "0.5px solid #000" }}>
-              <View style={styles.flexContent}>
-                <Text style={styles.head}>Date & Time:</Text>
-                <Text style={styles.text}> 24/08/2023</Text>
-              </View>
-              <Text style={styles.text}> 00:39:27 hrs</Text>
-            </View>
-          </View>
+        <View
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
           <View
             style={{
               padding: 6,
-              borderRight: "0.5px solid #000",
-              paddingTop: 23,
-              width: 80,
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
             }}
           >
-            <Text style={styles.head}>Invoice Value: </Text>
-            <Text style={styles.text}>{data.price}</Text>
+            <Text style={styles.head}>Date </Text>
+            <Text style={styles.text}>
+              {data.createdAt.toDate().toISOString().split("T")[0]}
+            </Text>
           </View>
-          <View style={{ width: 130 }}>
+
+          <View>
+            {/* <View
+              style={{
+                padding: 6,
+                flexDirection: "row",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Text style={styles.head}>Invoice Value: </Text>
+              <Text style={styles.text}> RS:{data.price}</Text>
+            </View> */}
+
             <View
               style={{
                 padding: 6,
-                borderBottom: "0.5px solid #000",
+                flexDirection: "row",
+                display: "flex",
+                alignItems: "center",
               }}
             >
               <Text style={styles.head}>Mode of Payment: </Text>
-              <Text style={styles.text}>GiftCard</Text>
-            </View>
-            <View
-              style={{
-                padding: 6,
-              }}
-            >
-              <Text style={styles.head}>Mode of Payment: </Text>
-              <Text style={styles.text}>GiftCard</Text>
+              <Text style={styles.text}>Online</Text>
             </View>
           </View>
         </View>

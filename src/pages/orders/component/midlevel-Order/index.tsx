@@ -3,7 +3,7 @@ import { ReactComponent as ChevronDown } from "../../../../assets/icons/chevron-
 import { ReactComponent as DownloadIcon } from "../../../../assets/icons/downloadIcon.svg";
 import LayoutModule from "../../../../components/layoutModule";
 import TShirtImg from "../../../../assets/images/t-shirt-two.png";
-import { doc, getDoc, getDocs } from "firebase/firestore";
+import { doc, getDoc, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../../../../utils/firebase";
 import Chart from "../../../../components/Chart";
 import Button from "../../../../components/button";
@@ -27,8 +27,9 @@ import {
 import Loading from "../../../../components/loading";
 import Loader from "../../../../components/Loader";
 import User from "../../../../assets/icons/user.jpg";
-import { useMidGetData } from "../../../../hooks/midData";
+import { useMidGetChart, useMidGetData } from "../../../../hooks/midData";
 import MidCard from "../../../../components/dashboard/midLevelCard";
+import DeliveryDetailsModal from "../../ordersModals/midlevelModal/deliveryDetails";
 
 const MidlevelOrder: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
@@ -41,17 +42,9 @@ const MidlevelOrder: React.FC = () => {
 
   const [isdate, setDate] = useState<Date>(new Date());
   const { data: midHooksData } = useMidGetData({ date: isdate });
+  const { data: chartData } = useMidGetChart({ date: isdate });
+  console.log("chartData", chartData);
 
-  // const getData = useCallback(async () => {
-  //   const productData = collection(db, ORDERS_COLLECTION_NAME);
-  //   const q = query(productData, where("type", "==", "Mid-Level"));
-  //   const midData = await getDocs(q);
-  //   const fetchProduct = midData.docs.map((doc) => ({
-  //     id: doc.id,
-  //     ...(doc.data() as any),
-  //   }));
-  //   setData(fetchProduct);
-  // }, []);
   const ordersData = [
     {
       heading: "Total mID LEVEL orders",
@@ -82,14 +75,17 @@ const MidlevelOrder: React.FC = () => {
         query = deliveryQueryMid;
       }
 
-      const collectionData = await getDocs(query);
-      const docs = collectionData.docs.map((doc) => ({
-        id: doc.id,
-        ...(doc.data() as any),
-      }));
-      allProducts.push(...docs);
-      console.log(allProducts);
-      setData(allProducts);
+      onSnapshot(query, (q: any) => {
+        const allProducts = [];
+
+        const docs = q.docs.map((doc: any) => ({
+          id: doc.id,
+          ...(doc.data() as any),
+        }));
+        allProducts.push(...docs);
+        console.log(allProducts);
+        setData(allProducts);
+      });
     } catch (error) {
       // Handle any potential errors here
       console.error("Error fetching data:", error);
@@ -145,14 +141,14 @@ const MidlevelOrder: React.FC = () => {
                   marginTop: "26px",
                 }}
               >
-                {/* <Chart /> */}
+                <Chart data={chartData} />
               </div>
             </div>
             <div className="post-order-text">
               <p>Midlevel Order</p>
               <div className="drop-down-wrapper">
                 <div className="flex-item" onClick={handleToggle}>
-                  <p>Place orders</p>
+                  <p>{filterOrder ? filterOrder : "Placed orders"}</p>
                   <ChevronDown
                     className={`drop-down-icon ${isActive ? "rotate" : ""}`}
                     onClick={handleToggle}
@@ -207,20 +203,24 @@ const MidlevelOrder: React.FC = () => {
                     <th>
                       <span>Product</span>
                     </th>
-                    <th>
-                      <span>Quantity</span>
-                    </th>
+
                     <th>
                       <span>Price</span>
                     </th>
                     <th>
                       <span>Size</span>
                     </th>
-                    {/* <th>
-                      <span>Address</span>
-                    </th> */}
+                    <th>
+                      <span>Created</span>
+                    </th>
+                    <th>
+                      <span>Invoice</span>
+                    </th>
                     <th>
                       <span>Details</span>
+                    </th>
+                    <th>
+                      <span>Delivery status</span>
                     </th>
                   </tr>
                 </thead>
@@ -245,6 +245,7 @@ interface ICardComponent {
 }
 const CardComponent: React.FC<ICardComponent> = ({ data }) => {
   const [active, setActive] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   const [userData, setUserData] = useState<IUserData>();
   const docRef = doc(db, "users", data.userId);
   const [loading, setLoading] = useState(false);
@@ -304,12 +305,12 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
               </div>
             </td>
             <td>{data.productName}</td>
-            <td>{data.sizes.sizeVarient.quantity}</td>
             <td>{data.price} INR</td>
             <td>
               {data.sizes.sizeVarient.size} -{" "}
               {data.sizes.sizeVarient.measurement}
             </td>
+            <td>{data.createdAt.toDate().toISOString().split("T")[0]}</td>
             <td>
               <PDFDownloadLink
                 document={<MidLevelPdf data={data} userData={userData} />}
@@ -338,18 +339,28 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
     } */}
               </PDFDownloadLink>
             </td>
+
             <td>
               <Button
                 varient="primary"
-                style={{ padding: "9px 38px", fontSize: "12px" }}
+                style={{ padding: "9px 8px", fontSize: "12px" }}
                 onClick={handleModalToggle}
               >
                 View details
               </Button>
             </td>
+            <td>
+              <Button
+                varient="primary"
+                style={{ padding: "9px 8px", fontSize: "12px" }}
+                onClick={() => setIsActive(true)}
+              >
+                Delivery status
+              </Button>
+            </td>
             {active && (
               <LayoutModule
-                handleToggle={handleModalToggle}
+                handleToggle={handleModalCloseToggle}
                 className="layout-module"
               >
                 <MidlevelModal
@@ -357,6 +368,14 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
                   data={data}
                   userData={userData}
                 />
+              </LayoutModule>
+            )}
+            {isActive && (
+              <LayoutModule
+                handleToggle={() => setIsActive(false)}
+                className="layout-module"
+              >
+                <DeliveryDetailsModal setIsActive={setIsActive} data={data} />
               </LayoutModule>
             )}
           </>

@@ -14,48 +14,27 @@ const ProductDetailsModal: React.FC<IDetailsdata> = ({
   onClose,
   user,
 }) => {
-  const [activeSection, setActiveSection] = useState("Image");
-
   return (
     <div className="product-details-container">
       <div className="product-details-modal-wrapper">
         <div className="product-details-img-box">
           <div className="product-head flex-item">
-            <div
-              className={activeSection === "Image" ? "active" : ""}
-              onClick={() => setActiveSection("Image")}
-            >
+            <div className="Image">
               <p>Image</p>
             </div>
-            <div
-              className={activeSection === "Design" ? "active" : ""}
-              onClick={() => setActiveSection("Design")}
-            >
-              <p>Design</p>
-            </div>
           </div>
-          {activeSection === "Image" && (
-            <div className="image">
-              {data ? (
-                <img
-                  src={data.productImage}
-                  alt=""
-                  style={{ objectFit: "contain" }}
-                />
-              ) : (
-                <img src={BgImage} alt="" />
-              )}
-            </div>
-          )}
-          {activeSection === "Design" && (
-            <div className="image">
-              {data ? (
-                <img src={data.productImage} alt="" />
-              ) : (
-                <img src={BgImage} alt="" />
-              )}
-            </div>
-          )}
+
+          <div className="image">
+            {data ? (
+              <img
+                src={data.productImage}
+                alt=""
+                style={{ objectFit: "contain" }}
+              />
+            ) : (
+              <img src={BgImage} alt="" />
+            )}
+          </div>
         </div>
         <div className="product-wrapper">
           <div className="product-items flex-item">
@@ -63,10 +42,7 @@ const ProductDetailsModal: React.FC<IDetailsdata> = ({
               <p>Product</p>
               <h5>{data.productName ? data.productName : "--"}</h5>
             </div>
-            <div className="product-text">
-              <p>Color</p>
-              {/* <h5>{data. ? data.color : "--"}</h5> */}
-            </div>
+
             <div className="product-text">
               <p>Style</p>
               <h5>{data.styles ? data.styles : "--"}</h5>
@@ -95,6 +71,7 @@ const ProductDetailsModal: React.FC<IDetailsdata> = ({
                 {data.offerPrice ? data.offerPrice : "--"}
               </h5>
             </div>
+
             {/* <div className="product-text">
               <p>Design Image Price</p>
               <h5>{data.textAndImage.rate ? data.textAndImage.rate : "--"}</h5>
@@ -120,7 +97,7 @@ const ProductDetailsModal: React.FC<IDetailsdata> = ({
             </div>
             <div>
               <p>Payment</p>
-              <h5>Status-{data.status}</h5>
+              <h5>Status-{data.paymentStatus}</h5>
             </div>
             <div>
               <p>Gift messages</p>

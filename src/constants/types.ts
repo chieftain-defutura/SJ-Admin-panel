@@ -2,6 +2,8 @@ import { Timestamp } from "firebase/firestore";
 
 export interface IpostData {
   id: string;
+  createdAt: Timestamp;
+
   productCaption: string;
   normalPrice: string;
   offerPrice: string;
@@ -111,6 +113,8 @@ export interface IUserData {
 }
 
 export interface IPremiumData {
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
   description: string;
   gender: string;
   offerPrice: string;
@@ -128,7 +132,7 @@ export interface IPremiumData {
       measurement: number;
     };
   };
-  status: string;
+  paymentStatus: string;
   type: string;
   orderStatus: {
     delivery: {
@@ -166,6 +170,7 @@ export interface IPremiumData {
 
 export interface IPost {
   description: string;
+  createdAt: Timestamp;
   gender: string;
   offerPrice: string;
   giftMessage: {
@@ -243,10 +248,8 @@ export interface IMidLevelData {
     };
   };
   gender: string;
-  createdAt: {
-    seconds: number;
-    nanoseconds: number;
-  };
+  createdAt: Timestamp;
+
   paymentStatus: string;
   orderStatus: {
     orderPlaced: {
@@ -297,6 +300,7 @@ export interface IMidLevelData {
 }
 export interface IAccessoryLevel {
   id: string;
+  createdAt: Timestamp;
   updatedAt: {
     seconds: number;
     nanoseconds: number;
@@ -316,10 +320,7 @@ export interface IAccessoryLevel {
     };
   };
   gender: string;
-  createdAt: {
-    seconds: number;
-    nanoseconds: number;
-  };
+
   paymentStatus: string;
   orderStatus: {
     orderPlaced: {

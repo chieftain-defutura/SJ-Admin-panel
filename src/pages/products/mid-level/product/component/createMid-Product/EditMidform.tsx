@@ -54,7 +54,7 @@ const EditMidform: React.FC = () => {
   // const [video, setVideo] = useState("");
   const [files, setFiles] = useState<IFiles[]>([]);
   const [active, setActive] = useState(false);
-  const [toggle, setToggle] = useState(false);
+  // const [toggle, setToggle] = useState(false);
   const [data, setData] = useState<typeof initialValue | null>(null);
   const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
   const [country, setCountry] = useState("");
@@ -117,7 +117,7 @@ const EditMidform: React.FC = () => {
 
   const handleToggle = () => {
     setActive(true);
-    setToggle(true);
+    // setToggle(true);
   };
   const handleSubmit = async (value: typeof initialValue) => {
     try {

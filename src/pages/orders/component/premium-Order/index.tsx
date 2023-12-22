@@ -28,7 +28,10 @@ import {
   shippingQuery,
 } from "../../../../utils/query";
 import Loader from "../../../../components/Loader";
-import { usePremiumGetData } from "../../../../hooks/premiumData";
+import {
+  usePremiumGetChart,
+  usePremiumGetData,
+} from "../../../../hooks/premiumData";
 import DeliveryDetailsModal from "../../ordersModals/premiumModal/deliveryDetails";
 
 const PremiumOrder: React.FC = () => {
@@ -44,6 +47,7 @@ const PremiumOrder: React.FC = () => {
   console.log("Data", data);
   const [isdate, setDate] = useState<Date>(new Date());
   const { data: premiumHooksData } = usePremiumGetData({ date: isdate });
+  const { data: chartData } = usePremiumGetChart({ date: isdate });
 
   const ordersFetchData = useCallback(async () => {
     console.log(filterOrder);
@@ -156,7 +160,7 @@ const PremiumOrder: React.FC = () => {
                   marginTop: "26px",
                 }}
               >
-                {/* <Chart /> */}
+                <Chart data={chartData} />
               </div>
             </div>
             <div className="post-order-text">
@@ -191,7 +195,8 @@ const PremiumOrder: React.FC = () => {
                 </div>
                 <div className="drop-down-wrapper">
                   <div className="flex-item" onClick={handleToggle}>
-                    <p>Place orders</p>
+                    <p>{filterOrder ? filterOrder : "Placed orders"}</p>
+
                     <ChevronDown
                       className={`drop-down-icon ${isActive ? "rotate" : ""}`}
                       onClick={handleToggle}
@@ -251,14 +256,15 @@ const PremiumOrder: React.FC = () => {
                     <th>
                       <span>Product</span>
                     </th>
-                    <th>
-                      <span>Quantity</span>
-                    </th>
+
                     <th>
                       <span>Price</span>
                     </th>
                     <th>
                       <span>Size</span>
+                    </th>
+                    <th>
+                      <span>Created</span>
                     </th>
                     <th>
                       <span>Invoice</span>
@@ -365,12 +371,12 @@ const CardComponent: React.FC<ICardComponent> = ({ data, filterOrder }) => {
                 </div>
               </td>
               <td>{data.productName}</td>
-              <td>{data.sizes.sizeVarient.quantity}</td>
               <td>{data.price} INR</td>
               <td>
                 {data.sizes.sizeVarient.size} -{" "}
                 {data.sizes.sizeVarient.measurement}
               </td>
+              <td>{data.createdAt.toDate().toISOString().split("T")[0]}</td>
               <td>
                 <PDFDownloadLink
                   document={<PremiumPdf data={data} userData={userData} />}

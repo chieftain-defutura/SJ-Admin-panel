@@ -4,7 +4,7 @@ import Button from "../../../../../components/button";
 import { IPremiumData } from "../../../../../constants/types";
 import { Form, Formik } from "formik";
 import ConfirmOrder from "./confirmOrder";
-import { doc, updateDoc } from "firebase/firestore";
+import { Timestamp, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../utils/firebase";
 import { ORDERS_COLLECTION_NAME } from "../../../../../constants/firebaseCollection";
 import Loader from "../../../../../components/Loader";

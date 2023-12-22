@@ -5,9 +5,8 @@ import ToggleSwitch from "../../components/toggleSwitch";
 import Input from "../../components/input";
 import { Form, Formik } from "formik";
 import Button from "../../components/button";
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
-import { ISettingdata } from "../../constants/types";
 
 const initialValues = {
   showAccessoryPage: false,

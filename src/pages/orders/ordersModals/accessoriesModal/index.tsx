@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg";
-import DeliveryDetailsModal from "./deliveryDetails";
 import ProductDetailsModal from "./productDetails";
 import "../../../../styles/postModal.scss";
 import { IAccessoryLevel, IUserData } from "../../../../constants/types";
@@ -38,19 +37,19 @@ const AccessoriesModal: React.FC<IAccessoriesModal> = ({
             <div className="border-bottom"></div>
           </div>
 
-          <div
+          {/* <div
             className={activeSection === "delivery" ? "active" : ""}
             onClick={handleDeliveryClick}
           >
             <p>Delivery status</p>
             <div className="border-bottom"></div>
-          </div>
+          </div> */}
         </div>
         <div className="close-icon" onClick={onClose}>
           <CloseIcon />
         </div>
 
-        {activeSection === "delivery" && <DeliveryDetailsModal data={data} />}
+        {/* {activeSection === "delivery" && <DeliveryDetailsModal data={data} />} */}
         {activeSection === "product" && (
           <ProductDetailsModal data={data} user={user} onClose={onClose} />
         )}

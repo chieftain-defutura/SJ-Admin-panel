@@ -21,11 +21,12 @@ import {
   shippingQueryPost,
   deliveryQueryPost,
 } from "../../../../utils/query";
-import { useGetPostData } from "../../../../hooks/postData";
+import { useGetPostData, usePostGetChart } from "../../../../hooks/postData";
 import Loading from "../../../../components/loading";
 import Loader from "../../../../components/Loader";
 import PostCard from "../../../../components/dashboard/postCard";
 import User from "../../../../assets/icons/user.jpg";
+import DeliveryDetailsModal from "../../ordersModals/postModal/deliveryDetails";
 
 const PostOrders: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
@@ -36,6 +37,7 @@ const PostOrders: React.FC = () => {
   );
   const [isdate, setDate] = useState<Date>(new Date());
   const { data: PostHooksData } = useGetPostData({ date: isdate });
+  const { data: chartData } = usePostGetChart({ date: isdate });
 
   const getData = useCallback(async () => {
     const allProducts = [];
@@ -132,14 +134,14 @@ const PostOrders: React.FC = () => {
                   marginTop: "26px",
                 }}
               >
-                {/* <Chart /> */}
+                <Chart data={chartData} />
               </div>
             </div>
             <div className="post-order-text">
               <p>Post orders</p>
               <div className="drop-down-wrapper">
                 <div className="flex-item" onClick={handleToggle}>
-                  <p>Place orders</p>
+                  <p>{filterOrder ? filterOrder : "Placed orders"}</p>
                   <ChevronDown
                     className={`drop-down-icon ${isActive ? "rotate" : ""}`}
                     onClick={handleToggle}
@@ -194,9 +196,7 @@ const PostOrders: React.FC = () => {
                     <th>
                       <span>Product</span>
                     </th>
-                    <th>
-                      <span>Quantity</span>
-                    </th>
+
                     <th>
                       <span>Price</span>
                     </th>
@@ -204,10 +204,16 @@ const PostOrders: React.FC = () => {
                       <span>Size</span>
                     </th>
                     <th>
-                      <span>Address</span>
+                      <span>Created</span>
+                    </th>
+                    <th>
+                      <span>Invoice</span>
                     </th>
                     <th>
                       <span>Details</span>
+                    </th>
+                    <th>
+                      <span>Delivery status</span>
                     </th>
                   </tr>
                 </thead>
@@ -241,6 +247,7 @@ const CardComponent: React.FC<ICardComponent> = ({ data, filterOrder }) => {
   const [userData, setUserData] = useState<IUserData>();
   const docRef = doc(db, "users", data.userId);
   const [loading, setLoading] = useState(false);
+  const [isActive, setIsActive] = useState(false);
 
   const handleModalToggle = () => {
     setActive(true);
@@ -275,84 +282,94 @@ const CardComponent: React.FC<ICardComponent> = ({ data, filterOrder }) => {
   }, [fetchData]);
 
   return (
-    <>
-      {filterOrder ? (
-        <tr>
-          {loading ? (
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <Loader />
-            </div>
-          ) : (
-            <>
-              <td>
-                <div className="flex-item row-header">
-                  {userData?.profile ? (
-                    <img src={userData?.profile} alt="" />
-                  ) : (
-                    <img src={User} alt="" />
-                  )}
-                  <p>{userData?.name ? userData?.name : "--"}</p>
-                </div>
-              </td>
-              <td>{data.productName}</td>
-              <td>{data.sizes.sizeVarient.quantity}</td>
-              <td>{data.price} INR</td>
-              <td>
-                {data.sizes.sizeVarient.size} -{" "}
-                {data.sizes.sizeVarient.measurement}
-              </td>
-              <td>Address</td>
-              <td>
-                <PDFDownloadLink
-                  document={<PostPdf data={data} userData={userData} />}
-                  fileName="FORM"
-                >
-                  {/* {({ loading }) =>
-  loading ? (
-    <Button varient="notifi" style={{ fontSize: "12px" }}>
-      Loading...
-    </Button>
-  ) : ( */}
-                  <div
-                    style={{
-                      background: "#8C73CB",
-                      width: "36px",
-                      height: "32px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <DownloadIcon />
-                  </div>
-                  {/* )
-} */}
-                </PDFDownloadLink>
-              </td>
-              <td>
-                <Button
-                  varient="primary"
-                  style={{ padding: "9px 38px", fontSize: "12px" }}
-                  onClick={handleModalToggle}
-                >
-                  View details
-                </Button>
-              </td>
-              {active && (
-                <LayoutModule
-                  handleToggle={handleModalToggle}
-                  className="layout-module"
-                >
-                  <PostModal onClose={handleModalCloseToggle} data={data} />
-                </LayoutModule>
-              )}
-            </>
-          )}
-        </tr>
+    <tr>
+      {loading ? (
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Loader />
+        </div>
       ) : (
-        <p>No orders</p>
+        <>
+          <td>
+            <div className="flex-item row-header">
+              {userData?.profile ? (
+                <img src={userData?.profile} alt="" />
+              ) : (
+                <img src={User} alt="" />
+              )}
+              <p>{userData?.name ? userData?.name : "--"}</p>
+            </div>
+          </td>
+          <td>{data.productName}</td>
+          <td>{data.price} INR</td>
+          <td>
+            {data.sizes.sizeVarient.size} - {data.sizes.sizeVarient.measurement}
+          </td>
+          <td>{data.createdAt.toDate().toISOString().split("T")[0]}</td>
+          <td>
+            <PDFDownloadLink
+              document={<PostPdf data={data} userData={userData} />}
+              fileName="FORM"
+            >
+              {/* {({ loading }) =>
+      loading ? (
+        <Button varient="notifi" style={{ fontSize: "12px" }}>
+          Loading...
+        </Button>
+      ) : ( */}
+              <div
+                style={{
+                  background: "#8C73CB",
+                  width: "36px",
+                  height: "32px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "5px",
+                }}
+              >
+                <DownloadIcon />
+              </div>
+              {/* )
+    } */}
+            </PDFDownloadLink>
+          </td>
+
+          <td>
+            <Button
+              varient="primary"
+              style={{ padding: "9px 8px", fontSize: "12px" }}
+              onClick={handleModalToggle}
+            >
+              View details
+            </Button>
+          </td>
+          <td>
+            <Button
+              varient="primary"
+              style={{ padding: "9px 8px", fontSize: "12px" }}
+              onClick={() => setIsActive(true)}
+            >
+              Delivery status
+            </Button>
+          </td>
+          {active && (
+            <LayoutModule
+              handleToggle={handleModalToggle}
+              className="layout-module"
+            >
+              <PostModal onClose={handleModalCloseToggle} data={data} />
+            </LayoutModule>
+          )}
+          {isActive && (
+            <LayoutModule
+              handleToggle={() => setIsActive(false)}
+              className="layout-module"
+            >
+              <DeliveryDetailsModal setIsActive={setIsActive} data={data} />
+            </LayoutModule>
+          )}
+        </>
       )}
-    </>
+    </tr>
   );
 };

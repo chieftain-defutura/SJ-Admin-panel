@@ -23,7 +23,8 @@ const PremiumModal: React.FC<IPremiumModal> = ({ onClose, data, user }) => {
     const Premium = collection(db, ORDERS_COLLECTION_NAME);
     const premiumProducts = query(
       Premium,
-      where("type", "==", "Premium-Level")
+      where("type", "==", "Premium-Level"),
+      where("paymentStatus", "==", "SUCCESS")
     );
     const premiumData = await getDocs(premiumProducts);
     const fetchProduct = premiumData.docs.map((doc) => ({

@@ -12,17 +12,12 @@ interface IPropdata {
 }
 
 const ProductDetailsModal: React.FC<IPropdata> = ({ data, onClose, user }) => {
-  const [activeSection, setActiveSection] = useState("Image");
-
   return (
     <div className="product-details-container">
       <div className="product-details-modal-wrapper">
         <div className="product-details-img-box">
           <div className="product-head flex-item">
-            <div
-              className={activeSection === "Image" ? "active" : ""}
-              onClick={() => setActiveSection("Image")}
-            >
+            <div className="Image">
               <p>Image</p>
             </div>
             {/* <div
@@ -32,28 +27,17 @@ const ProductDetailsModal: React.FC<IPropdata> = ({ data, onClose, user }) => {
               <p>Design</p>
             </div> */}
           </div>
-          {activeSection === "Image" && (
-            <div className="image">
-              {data ? (
-                <img
-                  src={data.productImage}
-                  alt=""
-                  style={{ objectFit: "contain" }}
-                />
-              ) : (
-                <img src={BgImage} alt="" />
-              )}
-            </div>
-          )}
-          {activeSection === "Design" && (
-            <div className="image">
-              {data ? (
-                <img src={data.textAndImage.designs.originalImage} alt="" />
-              ) : (
-                <img src={BgImage} alt="" />
-              )}
-            </div>
-          )}
+          <div className="image">
+            {data ? (
+              <img
+                src={data.productImage}
+                alt=""
+                style={{ objectFit: "contain" }}
+              />
+            ) : (
+              <img src={BgImage} alt="" />
+            )}
+          </div>
         </div>
         <div className="product-wrapper">
           <div className="product-items flex-item">
@@ -99,7 +83,7 @@ const ProductDetailsModal: React.FC<IPropdata> = ({ data, onClose, user }) => {
             </div>
           </div>
           <div>
-            <p>Detailed features</p>
+            <p>Description</p>
             <div className="flex-item material-content">
               <h5>{data.description ? data.description : "--"}</h5>
             </div>

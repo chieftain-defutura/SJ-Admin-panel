@@ -12,16 +12,24 @@ export const initialValues = {
   orderStatus: {
     delivery: { createdAt: "", description: "", status: false },
     manufacturing: { createdAt: "", description: "", status: false },
-    orderPlaced: { createdAt: "", description: "", status: false },
+    orderPlaced: {
+      createdAt: "",
+      description: "your order will be placed",
+      status: true,
+    },
     readyToShip: { createdAt: "", description: "", status: false },
     shipping: { createdAt: "", description: "", status: false },
   },
 };
 interface IDetailsdata {
   data: IAccessoryLevel;
+  setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const DeliveryDetailsModal: React.FC<IDetailsdata> = ({ data }) => {
+const DeliveryDetailsModal: React.FC<IDetailsdata> = ({
+  data,
+  setIsActive,
+}) => {
   const handleSubmit = async (value: typeof initialValues) => {
     console.log(value);
     try {
@@ -39,6 +47,8 @@ const DeliveryDetailsModal: React.FC<IDetailsdata> = ({ data }) => {
       console.log(value);
     } catch (error) {
       console.log("updateError", error);
+    } finally {
+      setIsActive(false);
     }
   };
 

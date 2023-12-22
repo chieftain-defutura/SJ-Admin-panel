@@ -19,10 +19,13 @@ export const initialValues = {
 };
 interface IDetailsdata {
   data: IPost;
-  onClose: () => void;
+  setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const DeliveryDetailsModal: React.FC<IDetailsdata> = ({ data, onClose }) => {
+const DeliveryDetailsModal: React.FC<IDetailsdata> = ({
+  data,
+  setIsActive,
+}) => {
   const handleSubmit = async (value: typeof initialValues) => {
     console.log(value);
     try {
@@ -34,6 +37,8 @@ const DeliveryDetailsModal: React.FC<IDetailsdata> = ({ data, onClose }) => {
       console.log(value);
     } catch (error) {
       console.log("updateError", error);
+    } finally {
+      setIsActive(false);
     }
   };
 
@@ -82,7 +87,7 @@ const DeliveryDetailsModal: React.FC<IDetailsdata> = ({ data, onClose }) => {
             </>
 
             <div className="done-btn">
-              <Button varient="primary" type="submit" onClick={onClose}>
+              <Button varient="primary" type="submit">
                 Done
               </Button>
             </div>

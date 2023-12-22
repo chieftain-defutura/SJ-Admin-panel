@@ -45,9 +45,9 @@ const PostModal: React.FC<IPostModal> = ({ onClose, data }) => {
           <CloseIcon />
         </div>
 
-        {activeSection === "delivery" && (
+        {/* {activeSection === "delivery" && (
           <DeliveryDetailsModal data={data} onClose={onClose} />
-        )}
+        )} */}
         {activeSection === "product" && (
           <ProductDetailsModal data={data} onClose={onClose} />
         )}

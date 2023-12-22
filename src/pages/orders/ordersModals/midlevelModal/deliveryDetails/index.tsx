@@ -19,9 +19,13 @@ export const initialValues = {
 };
 interface IDetailsdata {
   data: IMidLevelData;
+  setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const DeliveryDetailsModal: React.FC<IDetailsdata> = ({ data }) => {
+const DeliveryDetailsModal: React.FC<IDetailsdata> = ({
+  data,
+  setIsActive,
+}) => {
   const handleSubmit = async (value: typeof initialValues) => {
     console.log(value);
     try {
@@ -39,6 +43,8 @@ const DeliveryDetailsModal: React.FC<IDetailsdata> = ({ data }) => {
       console.log(value);
     } catch (error) {
       console.log("updateError", error);
+    } finally {
+      setIsActive(false);
     }
   };
 

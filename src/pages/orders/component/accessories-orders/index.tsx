@@ -14,7 +14,13 @@ import {
   IOrdersCategory,
   IUserData,
 } from "../../../../constants/types";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+} from "firebase/firestore";
 import { db } from "../../../../utils/firebase";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import AccessoryPdf from "../../../../components/PdfFile/AccessoryPdf";
@@ -35,6 +41,7 @@ import {
 import AccessoryCard from "../../../../components/dashboard/accessoryCard";
 import Loader from "../../../../components/Loader";
 import User from "../../../../assets/icons/user.jpg";
+import DeliveryDetailsModal from "../../ordersModals/accessoriesModal/deliveryDetails";
 
 const AccessoriesOrder: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
@@ -49,7 +56,6 @@ const AccessoriesOrder: React.FC = () => {
   const { data: chartData } = useGetAccessoryChart({ date: isdate });
 
   const getData = useCallback(async () => {
-    const allProducts = [];
     console.log(filterOrder);
     try {
       setLoading(true);
@@ -66,14 +72,17 @@ const AccessoriesOrder: React.FC = () => {
         query = deliveryQueryAccessory;
       }
 
-      const collectionData = await getDocs(query);
-      const docs = collectionData.docs.map((doc) => ({
-        id: doc.id,
-        ...(doc.data() as any),
-      }));
-      allProducts.push(...docs);
-      console.log(allProducts);
-      setData(allProducts);
+      onSnapshot(query, (q: any) => {
+        const allProducts = [];
+
+        const docs = q.docs.map((doc: any) => ({
+          id: doc.id,
+          ...(doc.data() as any),
+        }));
+        allProducts.push(...docs);
+        console.log(allProducts);
+        setData(allProducts);
+      });
     } catch (error) {
       // Handle any potential errors here
       console.error("Error fetching data:", error);
@@ -147,7 +156,7 @@ const AccessoriesOrder: React.FC = () => {
             <p>Accessories Order</p>
             <div className="drop-down-wrapper">
               <div className="flex-item" onClick={handleToggle}>
-                <p>Place orders</p>
+                <p>{filterOrder ? filterOrder : "Placed orders"}</p>
                 <ChevronDown
                   className={`drop-down-icon ${isActive ? "rotate" : ""}`}
                   onClick={handleToggle}
@@ -198,9 +207,7 @@ const AccessoriesOrder: React.FC = () => {
                   <th>
                     <span>Product</span>
                   </th>
-                  <th>
-                    <span>Quantity</span>
-                  </th>
+
                   <th>
                     <span>Price</span>
                   </th>
@@ -208,10 +215,17 @@ const AccessoriesOrder: React.FC = () => {
                     <span>Size</span>
                   </th>
                   <th>
-                    <span>Address</span>
+                    <span>Created</span>
+                  </th>
+
+                  <th>
+                    <span>Invoice</span>
                   </th>
                   <th>
                     <span>Details</span>
+                  </th>
+                  <th>
+                    <span>Delivery status</span>
                   </th>
                 </tr>
               </thead>
@@ -237,12 +251,17 @@ interface ICardComponent {
 const CardComponent: React.FC<ICardComponent> = ({ data }) => {
   const [active, setActive] = useState(false);
   const [userData, setUserData] = useState<IUserData>();
+  const [isActive, setIsActive] = useState(false);
+
   const docRef = doc(db, "users", data.userId);
 
   const [loading, setLoading] = useState(false);
 
   const handleModalToggle = () => {
     setActive(true);
+  };
+  const handleToggle = () => {
+    setIsActive(true);
   };
 
   const handleModalCloseToggle = () => {
@@ -292,14 +311,14 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
             </div>
           </td>
           <td>{data.productName}</td>
-          <td>1</td>
+
           <td>{data.price} INR</td>
           <td>
-            {/* {data.sizes.sizeVarient.size} - {data.sizes.sizeVarient.measurement} */}
+            {data.sizes.sizeVarient.size} - {data.sizes.sizeVarient.measurement}
           </td>
-          {userData?.address.map(
-            (f) => f.isSelected === true && <td>{f.country}</td>
-          )}
+          <td>
+            <td>{data.createdAt.toDate().toISOString().split("T")[0]}</td>
+          </td>
           <td>
             <PDFDownloadLink
               document={<AccessoryPdf data={data} userData={userData} />}
@@ -325,10 +344,20 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
           <td>
             <Button
               varient="primary"
-              style={{ padding: "9px 38px", fontSize: "12px" }}
+              style={{ padding: "9px 8px", fontSize: "12px" }}
               onClick={handleModalToggle}
             >
               View details
+            </Button>
+          </td>
+          <td>
+            <Button
+              varient="primary"
+              style={{ padding: "9px 8px", fontSize: "12px" }}
+              // onClick={handleModalToggle}
+              onClick={() => setIsActive(true)}
+            >
+              Delivery status
             </Button>
           </td>
           {active && (
@@ -341,6 +370,11 @@ const CardComponent: React.FC<ICardComponent> = ({ data }) => {
                 data={data}
                 user={userData}
               />
+            </LayoutModule>
+          )}
+          {isActive && (
+            <LayoutModule handleToggle={handleToggle} className="layout-module">
+              <DeliveryDetailsModal setIsActive={setIsActive} data={data} />
             </LayoutModule>
           )}
         </>
