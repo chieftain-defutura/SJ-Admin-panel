@@ -12,7 +12,7 @@ interface IData extends IProductdata {
   dragPerson: React.MutableRefObject<number>;
   draggedOverPerson: React.MutableRefObject<number>;
 
-  handleSort: () => void;
+  handleSort: (index: number) => Promise<void>;
 }
 
 const DragAndDrop: React.FC<IData> = ({
@@ -27,14 +27,12 @@ const DragAndDrop: React.FC<IData> = ({
   const [hidde, setHidde] = useState(false);
 
   const handleToggleUpdate = async () => {
-    try {
-      setHidde(!hidde);
+    setHidde(!hidde);
 
+    try {
       const docRef = doc(db, PRODUCTS_COLLECTION_NAME, id);
       await updateDoc(docRef, {
         activePost: hidde,
-        index: dragPerson,
-        indexEnd: draggedOverPerson,
       });
 
       //   setHidde(false);
@@ -61,7 +59,7 @@ const DragAndDrop: React.FC<IData> = ({
         draggable
         onDragStart={() => (dragPerson.current = index)}
         onDragEnter={() => (draggedOverPerson.current = index)}
-        onDragEnd={handleSort}
+        onDragEnd={() => handleSort(index)}
         onDragOver={(e) => e.preventDefault}
       >
         {/* <h4>{data.length}</h4> */}
@@ -69,7 +67,7 @@ const DragAndDrop: React.FC<IData> = ({
           <FilterIcon />
           <h4>{productName}</h4>
         </div>
-        <ToggleSwitch value={hidde} setValue={handleToggleUpdate} />
+        <ToggleSwitch value={hidde} setValue={() => handleToggleUpdate()} />
         <Delete onClick={handleDelete} />
       </div>
     </div>

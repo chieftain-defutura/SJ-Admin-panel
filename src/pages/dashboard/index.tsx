@@ -14,6 +14,8 @@ import { db } from "../../utils/firebase";
 import {
   useGetDashboardChartData,
   useGetDashboardData,
+  useGetDashboardWeekChartData,
+  useGetDashboardYearChartData,
 } from "../../hooks/useGetDashboardData";
 import TShirtImg from "../../assets/images/t-shirt-two.png";
 import LoadingCard from "../../components/loadingCard";
@@ -46,6 +48,14 @@ const Dashboard: React.FC = () => {
   console.log("date", isdate);
   const { data: dashboardData } = useGetDashboardData({ date: isdate });
   const { data: chartData } = useGetDashboardChartData({ date: isdate });
+  const { data: weekChartData } = useGetDashboardWeekChartData({
+    date: isdate,
+  });
+
+  const { data: yearChartData } = useGetDashboardYearChartData({
+    date: isdate,
+  });
+
   const adminDetails = useAdminStore((user) => user.adminDetails);
 
   const handleUpdateData = (value: typeof initialValues) => {
@@ -148,7 +158,11 @@ const Dashboard: React.FC = () => {
                   padding: "16px",
                 }}
               >
-                <Chart data={chartData} />
+                <Chart
+                  data={chartData}
+                  yearChartData={yearChartData}
+                  weekChartData={weekChartData}
+                />
               </div>
             </div>
             <div style={{ margin: "32px 0" }}>

@@ -21,10 +21,6 @@ const AccessoriesModal: React.FC<IAccessoriesModal> = ({
     setActiveSection("product");
   };
 
-  const handleDeliveryClick = () => {
-    setActiveSection("delivery");
-  };
-
   return (
     <div className="mx">
       <div className="post-modal-wrapper">

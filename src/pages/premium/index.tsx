@@ -1,7 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../../styles/premium.scss";
 import PremiumLayout from "../../layout/premium-layout";
-import { query, collection, where, onSnapshot } from "firebase/firestore";
+import {
+  query,
+  collection,
+  where,
+  onSnapshot,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { NavLink } from "react-router-dom";
 import { PRODUCTS_COLLECTION_NAME } from "../../constants/firebaseCollection";
 import { IProductCategory, IProductdata } from "../../constants/types";
@@ -45,12 +52,22 @@ const Premium: React.FC<{}> = () => {
     handleGetData();
   }, [handleGetData]);
 
-  const handleSort = () => {
-    const peopleClone = [...data];
-    const temp = peopleClone[dragPerson.current];
-    peopleClone[dragPerson.current] = peopleClone[draggedOverPerson.current];
-    peopleClone[draggedOverPerson.current] = temp;
-    setData(peopleClone);
+  const handleSort = async (index: number) => {
+    try {
+      const peopleClone = [...data];
+      const temp = peopleClone[dragPerson.current];
+      peopleClone[dragPerson.current] = peopleClone[draggedOverPerson.current];
+      peopleClone[draggedOverPerson.current] = temp;
+      setData(peopleClone);
+      data.map(async (f) => {
+        const docRef = doc(db, PRODUCTS_COLLECTION_NAME, f.id);
+        await updateDoc(docRef, {
+          index, // Update the index in Firebase with the new position
+        });
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -75,13 +92,22 @@ const Premium: React.FC<{}> = () => {
               </div>
               <div className="products">
                 {data.map((f, index) => (
-                  <DragAndDrop
-                    dragPerson={dragPerson}
-                    draggedOverPerson={draggedOverPerson}
-                    handleSort={handleSort}
-                    {...f}
-                    index={index}
-                  />
+                  <>
+                    <DragAndDrop
+                      dragPerson={dragPerson}
+                      draggedOverPerson={draggedOverPerson}
+                      handleSort={handleSort}
+                      {...f}
+                      index={index}
+                    />
+                    <div
+                      style={{
+                        display: "flex",
+                        paddingTop: "12px ",
+                        justifyContent: "center",
+                      }}
+                    ></div>
+                  </>
                 ))}
               </div>
             </div>

@@ -160,7 +160,7 @@ const PremiumOrder: React.FC = () => {
                   marginTop: "26px",
                 }}
               >
-                <Chart data={chartData} />
+                {/* <Chart data={chartData} /> */}
               </div>
             </div>
             <div className="post-order-text">

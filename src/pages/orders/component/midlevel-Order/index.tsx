@@ -3,7 +3,7 @@ import { ReactComponent as ChevronDown } from "../../../../assets/icons/chevron-
 import { ReactComponent as DownloadIcon } from "../../../../assets/icons/downloadIcon.svg";
 import LayoutModule from "../../../../components/layoutModule";
 import TShirtImg from "../../../../assets/images/t-shirt-two.png";
-import { doc, getDoc, getDocs, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../../../utils/firebase";
 import Chart from "../../../../components/Chart";
 import Button from "../../../../components/button";
@@ -58,7 +58,6 @@ const MidlevelOrder: React.FC = () => {
   ];
 
   const getData = useCallback(async () => {
-    const allProducts = [];
     console.log(filterOrder);
     try {
       setLoading(true);
@@ -141,7 +140,7 @@ const MidlevelOrder: React.FC = () => {
                   marginTop: "26px",
                 }}
               >
-                <Chart data={chartData} />
+                {/* <Chart data={chartData} /> */}
               </div>
             </div>
             <div className="post-order-text">

@@ -3,7 +3,6 @@ import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg"
 import ProductDetailsModal from "./productDetails";
 import "../../../../styles/postModal.scss";
 import { IMidLevelData, IUserData } from "../../../../constants/types";
-import DeliveryDetailsModal from "./deliveryDetails";
 
 interface IMidlevelModal {
   onClose: () => void;

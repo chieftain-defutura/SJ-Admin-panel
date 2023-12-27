@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./deliveryDetailsModal.scss";
 import Button from "../../../../../components/button";
 import { IMidLevelData } from "../../../../../constants/types";

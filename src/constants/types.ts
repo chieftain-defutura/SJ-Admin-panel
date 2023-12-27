@@ -425,15 +425,27 @@ export interface IReturnOrdersData {
   createdAt: Timestamp;
   issues: string;
   Image: string;
-  RefundStatus: {
-    status: boolean;
-    createdAt: string;
-    discription: string;
-  }[];
+  refundStatus: {
+    orderReturned: {
+      description: string;
+      status: boolean;
+      createdAt: Timestamp;
+    };
+    paymenyCompleted: {
+      createdAt: null;
+      status: boolean;
+      description: string;
+    };
+    paymentInitiated: {
+      createdAt: null;
+      status: boolean;
+      description: string;
+    };
+  };
   description: string;
   status: string;
   updatedAt: Timestamp;
-  userId: string;
+  orderId: string;
   id: string;
 }
 export enum IProductCategory {
@@ -451,3 +463,10 @@ export enum IOrdersCategory {
   shipping = "Shipping",
   delivery = "Delivery",
 }
+const a = {
+  paymentInitiated: {
+    createdAt: null,
+    status: false,
+    description: "",
+  },
+};

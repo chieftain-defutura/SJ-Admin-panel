@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg";
-import DeliveryDetailsModal from "./deliveryDetails";
 import ProductDetailsModal from "./productDetails";
 import "../../../../styles/postModal.scss";
 import { getDocs, collection, where, query } from "firebase/firestore";
@@ -15,8 +14,6 @@ interface IPremiumModal {
 }
 
 const PremiumModal: React.FC<IPremiumModal> = ({ onClose, data, user }) => {
-  const [activeSection, setActiveSection] = useState("product");
-
   console.log(data);
 
   const getData = useCallback(async () => {
@@ -41,19 +38,11 @@ const PremiumModal: React.FC<IPremiumModal> = ({ onClose, data, user }) => {
 
   // const FilteredData = data?.filter((f) => f.type === "Premium-Level");
 
-  const handleProductClick = () => {
-    setActiveSection("product");
-  };
-
-  const handleDeliveryClick = () => {
-    setActiveSection("delivery");
-  };
-
   return (
     <div className="mx">
       <div className="post-modal-wrapper">
         <div className="post-modal-container flex-item">
-          <div className={activeSection === "product" ? "active" : ""}>
+          <div className="active">
             <p>Product details</p>
             <div className="border-bottom"></div>
           </div>
@@ -77,9 +66,7 @@ const PremiumModal: React.FC<IPremiumModal> = ({ onClose, data, user }) => {
         )} */}
 
         <>
-          {activeSection === "product" && (
-            <ProductDetailsModal data={data} user={user} onClose={onClose} />
-          )}
+          <ProductDetailsModal data={data} user={user} onClose={onClose} />
 
           {/* {activeSection === "delivery" && (
             <DeliveryDetailsModal setActive={setActive} data={data} />

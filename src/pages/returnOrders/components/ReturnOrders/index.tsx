@@ -7,7 +7,7 @@ import BG from "../../../../assets/images/bg-img.png";
 import StatusUpdate from "../statusUpdate";
 
 interface IReturnOrders {
-  returnData: IReturnOrdersData | undefined;
+  returnData: IReturnOrdersData;
 }
 const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
   const [active, setActive] = useState(false);
@@ -58,7 +58,12 @@ const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
             <div className="details">
               <div className="return-img">
                 {returnData?.Image ? (
-                  <img src={returnData?.Image} alt="" />
+                  <img
+                    src={returnData?.Image}
+                    alt=""
+                    width={150}
+                    height={100}
+                  />
                 ) : (
                   <img src={BG} alt="" />
                 )}

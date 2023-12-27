@@ -10,26 +10,30 @@ import { ReactComponent as Close } from "../../../../assets/icons/close.svg";
 
 interface Idata {
   setStatusIpdate: React.Dispatch<React.SetStateAction<boolean>>;
-  data: IReturnOrdersData | undefined;
+  data: IReturnOrdersData;
 }
 const initialValues = {
-  RefundStatus: {
-    initiated: { createdAt: "", discription: "", status: false },
-    completed: { createdAt: "", discription: "", status: false },
+  refundStatus: {
+    orderReturned: { createdAt: "", discription: "", status: false },
+    paymentInitiated: { createdAt: "", discription: "", status: false },
+    paymenyCompleted: { createdAt: "", discription: "", status: false },
   },
 };
 
 const StatusUpdate: React.FC<Idata> = ({ data, setStatusIpdate }) => {
   const handleSubmit = async (value: typeof initialValues) => {
     try {
-      const returnOrders = d(db, "Returns", "xQH1XUEENAEM50g3r4ud");
+      const returnOrders = d(db, "Returns", data?.id);
       await update(returnOrders, {
-        RefundStatus: {
-          initiated: value.RefundStatus.initiated,
-          completed: value.RefundStatus.completed,
+        refundStatus: {
+          orderReturned: value.refundStatus.orderReturned,
+          paymentInitiated: value.refundStatus.paymentInitiated,
+          paymenyCompleted: value.refundStatus.paymenyCompleted,
         },
         status:
-          value.RefundStatus.completed.status === true ? "Success" : "pending",
+          value.refundStatus.paymenyCompleted.status === true
+            ? "Success"
+            : "pending",
       });
       console.log(value);
     } catch (error) {
@@ -50,16 +54,22 @@ const StatusUpdate: React.FC<Idata> = ({ data, setStatusIpdate }) => {
         <Form>
           <div className="order-conformed-content">
             <ConfirmOrder
-              title="Order Initiated"
-              status={"RefundStatus.initiated.status"}
-              creayedAt={"RefundStatus.initiated.createdAt"}
-              descriptionName={"RefundStatus.initiated.discription"}
+              title="Order Returned"
+              status={"refundStatus.orderReturned.status"}
+              creayedAt={"refundStatus.orderReturned.createdAt"}
+              descriptionName={"refundStatus.orderReturned.discription"}
             />
             <ConfirmOrder
-              title="Completed"
-              status={"RefundStatus.completed.status"}
-              creayedAt={"RefundStatus.completed.createdAt"}
-              descriptionName={"RefundStatus.completed.discription"}
+              title="Order Initiated"
+              status={"refundStatus.paymentInitiated.status"}
+              creayedAt={"refundStatus.paymentInitiated.createdAt"}
+              descriptionName={"refundStatus.paymentInitiated.discription"}
+            />
+            <ConfirmOrder
+              title="Order Completed"
+              status={"refundStatus.paymenyCompleted.status"}
+              creayedAt={"refundStatus.paymenyCompleted.createdAt"}
+              descriptionName={"refundStatus.paymenyCompleted.discription"}
             />
           </div>
           <div className="done-btn">

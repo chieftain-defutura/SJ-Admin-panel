@@ -14,18 +14,11 @@ import {
   IOrdersCategory,
   IUserData,
 } from "../../../../constants/types";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  onSnapshot,
-} from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../../../utils/firebase";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import AccessoryPdf from "../../../../components/PdfFile/AccessoryPdf";
 import AccessoriesModal from "../../ordersModals/accessoriesModal";
-import { ORDERS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import Loading from "../../../../components/loading";
 import {
   useGetAccessoryChart,
@@ -149,7 +142,7 @@ const AccessoriesOrder: React.FC = () => {
                 marginTop: "26px",
               }}
             >
-              <Chart data={chartData} />
+              {/* <Chart data={chartData} /> */}
             </div>
           </div>
           <div className="post-order-text">
