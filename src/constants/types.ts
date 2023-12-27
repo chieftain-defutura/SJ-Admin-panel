@@ -427,19 +427,19 @@ export interface IReturnOrdersData {
   Image: string;
   refundStatus: {
     orderReturned: {
-      description: string;
+      discription: string;
       status: boolean;
       createdAt: Timestamp;
     };
     paymenyCompleted: {
       createdAt: null;
       status: boolean;
-      description: string;
+      discription: string;
     };
     paymentInitiated: {
       createdAt: null;
       status: boolean;
-      description: string;
+      discription: string;
     };
   };
   description: string;

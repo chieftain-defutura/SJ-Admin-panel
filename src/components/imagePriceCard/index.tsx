@@ -40,36 +40,34 @@ const ImagePriceCard: React.FC<IImagePrice> = ({ data }) => {
           initialValues={f || initialValue}
           onSubmit={handleUpdate}
         >
-          {({ isSubmitting }) => (
-            <Form>
-              <div className="design-wrap">
-                <div>
-                  <div className="image-price">
-                    <Input
-                      name="FrontAndBack"
-                      placeholder="0"
-                      label="Front and back  price"
-                      type="text"
-                    />
-                  </div>
-                  <div className="image-price">
-                    <Input
-                      name="LeftAndRight"
-                      placeholder="0"
-                      label="Left arm and right arm price"
-                      type="text"
-                    />
-                  </div>
+          <Form>
+            <div className="design-wrap">
+              <div>
+                <div className="image-price">
+                  <Input
+                    name="FrontAndBack"
+                    placeholder="0"
+                    label="Front and back  price"
+                    type="text"
+                  />
                 </div>
-
-                <div className="add-btn">
-                  <Button varient="primary" type="submit">
-                    {save ? "saved" : "Save"}
-                  </Button>
+                <div className="image-price">
+                  <Input
+                    name="LeftAndRight"
+                    placeholder="0"
+                    label="Left arm and right arm price"
+                    type="text"
+                  />
                 </div>
               </div>
-            </Form>
-          )}
+
+              <div className="add-btn">
+                <Button varient="primary" type="submit">
+                  {save ? "saved" : "Save"}
+                </Button>
+              </div>
+            </div>
+          </Form>
         </Formik>
       ))}
     </div>

@@ -38,6 +38,8 @@ const CardModule: React.FC<ICardModuleData> = ({
 
     try {
       await deleteDoc(DeleteRef);
+      setIsActive(false);
+      setActive(false);
     } catch (error) {
       console.log(error);
     }

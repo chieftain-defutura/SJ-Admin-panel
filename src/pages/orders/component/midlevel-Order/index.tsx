@@ -27,7 +27,12 @@ import {
 import Loading from "../../../../components/loading";
 import Loader from "../../../../components/Loader";
 import User from "../../../../assets/icons/user.jpg";
-import { useMidGetChart, useMidGetData } from "../../../../hooks/midData";
+import {
+  useGetMidWeekChartData,
+  useGetMidYearChartData,
+  useMidGetChart,
+  useMidGetData,
+} from "../../../../hooks/midData";
 import MidCard from "../../../../components/dashboard/midLevelCard";
 import DeliveryDetailsModal from "../../ordersModals/midlevelModal/deliveryDetails";
 
@@ -43,6 +48,9 @@ const MidlevelOrder: React.FC = () => {
   const [isdate, setDate] = useState<Date>(new Date());
   const { data: midHooksData } = useMidGetData({ date: isdate });
   const { data: chartData } = useMidGetChart({ date: isdate });
+  const { data: yearChartData } = useGetMidYearChartData({ date: isdate });
+  const { data: weekChartData } = useGetMidWeekChartData({ date: isdate });
+
   console.log("chartData", chartData);
 
   const ordersData = [
@@ -140,7 +148,11 @@ const MidlevelOrder: React.FC = () => {
                   marginTop: "26px",
                 }}
               >
-                {/* <Chart data={chartData} /> */}
+                <Chart
+                  data={chartData}
+                  weekChartData={weekChartData}
+                  yearChartData={yearChartData}
+                />
               </div>
             </div>
             <div className="post-order-text">

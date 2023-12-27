@@ -61,7 +61,11 @@
     .contents {
       display: grid;
       grid-template-columns: 1fr 1fr;
+      gap: 24px;
       padding: 8px;
+      span {
+        padding: 0 4px;
+      }
       .discriprition {
         p {
           max-width: 100px;

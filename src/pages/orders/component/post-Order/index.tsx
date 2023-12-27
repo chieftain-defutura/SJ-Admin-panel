@@ -21,7 +21,12 @@ import {
   shippingQueryPost,
   deliveryQueryPost,
 } from "../../../../utils/query";
-import { useGetPostData, usePostGetChart } from "../../../../hooks/postData";
+import {
+  useGetPostData,
+  useGetPostWeekChartData,
+  useGetPostYearChartData,
+  usePostGetChart,
+} from "../../../../hooks/postData";
 import Loading from "../../../../components/loading";
 import Loader from "../../../../components/Loader";
 import PostCard from "../../../../components/dashboard/postCard";
@@ -38,6 +43,8 @@ const PostOrders: React.FC = () => {
   const [isdate, setDate] = useState<Date>(new Date());
   const { data: PostHooksData } = useGetPostData({ date: isdate });
   const { data: chartData } = usePostGetChart({ date: isdate });
+  const { data: weekChartData } = useGetPostWeekChartData({ date: isdate });
+  const { data: yearChartData } = useGetPostYearChartData({ date: isdate });
 
   const getData = useCallback(async () => {
     const allProducts = [];
@@ -134,7 +141,11 @@ const PostOrders: React.FC = () => {
                   marginTop: "26px",
                 }}
               >
-                {/* <Chart data={chartData} /> */}
+                <Chart
+                  data={chartData}
+                  weekChartData={weekChartData}
+                  yearChartData={yearChartData}
+                />
               </div>
             </div>
             <div className="post-order-text">

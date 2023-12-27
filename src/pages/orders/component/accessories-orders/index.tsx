@@ -23,6 +23,8 @@ import Loading from "../../../../components/loading";
 import {
   useGetAccessoryChart,
   useGetAccessoryData,
+  useGetAccessoryWeekChartData,
+  useGetAccessoryYearChartData,
 } from "../../../../hooks/useAccessoryData";
 import {
   orderPlacedQueryAccessory,
@@ -47,6 +49,12 @@ const AccessoriesOrder: React.FC = () => {
   const [isdate, setDate] = useState<Date>(new Date());
   const { data: AccessoryHooksData } = useGetAccessoryData({ date: isdate });
   const { data: chartData } = useGetAccessoryChart({ date: isdate });
+  const { data: weekChartData } = useGetAccessoryWeekChartData({
+    date: isdate,
+  });
+  const { data: yearChartData } = useGetAccessoryYearChartData({
+    date: isdate,
+  });
 
   const getData = useCallback(async () => {
     console.log(filterOrder);
@@ -142,7 +150,11 @@ const AccessoriesOrder: React.FC = () => {
                 marginTop: "26px",
               }}
             >
-              {/* <Chart data={chartData} /> */}
+              <Chart
+                data={chartData}
+                weekChartData={weekChartData}
+                yearChartData={yearChartData}
+              />
             </div>
           </div>
           <div className="post-order-text">

@@ -14,7 +14,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import ToggleSwitch from "../../../../../../components/toggleSwitch";
 import ColorModule from "../../../../../../components/color-module";
 import { IProductCategory } from "../../../../../../constants/types";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MOdalPopUp from "../../../../../../components/ModalPopupBox";
 import Bgimg from "../../../../../../assets/images/bg-img.png";
 import { validationSchema } from "../../../../../../constants/validations";
@@ -172,6 +172,7 @@ const CreateMidProduct: React.FC<Material> = () => {
                       <h3
                         style={{
                           color: values.gender === "MALE" ? "" : "#777",
+                          cursor: "pointer",
                           borderBottom:
                             values.gender === "MALE" ? "2px solid #8C73CB" : "",
                         }}
@@ -186,6 +187,7 @@ const CreateMidProduct: React.FC<Material> = () => {
                       <h3
                         style={{
                           color: values.gender === "FEMALE" ? "" : "#777",
+                          cursor: "pointer",
                           borderBottom:
                             values.gender === "FEMALE"
                               ? "2px solid #8C73CB"
@@ -200,11 +202,13 @@ const CreateMidProduct: React.FC<Material> = () => {
 
                 <div className="styles-wrap">
                   <div className="imageupload">
-                    <Field as="select" name="styles">
-                      <option value="">select styles</option>
-                      <option value="Round Neck">Round Neck</option>
-                      <option value="V Neck">V Neck</option>
-                    </Field>
+                    <div className="drop_down">
+                      <Field as="select" name="styles">
+                        <option value="">select styles</option>
+                        <option value="Round Neck">Round Neck</option>
+                        <option value="V Neck">V Neck</option>
+                      </Field>
+                    </div>
                     <div className="video-image">
                       <div className="bg-video">
                         <h4>Image</h4>
@@ -241,10 +245,36 @@ const CreateMidProduct: React.FC<Material> = () => {
                               />
                             ) : (
                               <img src={Bgimg} alt="" width={70} height={70} />
-                            )}
+                            )}{" "}
                           </div>
                         </label>
                       </div>
+                      {/* <div className="bg-video">
+                        <h4>3D Video</h4>
+                        <label htmlFor="3dvideo" className="custom-file-upload">
+                          <input
+                            type="file"
+                            id="3dvideo"
+                            name="video"
+                            onChange={(e: any) => {
+                              const file = e.target.files[0];
+                              setFiles((e) => ({
+                                ...e,
+                                productVideo: file,
+                              }));
+                              const fileReader = new FileReader();
+                              fileReader.onload = (r) => {
+                                setVideo(r.target?.result as string);
+                              };
+                              fileReader.readAsDataURL(file);
+                            }}
+                            accept="video/mp4,video/x-m4v,video/*"
+                          />
+                          <div className="bg-image">
+                            <video src={video}></video>
+                          </div>
+                        </label>
+                      </div> */}
                     </div>
                   </div>
                   <div className="product-info">
@@ -290,46 +320,6 @@ const CreateMidProduct: React.FC<Material> = () => {
 
               <div className="color-section">
                 <div>
-                  <h3>Select Colors</h3>
-                  <div className="color">
-                    <Button varient="primary" onClick={handleToggle}>
-                      Add
-                    </Button>
-
-                    {colors.map((color, index) => (
-                      <>
-                        <div className="color-wrap" key={index}>
-                          <div>
-                            <div
-                              style={{
-                                backgroundColor: color.color,
-                              }}
-                              className="color-circle"
-                              key={index}
-                            ></div>
-                            <p>{color.colorName}</p>
-                          </div>
-                          <Delete
-                            onClick={() => {
-                              const updatedColors = colors.filter(
-                                (f) => f.color !== color.color
-                              );
-                              setColors(updatedColors);
-                            }}
-                          />
-                        </div>
-                      </>
-                    ))}
-
-                    {active && (
-                      <ColorModule
-                        handleAddColor={handleAddColor}
-                        handleToggle={() => setActive(false)}
-                      />
-                    )}
-                  </div>
-                </div>
-                <div>
                   <h3>Select Size</h3>
                   <div className="size">
                     <div className="drop-down-section">
@@ -339,7 +329,7 @@ const CreateMidProduct: React.FC<Material> = () => {
                           value={country}
                           onChange={(e) => setCountry(e.target.value)}
                         >
-                          <option value="">Select continent</option>
+                          <option value="">Select country</option>
                           {Country.map((f, i) => (
                             <option id={f} value={f} key={i}>
                               {f}
@@ -347,7 +337,7 @@ const CreateMidProduct: React.FC<Material> = () => {
                           ))}
                         </select>
                       </div>
-                      <div className="gender">
+                      {/* <div className="gender">
                         <div className="male" onClick={() => setGender("MALE")}>
                           <h3
                             style={{
@@ -373,7 +363,7 @@ const CreateMidProduct: React.FC<Material> = () => {
                             Female
                           </h3>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="sizes">
                       <div>
@@ -467,12 +457,53 @@ const CreateMidProduct: React.FC<Material> = () => {
                     </div>
                   </div>
                 </div>
+                <div>
+                  <h3>Select Colors</h3>
+                  <div className="color">
+                    <Button varient="primary" onClick={handleToggle}>
+                      Add
+                    </Button>
+
+                    {colors.map((color, index) => (
+                      <>
+                        <div className="color-wrap" key={index}>
+                          <div>
+                            <div
+                              style={{
+                                backgroundColor: color.color,
+                              }}
+                              className="color-circle"
+                              key={index}
+                            ></div>
+                            <p>{color.colorName}</p>
+                          </div>
+                          <Delete
+                            onClick={() => {
+                              const updatedColors = colors.filter(
+                                (f) => f.color !== color.color
+                              );
+                              setColors(updatedColors);
+                            }}
+                          />
+                        </div>
+                      </>
+                    ))}
+
+                    {active && (
+                      <ColorModule
+                        handleAddColor={handleAddColor}
+                        handleToggle={() => setActive(false)}
+                      />
+                    )}
+                  </div>
+                </div>
               </div>
 
               <div className="detailed-futures">
+                <h2>Show image:</h2>
                 <div className="toggle-image">
                   <div className="active-img">
-                    <h3>Active image</h3>
+                    <h3>Design image</h3>
                     <ToggleSwitch
                       value={values.showDesign}
                       setValue={(value) =>
@@ -492,7 +523,7 @@ const CreateMidProduct: React.FC<Material> = () => {
                 </div>
                 <div className="position-toggle">
                   <div>
-                    <h2>Image positions :</h2>
+                    <h2>Image positions:</h2>
 
                     <div className="toggle-positions">
                       <div className="toggles">
@@ -535,11 +566,28 @@ const CreateMidProduct: React.FC<Material> = () => {
                   </div>
                 </div>
                 <div className="description">
-                  <Input
+                  {/* <Input
                     name="description"
                     type="text"
                     value={values.description}
                     label="Description"
+                  /> */}
+                  <h3 style={{ marginTop: 22 }}>Description</h3>
+                  <Field
+                    as="textarea"
+                    placeholder="description"
+                    name="description"
+                    rows="3"
+                    value={values.description}
+                    style={{
+                      // maxWidth: "500px",
+                      width: "100%",
+                      fontSize: "16px",
+                      padding: "16px 18px",
+                      outline: "none",
+                      border: "1px solid #e1e1e1",
+                      marginTop: "16px",
+                    }}
                   />
                 </div>
                 {/* <div className="detailes">
@@ -597,7 +645,10 @@ const CreateMidProduct: React.FC<Material> = () => {
                   </FieldArray>
                 </div> */}
               </div>
-              <div className="btn-submit">
+              <div className="btn-submit" style={{ marginTop: -20 }}>
+                <Link to="/products/mid-level/product/styles">
+                  <Button varient="notifi">Cancel</Button>
+                </Link>
                 <Button varient="primary" type="submit" disabled={isSubmitting}>
                   {isSubmitting ? "Uploading" : "submit"}
                 </Button>

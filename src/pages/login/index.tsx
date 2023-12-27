@@ -34,6 +34,8 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (values: typeof initialValue) => {
     try {
+      setLoading(true);
+
       const dataStore = await signInWithEmailAndPassword(
         auth,
         values.Email,
@@ -46,15 +48,16 @@ const Login: React.FC = () => {
       console.log("dataStore", dataStore);
     } catch (error) {
       console.log(error);
-      if (error instanceof FirebaseError) {
-        if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
-          setErrorMessage("Invalid password");
-        } else if (error.code === AuthErrorCodes.USER_DELETED) {
-          setErrorMessage("User not found");
-        }
-      }
+      setErrorMessage("Invalid user or password");
+      // if (error instanceof FirebaseError) {
+      //   if (error.code === AuthErrorCodes.INVALID_PASSWORD) {
+      //     setErrorMessage("Invalid password");
+      //   } else if (error.code === AuthErrorCodes.USER_DELETED) {
+      //     setErrorMessage("User not found");
+      //   }
+      // }
     } finally {
-      setLoading(true);
+      setLoading(false);
     }
   };
 
@@ -83,7 +86,9 @@ const Login: React.FC = () => {
               <div ref={parent}>
                 {errorMessage && (
                   <div className="error-window">
-                    <p style={{ color: "red" }}>{errorMessage}</p>
+                    <p style={{ color: "red", textAlign: "center" }}>
+                      {errorMessage}
+                    </p>
                   </div>
                 )}
               </div>

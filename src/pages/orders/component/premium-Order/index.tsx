@@ -29,6 +29,8 @@ import {
 } from "../../../../utils/query";
 import Loader from "../../../../components/Loader";
 import {
+  useGetPremiumWeekChartData,
+  useGetPremiumYearChartData,
   usePremiumGetChart,
   usePremiumGetData,
 } from "../../../../hooks/premiumData";
@@ -48,6 +50,12 @@ const PremiumOrder: React.FC = () => {
   const [isdate, setDate] = useState<Date>(new Date());
   const { data: premiumHooksData } = usePremiumGetData({ date: isdate });
   const { data: chartData } = usePremiumGetChart({ date: isdate });
+  const { data: weekChartData } = useGetPremiumWeekChartData({
+    date: isdate,
+  });
+  const { data: yearChartData } = useGetPremiumYearChartData({
+    date: isdate,
+  });
 
   const ordersFetchData = useCallback(async () => {
     console.log(filterOrder);
@@ -160,7 +168,11 @@ const PremiumOrder: React.FC = () => {
                   marginTop: "26px",
                 }}
               >
-                {/* <Chart data={chartData} /> */}
+                <Chart
+                  data={chartData}
+                  weekChartData={weekChartData}
+                  yearChartData={yearChartData}
+                />
               </div>
             </div>
             <div className="post-order-text">
@@ -307,7 +319,6 @@ interface ICardComponent {
 const CardComponent: React.FC<ICardComponent> = ({ data, filterOrder }) => {
   const [active, setActive] = useState(false);
   const [userData, setUserData] = useState<IUserData>();
-  const docRef = doc(db, "users", data.userId);
   const [loading, setLoading] = useState(false);
   const [isActive, setIsActive] = useState(false);
 
@@ -329,6 +340,8 @@ const CardComponent: React.FC<ICardComponent> = ({ data, filterOrder }) => {
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
+      const docRef = doc(db, "users", data.userId);
+
       const documentSnapshot = await getDoc(docRef);
 
       if (documentSnapshot.exists()) {

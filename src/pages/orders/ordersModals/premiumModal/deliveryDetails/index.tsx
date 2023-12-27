@@ -63,7 +63,11 @@ const DeliveryDetailsModal: React.FC<IDetailsdata> = ({
         <Loader />
       ) : (
         <div className="delivery-details-modal-wrapper">
-          <Formik onSubmit={handleSubmit} initialValues={initialValues}>
+          <Formik
+            onSubmit={handleSubmit}
+            initialValues={data.orderStatus as any}
+            enableReinitialize
+          >
             {({ values, setValues }) => (
               <Form>
                 <>

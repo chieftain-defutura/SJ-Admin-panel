@@ -18,6 +18,7 @@ import Loading from "../../components/loading";
 import { ReactComponent as Filter } from "../../assets/icons/filter-icon.svg";
 import LayoutModule from "../../components/layoutModule";
 import DragAndDrop from "./component/DragAndDrop";
+import Button from "../../components/button";
 const Premium: React.FC<{}> = () => {
   const [data, setData] = useState<IProductdata[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -59,14 +60,19 @@ const Premium: React.FC<{}> = () => {
       peopleClone[dragPerson.current] = peopleClone[draggedOverPerson.current];
       peopleClone[draggedOverPerson.current] = temp;
       setData(peopleClone);
-      data.map(async (f) => {
-        const docRef = doc(db, PRODUCTS_COLLECTION_NAME, f.id);
-        await updateDoc(docRef, {
-          index, // Update the index in Firebase with the new position
-        });
-      });
+
+      await Promise.all(
+        peopleClone.map(async (item, index) => {
+          const docRef = doc(db, PRODUCTS_COLLECTION_NAME, item.id);
+          await updateDoc(docRef, {
+            index: index, // Update the index in Firebase with the new position
+          });
+        })
+      );
+
+      console.log("Indexes updated successfully!");
     } catch (error) {
-      console.log(error);
+      console.error("Error updating indexes: ", error);
     }
   };
 
@@ -106,7 +112,14 @@ const Premium: React.FC<{}> = () => {
                         paddingTop: "12px ",
                         justifyContent: "center",
                       }}
-                    ></div>
+                    >
+                      {/* <Button
+                        varient="primary"
+                        onClick={() => handleSort(index)}
+                      >
+                        Done
+                      </Button> */}
+                    </div>
                   </>
                 ))}
               </div>

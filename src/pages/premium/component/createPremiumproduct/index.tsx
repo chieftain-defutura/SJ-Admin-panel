@@ -15,7 +15,7 @@ import {
   Material,
 } from "../../../products/mid-level/product/component/createMid-Product";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MOdalPopUp from "../../../../components/ModalPopupBox";
 import Bgimg from "../../../../assets/images/bg-img.png";
 import { validationSchema } from "../../../../constants/validations";
@@ -121,7 +121,7 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        {({ values, isSubmitting, setFieldValue }) => (
+        {({ values, setValues, isSubmitting, setFieldValue }) => (
           <Form>
             <div className="create-product">
               <div className="style-section">
@@ -164,13 +164,15 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
 
                 <div className="styles-wrap">
                   <div className="imageupload">
-                    <Field as="select" name="styles">
-                      <option value="">select styles</option>
-                      <option value="Saree">Saree</option>
-                      <option value="Blazers">Blazers</option>
-                      <option value="Shirt">Shirt</option>
-                      <option value="Jacket">Jacket</option>
-                    </Field>
+                    <div className="drop_down">
+                      <Field as="select" name="styles">
+                        <option value="">select styles</option>
+                        <option value="Saree">Saree</option>
+                        <option value="Blazers">Blazers</option>
+                        <option value="Shirt">Shirt</option>
+                        <option value="Jacket">Jacket</option>
+                      </Field>
+                    </div>
                     <div className="video-image">
                       <div className="bg-video">
                         <h4> Product image</h4>
@@ -361,7 +363,7 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                             ))}
                           </select>
                         </div>
-                        <div className="gender">
+                        {/* <div className="gender">
                           <div
                             className="male"
                             onClick={() => setGender("MALE")}
@@ -392,7 +394,7 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                               Female
                             </h3>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="sizes">
                         <div>
@@ -485,14 +487,33 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                   </div>
                   <div className="description">
                     <h3>Description</h3>
-                    <Input
+                    <Field
+                      as="textarea"
+                      placeholder="description"
                       name="description"
-                      type="text"
+                      rows="3"
                       value={values.description}
+                      style={{
+                        maxWidth: "500px",
+                        width: "100%",
+                        fontSize: "16px",
+                        padding: "16px 18px",
+                        outline: "none",
+                        border: "1px solid #e1e1e1",
+                        marginTop: "16px",
+                      }}
                     />
+                    {/* <Input
+                      name="description"
+                     type="text"
+                      value={values.description}
+                   /> */}
                   </div>
                 </div>
                 <div className="btn-submit">
+                  <Link to="/products/premium">
+                    <Button varient="notifi">Cancel</Button>
+                  </Link>
                   <Button
                     varient="primary"
                     type="submit"
@@ -500,6 +521,7 @@ const CreatePremium: React.FC<Material> = ({ index }) => {
                   >
                     {isSubmitting ? "Uploading" : "submit"}
                   </Button>
+                            
                 </div>
                 {isSubmitting && <MOdalPopUp />}
               </div>

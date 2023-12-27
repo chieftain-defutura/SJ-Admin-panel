@@ -20,6 +20,7 @@ const Return: React.FC = () => {
           id: doc.id,
           ...(doc.data() as any),
         }));
+
         setReturn(docs);
       });
     } catch (error) {
@@ -46,6 +47,9 @@ const Return: React.FC = () => {
                   <span>Product name</span>
                 </th>
                 <th>
+                  <span>Price</span>
+                </th>
+                <th>
                   <span>Status</span>
                 </th>
                 <th>
@@ -54,9 +58,9 @@ const Return: React.FC = () => {
                 <th>
                   <span>Created</span>
                 </th>
-                <th>
+                {/* <th>
                   <span>Modifyed</span>
-                </th>
+                </th> */}
                 <th>
                   <span>Action </span>
                 </th>
