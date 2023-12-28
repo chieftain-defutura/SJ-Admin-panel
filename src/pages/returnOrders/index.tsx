@@ -47,7 +47,7 @@ const Return: React.FC = () => {
                   <span>Product name</span>
                 </th>
                 <th>
-                  <span>Price</span>
+                  <span>Created</span>
                 </th>
                 <th>
                   <span>Status</span>
@@ -55,12 +55,10 @@ const Return: React.FC = () => {
                 <th>
                   <span>Reason</span>
                 </th>
+
                 <th>
-                  <span>Created</span>
+                  <span> Address</span>
                 </th>
-                {/* <th>
-                  <span>Modifyed</span>
-                </th> */}
                 <th>
                   <span>Action </span>
                 </th>

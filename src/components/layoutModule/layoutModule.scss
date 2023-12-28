@@ -124,4 +124,19 @@
       width: 5px;
     }
   }
+  .address {
+    padding: 24px;
+    .close {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .user {
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+    }
+  }
 }

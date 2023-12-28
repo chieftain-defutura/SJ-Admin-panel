@@ -10,18 +10,8 @@ import LayoutModule from "../../../../components/layoutModule";
 import { ReactComponent as Close } from "../../../../assets/icons/close.svg";
 import BG from "../../../../assets/images/bg-img.png";
 import StatusUpdate from "../statusUpdate";
-import {
-  query,
-  collection,
-  where,
-  onSnapshot,
-  getDoc,
-  doc,
-} from "firebase/firestore";
-import {
-  ORDERS_COLLECTION_NAME,
-  RETURN,
-} from "../../../../constants/firebaseCollection";
+import { getDoc, doc } from "firebase/firestore";
+import { ORDERS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import { db } from "../../../../utils/firebase";
 
 interface IReturnOrders {
@@ -29,10 +19,12 @@ interface IReturnOrders {
 }
 const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
   const [active, setActive] = useState(false);
-  const [orderData, setOrderData] = useState<IMidLevelData>();
-  const [userData, setUserData] = useState<IUserData>();
+  const [address, setAddress] = useState(false);
   const [statusUpdate, setStatusIpdate] = useState(false);
+  const [orderData, setOrderData] = useState<IMidLevelData | undefined>();
+  const [userData, setUserData] = useState<IUserData>();
   // const user = doc(db, "users",orderData?.userId);
+  console.log(userData);
 
   const handleToggle = () => {
     setStatusIpdate(!statusUpdate);
@@ -60,34 +52,41 @@ const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // const handleGetData = useCallback(async () => {
-  //   try {
+  const handleGetData = useCallback(async () => {
+    try {
+      if (!orderData) return;
+      const user = doc(db, "users", orderData.userId);
+      const userDocumentSnapshot = await getDoc(user);
 
-  //     const userDocumentSnapshot = await getDoc(user);
-
-  //     if (userDocumentSnapshot.exists()) {
-  //       const data = userDocumentSnapshot.data();
-  //       console.log("Document dataa:", data);
-  //       setUserData(data as any);
-  //     } else {
-  //       console.log("Document does not exist.");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }, []);
+      if (userDocumentSnapshot.exists()) {
+        const data = userDocumentSnapshot.data();
+        console.log("Document dataa:", data);
+        setUserData(data as any);
+      } else {
+        console.log("Document does not exist.");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+    handleGetData();
+  }, [fetchData, handleGetData]);
 
   return (
     <tr>
       {/* <td>{orderData?.userId}</td> */}
-      <td>vicky</td>
-      <td>{orderData?.productName}</td>
-      <td>{orderData?.offerPrice ? orderData.offerPrice : orderData?.price}</td>
 
+      <td>{userData?.name}</td>
+
+      <td>{orderData?.productName}</td>
+      <td>
+        {returnData && returnData.createdAt
+          ? returnData.createdAt.toDate().toISOString().split("T")[0]
+          : "No date"}
+      </td>
       <td>{returnData?.status}</td>
 
       <td>
@@ -95,26 +94,17 @@ const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
           View
         </Button>
       </td>
+
       <td>
-        {returnData && returnData.createdAt
-          ? returnData.createdAt.toDate().toISOString().split("T")[0]
-          : "No date"}
+        <Button varient="primary" onClick={() => setAddress(true)}>
+          View
+        </Button>
       </td>
-      {/* <td>
-        {returnData && returnData.updatedAt
-          ? returnData.updatedAt.toDate().toISOString().split("T")[0]
-          : "No date"}
-      </td> */}
       <td>
         <Button varient="primary" onClick={handleToggle}>
           View
         </Button>
       </td>
-      {statusUpdate && (
-        <LayoutModule handleToggle={handleToggle}>
-          <StatusUpdate data={returnData} setStatusIpdate={setStatusIpdate} />
-        </LayoutModule>
-      )}
       {active && (
         <LayoutModule handleToggle={() => setActive(false)}>
           <div className="return-module">
@@ -175,6 +165,62 @@ const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
               </div>
             </div>
           </div>
+        </LayoutModule>
+      )}
+      {address && (
+        <LayoutModule handleToggle={() => setAddress(false)}>
+          <div className="address">
+            <div className="close">
+              <h4>Reasons</h4>
+              <div onClick={() => setAddress(false)}>
+                <Close />
+              </div>
+            </div>
+
+            <div className="user">
+              <div>
+                <h5>Customer name</h5>
+                <p>{userData?.name}</p>
+              </div>
+              <div>
+                <h5>Mobile</h5>
+                <p>{userData?.phoneNo}</p>
+              </div>
+              <div>
+                <h5>Email</h5>
+                <p>{userData?.email}</p>
+              </div>
+            </div>
+            <div className="user">
+              <div>
+                <h5>Address</h5>
+
+                {userData?.address.map((f, i) => (
+                  <>
+                    <div>
+                      {f.isSelected === true && (
+                        <>
+                          <p>{f.name},</p>
+                          <p>
+                            {f.addressOne ? f.addressOne : f.addressTwo},
+                            {f.floor},{f.city}-{f.pinCode},{f.country}
+                          </p>
+                        </>
+                      )}
+                    </div>
+                  </>
+                ))}
+              </div>
+            </div>
+            {/* <div className="user">
+                <div><h5></h5></div>
+              </div> */}
+          </div>
+        </LayoutModule>
+      )}
+      {statusUpdate && (
+        <LayoutModule handleToggle={handleToggle}>
+          <StatusUpdate data={returnData} setStatusIpdate={setStatusIpdate} />
         </LayoutModule>
       )}
     </tr>
