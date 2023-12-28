@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import Button from "../../../../components/button";
 import {
   IMidLevelData,
-  IProductdata,
   IReturnOrdersData,
   IUserData,
 } from "../../../../constants/types";
@@ -13,6 +12,7 @@ import StatusUpdate from "../statusUpdate";
 import { getDoc, doc } from "firebase/firestore";
 import { ORDERS_COLLECTION_NAME } from "../../../../constants/firebaseCollection";
 import { db } from "../../../../utils/firebase";
+import Loading from "../../../../components/loading";
 
 interface IReturnOrders {
   returnData: IReturnOrdersData;
@@ -23,6 +23,7 @@ const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
   const [statusUpdate, setStatusIpdate] = useState(false);
   const [orderData, setOrderData] = useState<IMidLevelData | undefined>();
   const [userData, setUserData] = useState<IUserData>();
+  const [loading, setLoading] = useState(false);
   // const user = doc(db, "users",orderData?.userId);
   console.log(userData);
 
@@ -32,7 +33,7 @@ const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
 
   const fetchData = useCallback(async () => {
     try {
-      // setLoading(true);
+      setLoading(true);
       const docRef = doc(db, ORDERS_COLLECTION_NAME, returnData.orderId);
 
       const documentSnapshot = await getDoc(docRef);
@@ -47,13 +48,14 @@ const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
     } catch (error) {
       console.error("Error getting document:", error);
     } finally {
-      // setLoading(false);
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleGetData = useCallback(async () => {
     try {
+      setLoading(true);
       if (!orderData) return;
       const user = doc(db, "users", orderData.userId);
       const userDocumentSnapshot = await getDoc(user);
@@ -67,19 +69,23 @@ const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  }, [orderData]);
 
   useEffect(() => {
     fetchData();
     handleGetData();
   }, [fetchData, handleGetData]);
 
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <tr>
       {/* <td>{orderData?.userId}</td> */}
 
-      <td>{userData?.name}</td>
+      <td>{userData?.name ? userData.name : "loading..."}</td>
 
       <td>{orderData?.productName}</td>
       <td>
@@ -90,13 +96,13 @@ const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
       <td>{returnData?.status}</td>
 
       <td>
-        <Button varient="primary" onClick={() => setActive(true)}>
+        <Button varient="notifi" onClick={() => setActive(true)}>
           View
         </Button>
       </td>
 
       <td>
-        <Button varient="primary" onClick={() => setAddress(true)}>
+        <Button varient="notifi" onClick={() => setAddress(true)}>
           View
         </Button>
       </td>
@@ -171,7 +177,7 @@ const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
         <LayoutModule handleToggle={() => setAddress(false)}>
           <div className="address">
             <div className="close">
-              <h4>Reasons</h4>
+              <h4>Address</h4>
               <div onClick={() => setAddress(false)}>
                 <Close />
               </div>
@@ -198,15 +204,16 @@ const ReturnOrders: React.FC<IReturnOrders> = ({ returnData }) => {
                 {userData?.address.map((f, i) => (
                   <>
                     <div>
-                      {f.isSelected === true && (
-                        <>
-                          <p>{f.name},</p>
-                          <p>
-                            {f.addressOne ? f.addressOne : f.addressTwo},
-                            {f.floor},{f.city}-{f.pinCode},{f.country}
-                          </p>
-                        </>
-                      )}
+                      {/* {f.isSelected === true && ( */}
+                      <>
+                        <p>{f.name},</p>
+                        <p>
+                          {f.addressOne},{f.addressTwo},{f.floor},{f.city}-
+                          {f.pinCode}
+                        </p>
+                        <p>{f.country}</p>
+                      </>
+                      {/* )}   */}
                     </div>
                   </>
                 ))}

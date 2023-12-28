@@ -56,12 +56,10 @@ const EditMidform: React.FC = () => {
   const [active, setActive] = useState(false);
   // const [toggle, setToggle] = useState(false);
   const [data, setData] = useState<typeof initialValue | null>(null);
-  const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
   const [country, setCountry] = useState("");
   const [colors, setColors] = useState<ColorData[]>([]);
   const [sizes, setSizes] = useState<
     {
-      gender: string;
       country: string;
       sizeVarients: {
         size: string;
@@ -105,6 +103,7 @@ const EditMidform: React.FC = () => {
         });
         setImage(tempData.productImage);
         setSizes(tempData.sizes);
+        setColors(tempData.colors);
       }
     } catch (error) {
       console.log(error);
@@ -162,17 +161,14 @@ const EditMidform: React.FC = () => {
   };
 
   const getSizesLists = useMemo(() => {
-    if (!gender || !country) return undefined;
+    if (!country) return undefined;
 
-    const data = sizes.find(
-      (f) => f.country === country && f.gender === gender
-    );
+    const data = sizes.find((f) => f.country === country);
     console.log(data);
     if (!data) {
       setSizes((e) => [
         ...e,
         {
-          gender: gender,
           country: country,
           sizeVarients: [...defaultSizes],
         },
@@ -181,7 +177,7 @@ const EditMidform: React.FC = () => {
     } else {
       return data;
     }
-  }, [gender, country, sizes]);
+  }, [country, sizes]);
   console.log("getSizesLists", getSizesLists);
 
   return (
@@ -404,7 +400,7 @@ const EditMidform: React.FC = () => {
                       <div>
                         {sizes.map((m, i) => (
                           <>
-                            {m.country === country && m.gender === gender ? (
+                            {m.country === country ? (
                               <div className="types" key={i}>
                                 {m.sizeVarients.map((s, j) => (
                                   <div className="input-box" key={j}>

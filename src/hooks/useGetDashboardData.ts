@@ -25,7 +25,6 @@ export const useGetDashboardData = ({ date }: { date?: Date }) => {
         Mid,
         where("type", "==", "MidLevel"),
         // where("paymentStatus", "==", "SUCCESS"),
-
         where(
           "createdAt",
           ">=",

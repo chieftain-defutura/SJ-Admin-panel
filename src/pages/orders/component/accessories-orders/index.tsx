@@ -41,8 +41,6 @@ import DeliveryDetailsModal from "../../ordersModals/accessoriesModal/deliveryDe
 const AccessoriesOrder: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
   const [data, setData] = useState<IAccessoryLevel[]>();
-
-  const [loading, setLoading] = useState(false);
   const [filterOrder, setFilterOrder] = useState<IOrdersCategory>(
     IOrdersCategory.orderPlaced
   );
@@ -59,7 +57,6 @@ const AccessoriesOrder: React.FC = () => {
   const getData = useCallback(async () => {
     console.log(filterOrder);
     try {
-      setLoading(true);
       let query: any;
       if (filterOrder === IOrdersCategory.orderPlaced) {
         query = orderPlacedQueryAccessory;
@@ -87,8 +84,6 @@ const AccessoriesOrder: React.FC = () => {
     } catch (error) {
       // Handle any potential errors here
       console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
     }
   }, [filterOrder]);
 
@@ -236,9 +231,20 @@ const AccessoriesOrder: React.FC = () => {
               </thead>
 
               <tbody>
-                {FilteredData.map((f, index) => (
-                  <CardComponent key={index} data={f} />
-                ))}
+                {FilteredData.length === 0 ? (
+                  <h2
+                    style={{
+                      color: "#462d85",
+                      // paddingTop: "24px",
+                    }}
+                  >
+                    No orders
+                  </h2>
+                ) : (
+                  FilteredData.map((f, index) => (
+                    <CardComponent key={index} data={f} />
+                  ))
+                )}
               </tbody>
             </table>
           </div>

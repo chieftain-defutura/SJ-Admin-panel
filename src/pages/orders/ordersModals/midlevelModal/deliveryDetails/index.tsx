@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./deliveryDetailsModal.scss";
 import Button from "../../../../../components/button";
 import { IMidLevelData } from "../../../../../constants/types";
 import { Form, Formik } from "formik";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../utils/firebase";
 import { ORDERS_COLLECTION_NAME } from "../../../../../constants/firebaseCollection";
 import ConfirmOrder from "../../premiumModal/deliveryDetails/confirmOrder";
@@ -26,6 +26,25 @@ const DeliveryDetailsModal: React.FC<IDetailsdata> = ({
   data,
   setIsActive,
 }) => {
+  const [initialData, setInitialData] = useState(initialValues);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const docRef = doc(db, ORDERS_COLLECTION_NAME, data.id); // Replace "your_collection_name" with your actual collection name
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const fetchedData = docSnap.data();
+        setInitialData(fetchedData as any);
+        console.log("fetchedData", fetchedData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [data.id]);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   const handleSubmit = async (value: typeof initialValues) => {
     console.log(value);
     try {
@@ -50,7 +69,11 @@ const DeliveryDetailsModal: React.FC<IDetailsdata> = ({
 
   return (
     <div className="delivery-details-modal-wrapper">
-      <Formik onSubmit={handleSubmit} initialValues={initialValues}>
+      <Formik
+        onSubmit={handleSubmit}
+        enableReinitialize
+        initialValues={initialData}
+      >
         {({ values, setValues }) => (
           <Form>
             <>

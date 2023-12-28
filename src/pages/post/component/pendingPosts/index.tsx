@@ -67,11 +67,15 @@ const PendingPost: React.FC = () => {
         <Loading />
       ) : (
         <PostLayout>
-          {data.map((f, i) => (
-            <>
-              <PostCard handleUpdate={handleUpdate} {...f} key={i} />
-            </>
-          ))}
+          {data.length === 0 ? (
+            <h2>No orders</h2>
+          ) : (
+            data.map((f, i) => (
+              <>
+                <PostCard handleUpdate={handleUpdate} {...f} key={i} />
+              </>
+            ))
+          )}
         </PostLayout>
       )}
     </div>

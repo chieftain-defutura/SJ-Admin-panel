@@ -236,9 +236,20 @@ const MidlevelOrder: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {FilteredData.map((f, index) => (
-                    <CardComponent key={index} data={f} />
-                  ))}
+                  {FilteredData.length === 0 ? (
+                    <h2
+                      style={{
+                        color: "#462d85",
+                        // paddingTop: "24px",
+                      }}
+                    >
+                      No orders
+                    </h2>
+                  ) : (
+                    FilteredData.map((f, index) => (
+                      <CardComponent key={index} data={f} />
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

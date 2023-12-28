@@ -43,6 +43,8 @@ const PremiumOrder: React.FC = () => {
   const [data, setData] = useState<IPremiumData[]>([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [filteredData, setFilteredData] = useState<IPremiumData[]>([]);
+  console.log(filteredData);
+
   const [filterOrder, setFilterOrder] = useState<IOrdersCategory>(
     IOrdersCategory.orderPlaced
   );
@@ -292,13 +294,24 @@ const PremiumOrder: React.FC = () => {
                 </thead>
 
                 <tbody>
-                  {filteredData.map((f, index) => (
-                    <CardComponent
-                      key={index}
-                      data={f}
-                      filterOrder={filterOrder}
-                    />
-                  ))}
+                  {FilteredData.length === 0 ? (
+                    <h2
+                      style={{
+                        color: "#462d85",
+                        // paddingTop: "24px",
+                      }}
+                    >
+                      No orders
+                    </h2>
+                  ) : (
+                    FilteredData.map((f, index) => (
+                      <CardComponent
+                        key={index}
+                        data={f}
+                        filterOrder={filterOrder}
+                      />
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -324,10 +337,6 @@ const CardComponent: React.FC<ICardComponent> = ({ data, filterOrder }) => {
 
   console.log(data);
   console.log("userData", userData);
-
-  const handleToggle = () => {
-    setIsActive(true);
-  };
 
   const handleModalToggle = () => {
     setActive(true);
@@ -445,7 +454,7 @@ const CardComponent: React.FC<ICardComponent> = ({ data, filterOrder }) => {
               )}
               {isActive && (
                 <LayoutModule
-                  handleToggle={handleToggle}
+                  handleToggle={() => setIsActive(false)}
                   className="layout-module"
                 >
                   <DeliveryDetailsModal setIsActive={setIsActive} data={data} />

@@ -61,12 +61,10 @@ const CreateMidProduct: React.FC<Material> = () => {
 
   console.log(toggle);
 
-  const [gender, setGender] = useState<"MALE" | "FEMALE">("MALE");
   const [country, setCountry] = useState("");
 
   const [sizes, setSizes] = useState<
     {
-      gender: string;
       country: string;
       sizeVarients: {
         size: string;
@@ -127,17 +125,14 @@ const CreateMidProduct: React.FC<Material> = () => {
   };
 
   const getSizesLists = useMemo(() => {
-    if (!gender || !country) return undefined;
+    if (!country) return undefined;
 
-    const data = sizes.find(
-      (f) => f.country === country && f.gender === gender
-    );
+    const data = sizes.find((f) => f.country === country);
     console.log(data);
     if (!data) {
       setSizes((e) => [
         ...e,
         {
-          gender: gender,
           country: country,
           sizeVarients: [...defaultSizes],
         },
@@ -146,7 +141,7 @@ const CreateMidProduct: React.FC<Material> = () => {
     } else {
       return data;
     }
-  }, [gender, country, sizes]);
+  }, [country, sizes]);
   console.log("getSizesLists", getSizesLists);
 
   console.log(sizes);
@@ -369,7 +364,7 @@ const CreateMidProduct: React.FC<Material> = () => {
                       <div>
                         {sizes.map((m, i) => (
                           <>
-                            {m.country === country && m.gender === gender ? (
+                            {m.country === country ? (
                               <div className="types" key={i}>
                                 {m.sizeVarients.map((s, j) => (
                                   <div className="input-box" key={j}>

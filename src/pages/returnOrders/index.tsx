@@ -65,9 +65,19 @@ const Return: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {returnData.map((f, i) => (
-                <ReturnOrders returnData={f} key={i} />
-              ))}
+              {returnData.length === 0 ? (
+                <h2
+                  style={{
+                    color: "#462d85",
+                  }}
+                >
+                  No orders
+                </h2>
+              ) : (
+                returnData.map((f, i) => (
+                  <ReturnOrders returnData={f} key={i} />
+                ))
+              )}
             </tbody>
           </table>
         </div>

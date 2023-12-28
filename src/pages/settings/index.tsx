@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Layout from "../../layout";
 import "../../styles/settings.scss";
 import ToggleSwitch from "../../components/toggleSwitch";
 import Input from "../../components/input";
 import { Form, Formik } from "formik";
 import Button from "../../components/button";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 
 const initialValues = {
@@ -14,7 +14,7 @@ const initialValues = {
 };
 
 const Settings: React.FC = () => {
-  const [setting, setSettings] = useState({});
+  const [setting, setSettings] = useState(initialValues);
 
   const handleSubmit = async (value: typeof initialValues) => {
     try {
@@ -27,18 +27,40 @@ const Settings: React.FC = () => {
         premiumComingSoonText: value.premiumComingSoonText,
       });
       console.log("settings", updateDocs);
-      setSettings(updateDocs);
+      setSettings(updateDocs as any);
 
       console.log(value);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const fetchData = useCallback(async () => {
+    try {
+      const docRef = doc(db, "Settings", "GeneralSettings"); // Replace "your_collection_name" with your actual collection name
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const fetchedData = docSnap.data();
+        setSettings(fetchedData as any);
+        console.log("fetchedData", fetchedData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   return (
     <Layout>
       <div className="settings">
         <h1>General Settings</h1>
-        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        <Formik
+          initialValues={setting}
+          enableReinitialize
+          onSubmit={handleSubmit}
+        >
           {({ values, setValues }) => (
             <Form>
               <div className="general-setting">
@@ -69,8 +91,12 @@ const Settings: React.FC = () => {
                 </div>
               </div>
               <div className="btn">
-                <Button varient="primary" type="submit">
-                  {setting ? "Done" : "saved"}
+                <Button
+                  varient="primary"
+                  type="submit"
+                  style={{ width: "200px" }}
+                >
+                  {setting ? "Saved" : "saved"}
                 </Button>
               </div>
             </Form>

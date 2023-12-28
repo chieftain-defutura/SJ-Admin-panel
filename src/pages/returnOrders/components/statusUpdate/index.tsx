@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { IReturnOrdersData } from "../../../../constants/types";
 import ConfirmOrder from "../../../orders/ordersModals/premiumModal/deliveryDetails/confirmOrder";
 import { Form, Formik } from "formik";
 import Button from "../../../../components/button";
 import "./status.scss";
 import { db } from "../../../../utils/firebase";
-import { doc as d, updateDoc as update } from "firebase/firestore";
+import { doc as d, doc, getDoc, updateDoc as update } from "firebase/firestore";
 import { ReactComponent as Close } from "../../../../assets/icons/close.svg";
+import { RETURN } from "../../../../constants/firebaseCollection";
 
 interface Idata {
   setStatusIpdate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,6 +22,7 @@ const initialValues = {
 };
 
 const StatusUpdate: React.FC<Idata> = ({ data, setStatusIpdate }) => {
+  const [address, setAddress] = useState(initialValues);
   const handleSubmit = async (value: typeof initialValues) => {
     try {
       const returnOrders = d(db, "Returns", data?.id);
@@ -42,6 +44,30 @@ const StatusUpdate: React.FC<Idata> = ({ data, setStatusIpdate }) => {
       setStatusIpdate(false);
     }
   };
+
+  const handleGetData = useCallback(async () => {
+    try {
+      // setLoading(true);
+
+      const user = doc(db, RETURN, data.id);
+      const userDocumentSnapshot = await getDoc(user);
+
+      if (userDocumentSnapshot.exists()) {
+        const data = userDocumentSnapshot.data();
+        console.log("Document dataa:", data);
+        setAddress(data as any);
+      } else {
+        console.log("Document does not exist.");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // setLoading(false);
+    }
+  }, [data.id]);
+  useEffect(() => {
+    handleGetData();
+  }, [handleGetData]);
   return (
     <div>
       <div
@@ -50,7 +76,11 @@ const StatusUpdate: React.FC<Idata> = ({ data, setStatusIpdate }) => {
       >
         <Close />
       </div>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Formik
+        initialValues={address}
+        enableReinitialize
+        onSubmit={handleSubmit}
+      >
         <Form>
           <div className="order-conformed-content">
             <ConfirmOrder

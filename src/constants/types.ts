@@ -252,29 +252,29 @@ export interface IMidLevelData {
 
   paymentStatus: string;
   orderStatus: {
-    orderPlaced: {
-      createdAt: string;
-      status: boolean;
-      description: string;
-    };
     delivery: {
-      status: boolean;
+      createdAt: null;
       description: string;
-      createdAt: string;
-    };
-    shipping: {
       status: boolean;
-      description: string;
-      createdAt: string;
     };
     manufacturing: {
-      status: boolean;
-      createdAt: string;
+      createdAt: null;
       description: string;
+      status: boolean;
+    };
+    orderplaced: {
+      description: string;
+      status: boolean;
+      createdAt: null;
     };
     readyToShip: {
+      createdAt: null;
       status: boolean;
-      createdAt: string;
+      description: string;
+    };
+    shipping: {
+      createdAt: null;
+      status: boolean;
       description: string;
     };
   };
@@ -323,29 +323,29 @@ export interface IAccessoryLevel {
 
   paymentStatus: string;
   orderStatus: {
-    orderPlaced: {
-      createdAt: string;
-      status: boolean;
-      description: string;
-    };
     delivery: {
-      status: boolean;
+      createdAt: null;
       description: string;
-      createdAt: string;
-    };
-    shipping: {
       status: boolean;
-      description: string;
-      createdAt: string;
     };
     manufacturing: {
-      status: boolean;
-      createdAt: string;
+      createdAt: null;
       description: string;
+      status: boolean;
+    };
+    orderplaced: {
+      description: string;
+      status: boolean;
+      createdAt: null;
     };
     readyToShip: {
+      createdAt: null;
       status: boolean;
-      createdAt: string;
+      description: string;
+    };
+    shipping: {
+      createdAt: null;
+      status: boolean;
       description: string;
     };
   };
@@ -387,29 +387,29 @@ export interface IFetchData extends IUserData {
   };
   orderStatus: {
     delivery: {
-      status: boolean;
       createdAt: null;
       description: string;
+      status: boolean;
     };
     manufacturing: {
       createdAt: null;
-      status: boolean;
       description: string;
+      status: boolean;
     };
     orderplaced: {
+      description: string;
       status: boolean;
       createdAt: null;
-      description: string;
     };
     readyToShip: {
+      createdAt: null;
       status: boolean;
       description: string;
-      createdAt: null;
     };
     shipping: {
       createdAt: null;
-      description: string;
       status: boolean;
+      description: string;
     };
   };
   userId: string;
@@ -448,6 +448,10 @@ export interface IReturnOrdersData {
   orderId: string;
   id: string;
 }
+export interface ISettingdata {
+  showAccessoryPage: boolean;
+  premiumComingSoonText: string;
+}
 export enum IProductCategory {
   MID = "MIDLEVEL-PRODUCTS",
   PREMIUM = "PREMIUM-PRODUCTS",
@@ -463,10 +467,3 @@ export enum IOrdersCategory {
   shipping = "Shipping",
   delivery = "Delivery",
 }
-const a = {
-  paymentInitiated: {
-    createdAt: null,
-    status: false,
-    description: "",
-  },
-};
