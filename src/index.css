@@ -178,3 +178,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-weight: 500;
   color: var(--primary-);
 }
+
+.active-btn button {
+  background-color: var(--secondary-);
+  color: #fff;
+}

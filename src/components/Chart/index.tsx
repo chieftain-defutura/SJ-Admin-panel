@@ -167,15 +167,21 @@ const Chart: React.FC<Idata> = ({ data, yearChartData, weekChartData }) => {
           gap: "12px",
         }}
       >
-        <Button varient="secondary" onClick={() => setDay("Week")}>
-          week
-        </Button>
-        <Button varient="secondary" onClick={() => setDay("Month")}>
-          month
-        </Button>
-        <Button varient="secondary" onClick={() => setDay("Year")}>
-          year
-        </Button>
+        <div className={day === "Week" ? "active-btn" : ""}>
+          <Button varient="secondary" onClick={() => setDay("Week")}>
+            week
+          </Button>
+        </div>
+        <div className={day === "Month" ? "active-btn" : ""}>
+          <Button varient="secondary" onClick={() => setDay("Month")}>
+            month
+          </Button>
+        </div>
+        <div className={day === "Year" ? "active-btn" : ""}>
+          <Button varient="secondary" onClick={() => setDay("Year")}>
+            year
+          </Button>
+        </div>
       </div>
       {day === "Week" && (
         <ReactApexChart

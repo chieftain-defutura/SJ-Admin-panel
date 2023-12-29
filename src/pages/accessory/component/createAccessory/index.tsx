@@ -14,9 +14,10 @@ import {
   Material,
 } from "../../../products/mid-level/product/component/createMid-Product";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MOdalPopUp from "../../../../components/ModalPopupBox";
 import { validationSchema } from "../../../../constants/validations";
+import BGimg from "../../../../assets/images/bg-img.png";
 
 const initialValue = {
   styles: "",
@@ -82,20 +83,24 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
           <Form>
             <div className="create-product">
               <div className="style-section">
-                <h3>Select styles</h3>
+                <div className="gender-update">
+                  <h3>Select styles</h3>
+                </div>
 
                 <div className="styles-wrap">
                   <div className="imageupload">
-                    <Field as="select" name="styles">
-                      <option value="">select styles</option>
-                      <option value="pillow">pillow</option>
-                      <option value="Bed">Bed</option>
-                      <option value="Bed-shit">Bed shit</option>
-                      <option value="Bed-cover">Bed cover</option>
-                    </Field>
+                    <div className="drop_down">
+                      <Field as="select" name="styles">
+                        <option value="">select styles</option>
+                        <option value="Saree">Pillow</option>
+                        <option value="Blazers">Bedsheet</option>
+                        <option value="Shirt">Bed cover</option>
+                        <option value="Jacket">Pillow cover</option>
+                      </Field>
+                    </div>
                     <div className="video-image">
                       <div className="bg-video">
-                        <h4>Image</h4>
+                        <h4> Product image</h4>
                         <label
                           htmlFor="product-image"
                           className="custom-file-upload"
@@ -117,45 +122,29 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
                               fileReader.readAsDataURL(file);
                             }}
                             // files={files}
-                            accept="image/jpg,image/png"
+                            // accept="image/jpg,image/png"
                           />
                           <div className="bg-image">
-                            <img
-                              src={image}
-                              alt=""
-                              width={200}
-                              height={200}
-                              style={{ objectFit: "contain" }}
-                            />
+                            {image ? (
+                              <img
+                                src={image}
+                                alt=""
+                                width={120}
+                                height={120}
+                                style={{ objectFit: "contain" }}
+                              />
+                            ) : (
+                              <img
+                                src={BGimg}
+                                alt=""
+                                width={70}
+                                height={70}
+                                style={{ objectFit: "contain" }}
+                              />
+                            )}
                           </div>
                         </label>
                       </div>
-                      {/* <div className="bg-video">
-                        <h4>3D Video</h4>
-                        <label htmlFor="3dvideo" className="custom-file-upload">
-                          <input
-                            type="file"
-                            id="3dvideo"
-                            name="video"
-                            onChange={(e: any) => {
-                              const file = e.target.files[0];
-                              setFiles((e) => ({
-                                ...e,
-                                productVideo: file,
-                              }));
-                              const fileReader = new FileReader();
-                              fileReader.onload = (r) => {
-                                setVideo(r.target?.result as string);
-                              };
-                              fileReader.readAsDataURL(file);
-                            }}
-                            accept="video/mp4,video/x-m4v,video/*"
-                          />
-                          <div className="bg-image">
-                            <video src={video} width={200} height={200} />
-                          </div>
-                        </label>
-                      </div> */}
                     </div>
                   </div>
                   <div className="product-info">
@@ -198,20 +187,48 @@ const CreateAccessory: React.FC<Material> = ({ index }) => {
                   </div>
                 </div>
               </div>
-              <div className="description">
-                <h3>Description</h3>
-                <Input
-                  name="description"
-                  type="text"
-                  value={values.description}
-                />
+              <div className="sizes-futures">
+                <div className="description-section">
+                  <div className="description">
+                    <h3>Description</h3>
+                    <Field
+                      as="textarea"
+                      placeholder="description"
+                      name="description"
+                      rows="3"
+                      value={values.description}
+                      style={{
+                        maxWidth: "100%",
+                        width: "100%",
+                        fontSize: "16px",
+                        padding: "16px 18px",
+                        outline: "none",
+                        border: "1px solid #e1e1e1",
+                        marginTop: "16px",
+                      }}
+                    />
+                    {/* <Input
+                     name="description"
+                    type="text"
+                     value={values.description}
+                  /> */}
+                  </div>
+                </div>
+                <div className="btn-submit">
+                  <Link to="/products/mid-level/accessory">
+                    <Button varient="notifi">Cancel</Button>
+                  </Link>
+                  <Button
+                    varient="primary"
+                    type="submit"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Uploading" : "submit"}
+                  </Button>
+                            
+                </div>
+                {isSubmitting && <MOdalPopUp />}
               </div>
-              <div className="btn-submit">
-                <Button varient="primary" type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Uploading" : "submit"}
-                </Button>
-              </div>
-              {isSubmitting && <MOdalPopUp />}
             </div>
           </Form>
         )}

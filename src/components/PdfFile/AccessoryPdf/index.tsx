@@ -411,14 +411,6 @@ const AccessoryPdf: React.FC<IPdfData> = ({ data, userData }) => {
             </View>
           </View>
         </View>
-        <View style={styles.para}>
-          <Text style={[styles.text, { color: "#9E9FA5" }]}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit illo
-            corrupti minus ipsam et, rerum consequatur consequuntur ad delectus.
-            Libero error commodi eum voluptas laborum molestiae ut velit fuga
-            odio.
-          </Text>
-        </View>
       </Page>
     </Document>
     // </PDFViewer>

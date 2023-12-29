@@ -33,7 +33,8 @@ const AccessoryCardModule: React.FC<ICardModuleData> = ({
 
     try {
       await deleteDoc(DeleteRef);
-      window.location.reload();
+      // window.location.reload();
+      setIsActive(false);
     } catch (error) {
       console.log(error);
     }
@@ -118,9 +119,8 @@ const AccessoryCardModule: React.FC<ICardModuleData> = ({
                       </div>
                       <div className="content-delete">
                         <p>
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit, sed do eiusmod tempor incididunt ut labore et
-                          dolore magna aliqua. Ut enim ad minim veniam,""
+                          Are you sure you want to delete this content? This
+                          action cannot be undone.
                         </p>
                       </div>
                       <div className="delete-section-btn">
