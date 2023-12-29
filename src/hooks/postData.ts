@@ -50,7 +50,7 @@ export const useGetPostData = ({ date }: { date?: Date }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [date]);
+  }, []);
 
   useEffect(() => {
     handleGetData();

@@ -50,7 +50,7 @@ export const usePremiumGetData = ({ date }: { date?: Date }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [date]);
+  }, []);
 
   useEffect(() => {
     handleGetData();

@@ -18,7 +18,6 @@ import Loading from "../../components/loading";
 import { ReactComponent as Filter } from "../../assets/icons/filter-icon.svg";
 import LayoutModule from "../../components/layoutModule";
 import DragAndDrop from "./component/DragAndDrop";
-import Button from "../../components/button";
 const Premium: React.FC<{}> = () => {
   const [data, setData] = useState<IProductdata[]>([]);
   const [isLoading, setIsLoading] = useState(true);

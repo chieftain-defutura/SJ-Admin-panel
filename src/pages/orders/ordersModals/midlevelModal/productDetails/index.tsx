@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { ReactComponent as DownloadCloud } from "../../../../../assets/icons/downloadCloud.svg";
 import "./productDetailsModal.scss";
 import CustomerDetailsModal from "../customerDetails";
 import { IMidLevelData, IUserData } from "../../../../../constants/types";

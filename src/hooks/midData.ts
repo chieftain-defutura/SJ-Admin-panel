@@ -52,7 +52,7 @@ export const useMidGetData = ({ date }: { date?: Date }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [date]);
+  }, []);
 
   useEffect(() => {
     handleGetData();

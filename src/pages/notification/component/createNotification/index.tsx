@@ -5,9 +5,7 @@ import Icon from "../../../../assets/images/post-logo.png";
 import { ReactComponent as Plus } from "../../../../assets/icons/plus.svg";
 import NotifiyModule from "../moduleLayout";
 
-interface ICreateNotification {}
-
-const CreateNotification: React.FC<ICreateNotification> = ({}) => {
+const CreateNotification: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
   const handleToggle = () => {
     setIsActive(!isActive);

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg";
-import DeliveryDetailsModal from "./deliveryDetails";
 import ProductDetailsModal from "./productDetails";
 import "../../../../styles/postModal.scss";
 import { IPost } from "../../../../constants/types";

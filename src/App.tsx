@@ -29,15 +29,8 @@ import Settings from "./pages/settings";
 import { useAdminStore } from "./store/adminUser";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./utils/firebase";
-import {
-  query,
-  collection,
-  where,
-  onSnapshot,
-  setLogLevel,
-} from "firebase/firestore";
+import { query, collection, where, onSnapshot } from "firebase/firestore";
 import { ADMIN_COLLECTION_NAME } from "./constants/firebaseCollection";
-import Loading from "./components/loading";
 import EditAccessory from "./pages/accessory/component/EditAccessory";
 import Notification from "./pages/notification";
 import Return from "./pages/returnOrders";

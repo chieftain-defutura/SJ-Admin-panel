@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg";
 import ProductDetailsModal from "./productDetails";
 import "../../../../styles/postModal.scss";
